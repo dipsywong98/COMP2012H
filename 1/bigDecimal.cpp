@@ -225,7 +225,7 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
             s='.'+s;
         }
         int temp = ca*(a[i]-'0')+cb*(b[i]-'0')+increment;
-        cout<<sa<<a[i]<<"+"<<sb<<b[i]<<"+"<<increment<<"="<<temp<<" ";
+//        cout<<sa<<a[i]<<"+"<<sb<<b[i]<<"+"<<increment<<"="<<temp<<" ";
         if(temp>=10){
             s=char(temp%10+'0')+s;
             increment=1;
@@ -243,7 +243,7 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
     if(increment==1)s='1'+s;
     s=sa+s;
 
-    cout<<endl<<sa<<a<<" + "<<sb<<b<<"="<<s<<endl;
+//    cout<<endl<<sa<<a<<" + "<<sb<<b<<"="<<s<<endl;
     
     return BigDecimal(s.c_str());
 }
@@ -304,20 +304,44 @@ BigDecimal BigDecimal::operator*(const BigDecimal& bi)const {
     return multi(bi,true);
 }
 
-BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root) const{
+BigDecimal BigDecimal::operator*(const int& i) const{
+    return (*this)*BigDecimal(i);
+}
+
+BigDecimal BigDecimal::operator*(const float& i) const{
+    return (*this)*BigDecimal(i);
+}
+
+BigDecimal BigDecimal::operator*(const double& i) const{
+    return (*this)*BigDecimal(i);
+}
+
+BigDecimal operator*(const int& i, const BigDecimal& bi){
+    return bi*BigDecimal(i);
+}
+
+BigDecimal operator*(const float& i, const BigDecimal& bi){
+    return bi*BigDecimal(i);
+}
+
+BigDecimal operator*(const double& i, const BigDecimal& bi){
+    return bi*BigDecimal(i);
+}
+
+BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
     string a=pure_num(),b=bi.pure_num();
-    cout<<a<<"*"<<b<<endl;
+//    cout<<a<<"*"<<b<<endl;
     BigDecimal result;
     if(b.size()==0)return result;
     int index = 1;
-    cout<<"b:"<<b[b.size()-1]<<endl;
+//    cout<<"b:"<<b[b.size()-1]<<endl;
     for(int i=a.size()-1; i>=0;i--,index*=10){
         result = result + index*(b[b.size()-1]-'0')*(a[i]-'0');
     }
     BigDecimal delta;
     if(b.size()>1){
         delta = this->multi(BigDecimal(b.substr(0,b.size()-1).c_str()),false);
-        cout<<b.size()<<"delta:";
+//        cout<<b.size()<<"delta:";
         delta.print();
         Node* temp=delta.linkList;
         while(temp->next!=NULL)temp=temp->next;
@@ -326,20 +350,20 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root) const{
         temp->data='0';
         temp->next=NULL;
     }
-    cout<<b.size()<<"delta:";
+//    cout<<b.size()<<"delta:";
     delta.print();
-    cout<<b.size()<<"result:";
+//    cout<<b.size()<<"result:";
     result.print();
     result = result+delta;
-    cout<<b.size()<<"result+delta:";
+//    cout<<b.size()<<"result+delta:";
     result.print();
     //give back sign and decimal point
     if(sign()!=bi.sign())result.linkList->data = '-';
     int length = result.pure_num().size();
-    cout<<"l"<<length<<" a"<<a.size()<<" b"<<b.size()<<" c"<<dot_index()<<" d"<<bi.dot_index()<<endl;
+//    cout<<"l"<<length<<" a"<<a.size()<<" b"<<b.size()<<" c"<<dot_index()<<" d"<<bi.dot_index()<<endl;
     int dot = length-(a.size()+b.size()-dot_index()-bi.dot_index());
     if(dot<length&&root){
-        cout<<"Ydecimal point "<<dot<<endl;
+//        cout<<"Ydecimal point "<<dot<<endl;
         Node* temp = result.linkList;
         while(dot--)temp=temp->next;
         cout<<temp->data<<endl;         //temp is pointing right before dot
@@ -349,7 +373,7 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root) const{
         temp->data='.';
         temp->next = temp2;
     }
-    else cout<<"Ndecimal point "<<dot<<endl;
+//    else cout<<"Ndecimal point "<<dot<<endl;
     return result;
 }
 
