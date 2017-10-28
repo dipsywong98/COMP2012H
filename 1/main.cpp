@@ -16,7 +16,7 @@ char str[1024];
 
 int main(){
     printf("hello world\n");
-    BigDecimal a("-1235.124534"),b("+999325237.1345");
+    BigDecimal a("-12.345"),b("9876.54321");
     a.print();
     b.print();
     a+b;

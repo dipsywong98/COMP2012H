@@ -50,8 +50,9 @@ private:
 	void clear();
 	bool from_string(string str);
 	string numerical_part() const ;
+	string pure_num()const;
 	char sign()const ;
-	int dot_index(const string& str) const;
+	int dot_index() const;
 };
 
 #endif 
