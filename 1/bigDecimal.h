@@ -42,7 +42,28 @@ public:
 	void to_string(char* str);
 
 	/* #### Please add your overloading methods below. #### */
+	BigDecimal& operator=(const BigDecimal &bi);
+	BigDecimal& operator=(const int &i);
+	BigDecimal& operator=(const float &f);
+	BigDecimal& operator=(const double &d);
+	
 	BigDecimal operator+(const BigDecimal& bi) const;
+	BigDecimal operator+(const int& i) const;
+	BigDecimal operator+(const float& f) const;
+	BigDecimal operator+(const double& d) const;
+	friend BigDecimal operator+(const int& i,const BigDecimal& bi);
+	friend BigDecimal operator+(const float& f,const BigDecimal& bi);
+	friend BigDecimal operator+(const double& d,const BigDecimal& bi);
+	
+	BigDecimal operator-(const BigDecimal& bi) const;
+	BigDecimal operator-(const int& i) const;
+	BigDecimal operator-(const float& f) const;
+	BigDecimal operator-(const double& d) const;
+	friend BigDecimal operator-(const int& i,const BigDecimal& bi);
+	friend BigDecimal operator-(const float& f,const BigDecimal& bi);
+	friend BigDecimal operator-(const double& d,const BigDecimal& bi);
+	
+	BigDecimal operator*(const BigDecimal& bi) const;
 
     void print();
 private:
@@ -53,6 +74,7 @@ private:
 	string pure_num()const;
 	char sign()const ;
 	int dot_index() const;
+	BigDecimal& copy(const BigDecimal& bi);
 };
 
 #endif 

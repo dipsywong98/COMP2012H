@@ -38,20 +38,8 @@ BigDecimal::BigDecimal(double f){
 }
 
 BigDecimal::BigDecimal(const BigDecimal& bi){
-    linkList = new Node;
-    Node* temp = linkList,*from = bi.linkList;
-    while(from){
-        temp->data = from->data;
-        if(from->next){
-            from = from->next;
-            temp->next = new Node;
-            temp = temp->next;
-        }
-        else{
-            temp->next = NULL;
-            break;
-        }
-    }    
+    linkList = NULL;
+    
 }
 
 BigDecimal::~BigDecimal(){
@@ -185,6 +173,8 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
     string a, b;
     int c,d;
     char sa,sb;
+    
+    //find bigger absolute value
     bool this_larger=false;
     if(dot_index()>bi.dot_index()){
         this_larger=true;
@@ -198,7 +188,7 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
     else{
         b=pure_num(),a=bi.pure_num(),d=dot_index(),c=bi.dot_index(),sb=sign(),sa=bi.sign();
     }
-    cout<<a<<" + "<<b<<endl;
+//    cout<<a<<" + "<<b<<endl;
     
     //back zeros
     int append = b.size()-d-a.size()+c;
@@ -209,7 +199,7 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
         for(int i=0;i<-append;i++)b+="0";
     }
     
-    //fore zeros
+    //front zeros
     append=d-c;
     if(append>0){
         for(int i=0;i<append;i++)a="0"+a;
@@ -220,18 +210,18 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
     
     //combine
     string s="";
-    if(a.size()!=b.size())cout<<"warning: bug occurs, two lengths not same not allign: "<<a<<" "<<b<<endl;
-    else cout<<"processed: "<<a<<" "<<b<<endl;
+//    if(a.size()!=b.size())cout<<"warning: bug occurs, two lengths not same not allign: "<<a<<" "<<b<<endl;
+//    else cout<<"processed: "<<a<<" "<<b<<endl;
     int increment=0;
     
     int ca=1,cb=1;
-    cout<<sa<<sb<<endl;
+//    cout<<sa<<sb<<endl;
     if(sa!=sb){
         ca=1;cb=-1;
     }
     for(int i=a.size()-1;i>=0;i--){
         if(i+1==c){
-            cout<<"dot at "<<c<<endl;
+//            cout<<"dot at "<<c<<endl;
             s='.'+s;
         }
         int temp = ca*(a[i]-'0')+cb*(b[i]-'0')+increment;
@@ -240,7 +230,7 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
             s=char(temp%10+'0')+s;
             increment=1;
         }
-        if(temp>=0){
+        else if(temp>=0){
             s=char(temp+'0')+s;
             increment=0;
         }
@@ -251,9 +241,121 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
         
     }
     s=sa+s;
-    
-    
+
     cout<<endl<<sa<<a<<" + "<<sb<<b<<"="<<s<<endl;
+    
+    return BigDecimal(s.c_str());
+}
+
+BigDecimal BigDecimal::operator+(const int& i) const {
+    return *this+BigDecimal(i);
+}
+
+BigDecimal BigDecimal::operator+(const float& f) const {
+    return *this+BigDecimal(f);
+}
+
+BigDecimal BigDecimal::operator+(const double& d) const {
+    return *this+BigDecimal(d);
+}
+
+BigDecimal operator+(const int& i,const BigDecimal& bi){
+    return bi+BigDecimal(i);
+}
+
+BigDecimal operator+(const float& f,const BigDecimal& bi){
+    return bi+BigDecimal(f);
+}
+
+BigDecimal operator+(const double& d,const BigDecimal& bi){
+    return bi+BigDecimal(d);
+}
+
+BigDecimal BigDecimal::operator-(const BigDecimal& bi) const {
+    return *this+BigDecimal(((bi.sign()=='+'?'-':'+')+bi.numerical_part()).c_str());
+}
+
+BigDecimal BigDecimal::operator-(const int& i) const {
+    return *this-BigDecimal(i);
+}
+
+BigDecimal BigDecimal::operator-(const float& f) const {
+    return *this-BigDecimal(f);
+}
+
+BigDecimal BigDecimal::operator-(const double& d) const {
+    return *this-BigDecimal(d);
+}
+
+BigDecimal operator-(const int& i,const BigDecimal& bi){
+    return bi-BigDecimal(i);
+}
+
+BigDecimal operator-(const float& f,const BigDecimal& bi){
+    return bi-BigDecimal(f);
+}
+
+BigDecimal operator-(const double& d,const BigDecimal& bi){
+    return bi-BigDecimal(d);
+}
+
+BigDecimal BigDecimal::operator*(const BigDecimal& bi)const {
+    string a=pure_num(),b=bi.pure_num();
+    cout<<a<<"*"<<b<<endl;
+    BigDecimal result;
+    if(b.size()==0)return result;
+    int index = 1;
+    cout<<"b:"<<b[b.size()-1]<<endl;
+    for(int i=a.size()-1; i>=0;i--,index*=10){
+        result = result + index*(b[b.size()-1]-'0')*(a[i]-'0');
+    }
+    BigDecimal delta;
+    if(b.size()>1){
+        delta = (*this)*BigDecimal(b.substr(0,b.size()-1).c_str());
+        cout<<b.size()<<"delta:";
+        delta.print();
+        Node* temp=delta.linkList;
+        while(temp->next!=NULL)temp=temp->next;
+        temp->next = new Node;
+        temp=temp->next;
+        temp->data='0';
+        temp->next=NULL;
+    }
+    cout<<b.size()<<"delta:";
+    delta.print();
+    cout<<b.size()<<"result:";
+    result.print();
+    result = result+delta;
+    cout<<b.size()<<"result+delta:";
+    result.print();
+    //give back sign and decimal point
+    if(sign()!=bi.sign())result.linkList->data = '-';
+    int length = result.pure_num().size();
+    int dot = length-(a.size()+b.size()-dot_index()-bi.dot_index());
+    if(dot<length){
+        cout<<"Ydecimal point "<<dot<<endl;
+    }
+    else cout<<"Ndecimal point "<<dot<<endl;
+    return result;
+}
+
+BigDecimal& BigDecimal::operator=(const BigDecimal &bi){
+    copy(bi);
+    return *this;
+}
+
+BigDecimal& BigDecimal::operator=(const int &i){
+    copy(BigDecimal(i));
+    return *this;
+}
+
+BigDecimal& BigDecimal::operator=(const float &f){
+    copy(BigDecimal(f));
+    return *this;
+}
+
+BigDecimal& BigDecimal::operator=(const double &d){
+    copy(BigDecimal(d));
     return *this;
 }
 
@@ -274,4 +376,23 @@ void BigDecimal::print(){
         temp = temp->next;
     }
     cout<<endl;
+}
+
+BigDecimal& BigDecimal::copy(const BigDecimal& bi){
+    clear();
+    linkList = new Node;
+    Node* temp = linkList,*from = bi.linkList;
+    while(from){
+        temp->data = from->data;
+        if(from->next){
+            from = from->next;
+            temp->next = new Node;
+            temp = temp->next;
+        }
+        else{
+            temp->next = NULL;
+            break;
+        }
+    }
+    return *this;   
 }
