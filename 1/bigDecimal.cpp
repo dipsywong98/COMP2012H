@@ -225,10 +225,8 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
     int increment=0;
     
     int ca=1,cb=1;
-    if(sa=='-'&&sb=='+'){
-        ca=-1;cb=1;
-    }
-    else if(sa=='+'&&sb=='-'){
+    cout<<sa<<sb<<endl;
+    if(sa!=sb){
         ca=1;cb=-1;
     }
     for(int i=a.size()-1;i>=0;i--){
@@ -236,7 +234,6 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
             cout<<"dot at "<<c<<endl;
             s='.'+s;
         }
-        
         int temp = ca*(a[i]-'0')+cb*(b[i]-'0')+increment;
         cout<<sa<<a[i]<<"+"<<sb<<b[i]<<"+"<<increment<<"="<<temp<<" ";
         if(temp>=10){
@@ -253,7 +250,7 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
         }
         
     }
-    s=(increment==-1?'-':'+')+s;
+    s=sa+s;
     
     
     cout<<endl<<sa<<a<<" + "<<sb<<b<<"="<<s<<endl;
