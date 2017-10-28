@@ -16,14 +16,12 @@ char str[1024];
 
 int main(){
 //    printf("hello world\n");
-//    BigDecimal a("-12.345"),b("-9876.54321");
-//    a.print();
-//    b.print();
-//    BigDecimal c(-9876.54321+a);
+//    BigDecimal a("90000"),b("12345");
+//    BigDecimal c(a+b);
 //    c.print();
 
-    BigDecimal a("123450"),b("24690");
-    BigDecimal c(a+b);
+    BigDecimal a("12.3450"),b("2.4690");
+    BigDecimal c(a*b);
     cout<<"c:";
     c.print();
 }

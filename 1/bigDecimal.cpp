@@ -240,6 +240,7 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
         }
         
     }
+    if(increment==1)s='1'+s;
     s=sa+s;
 
     cout<<endl<<sa<<a<<" + "<<sb<<b<<"="<<s<<endl;
