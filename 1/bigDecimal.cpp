@@ -301,6 +301,10 @@ BigDecimal operator-(const double& d,const BigDecimal& bi){
 }
 
 BigDecimal BigDecimal::operator*(const BigDecimal& bi)const {
+    return multi(bi,true);
+}
+
+BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root) const{
     string a=pure_num(),b=bi.pure_num();
     cout<<a<<"*"<<b<<endl;
     BigDecimal result;
@@ -312,7 +316,7 @@ BigDecimal BigDecimal::operator*(const BigDecimal& bi)const {
     }
     BigDecimal delta;
     if(b.size()>1){
-        delta = (*this)*BigDecimal(b.substr(0,b.size()-1).c_str());
+        delta = this->multi(BigDecimal(b.substr(0,b.size()-1).c_str()),false);
         cout<<b.size()<<"delta:";
         delta.print();
         Node* temp=delta.linkList;
@@ -332,9 +336,18 @@ BigDecimal BigDecimal::operator*(const BigDecimal& bi)const {
     //give back sign and decimal point
     if(sign()!=bi.sign())result.linkList->data = '-';
     int length = result.pure_num().size();
+    cout<<"l"<<length<<" a"<<a.size()<<" b"<<b.size()<<" c"<<dot_index()<<" d"<<bi.dot_index()<<endl;
     int dot = length-(a.size()+b.size()-dot_index()-bi.dot_index());
-    if(dot<length){
+    if(dot<length&&root){
         cout<<"Ydecimal point "<<dot<<endl;
+        Node* temp = result.linkList;
+        while(dot--)temp=temp->next;
+        cout<<temp->data<<endl;         //temp is pointing right before dot
+        Node* temp2 = temp->next;
+        temp->next = new Node;
+        temp = temp->next;
+        temp->data='.';
+        temp->next = temp2;
     }
     else cout<<"Ndecimal point "<<dot<<endl;
     return result;

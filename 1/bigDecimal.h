@@ -75,6 +75,7 @@ private:
 	char sign()const ;
 	int dot_index() const;
 	BigDecimal& copy(const BigDecimal& bi);
+	BigDecimal multi(const BigDecimal& bi, bool root) const;
 };
 
 #endif 
