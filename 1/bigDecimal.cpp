@@ -105,30 +105,7 @@ bool BigDecimal::from_string(const char* str){
 }
 
 bool BigDecimal::from_string(string str){
-    if(!str[0])return false;
-    if(str[0]!='+'&&str[0]!='-'&&str[0]<'0'&&str[0]>'9')return false;
-    for(int i=1; str[i];i++)if(str[i]<'0'&&str[i]>'9'&&str[i]!='.') return false;
-    clear();
-    Node* head = new Node,*temp = head;
-    for(int i=0;; i++){
-        temp->data = str[i];
-        if(str[i+1]){
-            temp->next = new Node;
-            temp = temp->next;
-        }
-        else{
-            temp->next = NULL;
-            break;
-        }
-    }
-    if(str[0]!='+'&&str[0]!='-'){
-        linkList = new Node;
-        linkList->data = '+';
-        linkList->next = head;
-    }
-    else{
-        linkList = head;
-    }
+    return from_string(str.c_str());
 }
 
 void BigDecimal::to_string(char* str){
