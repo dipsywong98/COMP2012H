@@ -342,7 +342,7 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
     if(b.size()>1){
         delta = this->multi(BigDecimal(b.substr(0,b.size()-1).c_str()),false);
 //        cout<<b.size()<<"delta:";
-        delta.print();
+//        delta.print();
         Node* temp=delta.linkList;
         while(temp->next!=NULL)temp=temp->next;
         temp->next = new Node;
@@ -351,12 +351,12 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
         temp->next=NULL;
     }
 //    cout<<b.size()<<"delta:";
-    delta.print();
+//    delta.print();
 //    cout<<b.size()<<"result:";
-    result.print();
+//    result.print();
     result = result+delta;
 //    cout<<b.size()<<"result+delta:";
-    result.print();
+//    result.print();
     //give back sign and decimal point
     if(sign()!=bi.sign())result.linkList->data = '-';
     int length = result.pure_num().size();
@@ -366,7 +366,7 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
 //        cout<<"Ydecimal point "<<dot<<endl;
         Node* temp = result.linkList;
         while(dot--)temp=temp->next;
-        cout<<temp->data<<endl;         //temp is pointing right before dot
+//        cout<<temp->data<<endl;         //temp is pointing right before dot
         Node* temp2 = temp->next;
         temp->next = new Node;
         temp = temp->next;
