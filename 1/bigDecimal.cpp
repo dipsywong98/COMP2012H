@@ -423,9 +423,13 @@ BigDecimal BigDecimal::div(const BigDecimal &bi, bool root) const{
     BigDecimal leftover(*this-i*m*bi);
     cout<<"leftove:"<<endl;
     leftover.print();
-    cout<<"pn"<<leftover.pure_num()<<endl;
-    if(leftover.pure_num()[0]=='0')node->next=NULL;
-    else node->next = BigDecimal(leftover/bi).linkList->next;
+    cout<<"bi:"<<endl;
+    bi.print();
+    cout<<"bi>leftover"<<(bi>leftover)<<endl;
+    if(bi>leftover)node->next=NULL;
+    else node->next = BigDecimal(leftover.div(bi,false)).linkList->next;
+    cout<<"GGtest"<<endl;
+    if(root)cout<<"crash right at root"<<endl;
     return result;
 }
 
@@ -459,7 +463,7 @@ int BigDecimal::dot_index() const{
     return i-1;
 }
 
-void BigDecimal::print(){
+void BigDecimal::print() const{
     Node* temp = linkList;
     while(temp){
         cout<<temp->data<<" ";

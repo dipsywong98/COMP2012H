@@ -75,7 +75,7 @@ public:
 
     BigDecimal operator/(const BigDecimal& bi) const;
 
-    void print();
+    void print() const;
 private:
 	Node* linkList;
 	void clear();
