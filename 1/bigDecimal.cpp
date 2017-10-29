@@ -385,12 +385,14 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
 
 BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     cout<<"hi"<<endl;
-    return div(bi,true);
+    BigDecimal temp(div(bi,true,"").c_str());
+    
+    return temp;
 }
 
-BigDecimal BigDecimal::div(const BigDecimal &bi, bool root) const{
+string BigDecimal::div(const BigDecimal &bi, bool root,string s) const{
     int original_decimal=0;
-    //root remove dot and add one more ditgit at the back
+    //root remove dot and add one more ditgit at the back for rounding off
     if(root){
         original_decimal = dot_index();
         Node* temp = linkList->next, *prev=linkList;
@@ -415,7 +417,7 @@ BigDecimal BigDecimal::div(const BigDecimal &bi, bool root) const{
     cout<<a<<"/"<<b<<endl;
     BigDecimal result;
     cout<<"greater:"<<(bi>*this)<<endl;
-    if(bi>*this)return result;
+    if(bi>*this)return s;
     int index=0;
     if(greater(b,a.substr(0,b.size()))){
         index=b.size()+1;
@@ -433,9 +435,8 @@ BigDecimal BigDecimal::div(const BigDecimal &bi, bool root) const{
         d=d+bi;
     }
     cout<<"i:"<<i<<endl;
-    result.linkList->next = new Node;
-    Node* node = result.linkList->next;
-    node->data = i+'0';
+    
+    s+=i+'0';
     
     int m=1;
     for(int j=0;j<a.size()-index;j++)m*=10;
@@ -448,12 +449,13 @@ BigDecimal BigDecimal::div(const BigDecimal &bi, bool root) const{
     cout<<"bi:"<<endl;
     bi.print();
     cout<<"bi>leftover"<<(bi>leftover)<<endl;
-    if(bi>leftover)node->next=NULL;
-    else node->next = BigDecimal(leftover.div(bi,false)).linkList->next;
+    if(bi>leftover){
+    }
+    else s= leftover.div(bi,false,s);
     cout<<"GGtest"<<endl;
     result.print();
     if(root)cout<<"crash right at root"<<endl;
-    return result;
+    return s;
 }
 
 BigDecimal& BigDecimal::operator=(const BigDecimal &bi){

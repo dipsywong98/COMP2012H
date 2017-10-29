@@ -86,7 +86,7 @@ private:
 	int dot_index() const;
 	BigDecimal& copy(const BigDecimal& bi);
 	BigDecimal multi(const BigDecimal& bi, bool root) const;
-	BigDecimal div(const BigDecimal& bi, bool root) const;
+	string div(const BigDecimal& bi, bool root,string s) const;
 	bool greater(string a, string b)const;
 	BigDecimal abs()const;
 };
