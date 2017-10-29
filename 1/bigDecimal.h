@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include <string.h>
+#include <sstream>
 
 using namespace std;
 
@@ -79,6 +80,7 @@ public:
     BigDecimal operator/(const BigDecimal& bi) const;
 
     void print() const;
+	string roundoff_1d(string s);
 private:
 	Node* linkList;
 	void clear();

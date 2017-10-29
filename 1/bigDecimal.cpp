@@ -21,8 +21,9 @@ BigDecimal::BigDecimal(const char* str){
 
 BigDecimal::BigDecimal(int i){
     linkList=NULL;
-    char str[1024];
-    sprintf(str,"%d",i);
+    std::ostringstream ss;
+    ss << i;
+    std::string str(ss.str());
     if(!from_string(str))from_string("0"); 
 }
 
@@ -209,7 +210,7 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
         ca=1;cb=-1;
     }
     for(int i=a.size()-1;i>=0;i--){
-        if(i+1==c){
+        if(i+1<a.size()&&i+1==c){
 //            cout<<"dot at "<<c<<endl;
             s='.'+s;
         }
@@ -230,7 +231,7 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
         
     }
     if(increment==1)s='1'+s;
-    if(s[0]=='0')s=s.substr(1,s.size()-1);
+//    if(s[0]=='0')s=s.substr(1,s.size()-1);
     s=sa+s;
 
 //    cout<<endl<<sa<<a<<" + "<<sb<<b<<"="<<s<<endl;
@@ -320,19 +321,22 @@ BigDecimal operator*(const double& i, const BigDecimal& bi){
 
 BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
     string a=pure_num(),b=bi.pure_num();
+    
 //    cout<<a<<"*"<<b<<endl;
+    
     BigDecimal result;
     if(b.size()==0)return result;
     int index = 1;
-//    cout<<"b:"<<b[b.size()-1]<<endl;
+    cout<<"b:"<<b[b.size()-1]<<endl;
     for(int i=a.size()-1; i>=0;i--,index*=10){
-        result = result + index*(b[b.size()-1]-'0')*(a[i]-'0');
+//        cout<<"index plus:"<<index*(b[b.size()-1]-'0')*(a[i]-'0')<<" | "<<result<<" | ";
+        result = result + (index*(b[b.size()-1]-'0')*(a[i]-'0'));
+//        cout<<result<<endl;
     }
     BigDecimal delta;
     if(b.size()>1){
         delta = this->multi(BigDecimal(b.substr(0,b.size()-1).c_str()),false);
-//        cout<<b.size()<<"delta:";
-//        delta.print();
+//        cout<<b.size()<<" delta:"<<delta<<endl;
         Node* temp=delta.linkList;
         while(temp->next!=NULL)temp=temp->next;
         temp->next = new Node;
@@ -340,13 +344,10 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
         temp->data='0';
         temp->next=NULL;
     }
-//    cout<<b.size()<<"delta:";
-//    delta.print();
-//    cout<<b.size()<<"result:";
-//    result.print();
+//    cout<<b.size()<<"delta:"<<delta<<endl;
+//    cout<<b.size()<<"result:"<<result<<endl;
     result = result+delta;
-//    cout<<b.size()<<"result+delta:";
-//    result.print();
+//    cout<<b.size()<<"result+delta:"<<result<<endl;
     //give back sign and decimal point
     if(sign()!=bi.sign())result.linkList->data = '-';
     int length = result.pure_num().size();
@@ -356,7 +357,7 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
 //        cout<<"Ydecimal point "<<dot<<endl;
         Node* temp = result.linkList;
         while(dot--)temp=temp->next;
-//        cout<<temp->data<<endl;         //temp is pointing right before dot
+        cout<<temp->data<<endl;         //temp is pointing right before dot
         Node* temp2 = temp->next;
         temp->next = new Node;
         temp = temp->next;
@@ -370,11 +371,15 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
 BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     cout<<"hi"<<endl;
     string s = div(bi,true,"");
+    
+    //round off
+    
+    int precision = bi.precision()-this->precision()-max(bi.precision(),this->precision())-1;
+    cout<<"precision"<<precision<<endl;
     s='0'+s;
     cout<<"ending:"<<s<<endl;
     print();
-    int precision = bi.precision()-this->precision()-max(bi.precision(),this->precision())-1;
-    cout<<"precision"<<precision<<endl;
+    
     char last = s[s.size()-1];
     s = s.substr(0,s.size()-2);
     BigDecimal result(s.c_str());
@@ -422,11 +427,11 @@ string BigDecimal::div(BigDecimal bi, bool root,string s) const{
 //    cout<<"a.size-index = "<<a.size()<<"-"<<index<<"="<<a.size()-index<<endl;
     int m=1;
     for(int j=0;j<a.size()-index;j++)m*=10;
-//    cout<<"m:"<<m<<endl;
-    BigDecimal dd(i*m*bi);
+    cout<<"m:"<<m<<" d: "<<d<<endl;
+    BigDecimal dd(m*d);
     cout<<"dd:"<<endl;
     dd.print();
-    BigDecimal leftover(ai-i*m*bi);
+    BigDecimal leftover(ai-dd);
     cout<<"leftover:"<<endl;
     leftover.print();
     cout<<"bi:"<<endl;
@@ -516,7 +521,7 @@ int BigDecimal::dot_index() const{
 void BigDecimal::print() const{
     Node* temp = linkList;
     while(temp){
-        cout<<temp->data;
+        cout<<(temp->data)<<" ";
         temp = temp->next;
     }
 }
@@ -581,4 +586,24 @@ void BigDecimal::append(char data){
     temp = temp->next;
     temp->data = data;
     temp->next = NULL;
+}
+
+string BigDecimal::roundoff_1d(string s){
+    int index = s.size()-1;
+    if(s[index]>='5'){
+        int increment = 1;
+        while(--index>=0&&increment){
+            cout<<s[index]<<" ";
+            s[index]+=1;
+            if(s[index]>'9'){
+                s[index]='0';
+                increment=1;
+            }else {
+                increment=0;
+                break;
+            }
+        }
+        if(increment)s='1'+s;
+    }
+    return s.substr(0,s.size()-1);
 }
