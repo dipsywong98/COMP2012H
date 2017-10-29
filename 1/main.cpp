@@ -15,8 +15,8 @@ using namespace std;
 char str[1024];
 
 int main(){
-    BigDecimal a;
-    cout<<a.roundoff_1d("999999");
+//    BigDecimal a;
+//    cout<<a.roundoff_1d("999999");
     
 //    BigDecimal a;
 //    a.from_string("-00001.4003000");
@@ -40,10 +40,10 @@ int main(){
 //    a = a + b;
 //    cout<<"c:"<<a;
 
-//    BigDecimal a("11.345"),b("13");
-//    BigDecimal c(a/b);
-//    cout<<"c:";
-//    c.print();
+    BigDecimal a("11.345"),b("13");
+    BigDecimal c(a/b);
+    cout<<"c:";
+    c.print();
 
 //    BigDecimal a("4556"),b("-4400");
 //    BigDecimal c(a+b);

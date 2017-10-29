@@ -80,7 +80,7 @@ public:
     BigDecimal operator/(const BigDecimal& bi) const;
 
     void print() const;
-	string roundoff_1d(string s);
+	string roundoff_1d(string s)const;
 private:
 	Node* linkList;
 	void clear();

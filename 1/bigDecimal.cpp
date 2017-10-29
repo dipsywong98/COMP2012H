@@ -373,22 +373,18 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     string s = div(bi,true,"");
     
     //round off
-    
-    int precision = bi.precision()-this->precision()-max(bi.precision(),this->precision())-1;
-    cout<<"precision"<<precision<<endl;
-    s='0'+s;
     cout<<"ending:"<<s<<endl;
-    print();
+    s = roundoff_1d(s);
+    cout<<"rounded:"<<s<<endl;
     
-    char last = s[s.size()-1];
-    s = s.substr(0,s.size()-2);
-    BigDecimal result(s.c_str());
-    cout<<"result:"<<endl;
-    result.print();
-    if(last>='5')result = result + 1;
-    BigDecimal m(1);
-    while(++precision)m=m*0.1;
-    return m*result;
+    int precision = this->precision()+max(bi.precision(),this->precision())-bi.precision();
+    cout<<precision<<endl;
+    while(1+precision>s.size())s='0'+s;
+    cout<<s<<endl;
+    s.insert(s.size()-precision,1,'.');
+    cout<<"insert precision"<<s<<" "<<precision<<endl;
+    
+    return BigDecimal(s.c_str());
 }
 
 string BigDecimal::div(BigDecimal bi, bool root,string s) const{
@@ -588,7 +584,7 @@ void BigDecimal::append(char data){
     temp->next = NULL;
 }
 
-string BigDecimal::roundoff_1d(string s){
+string BigDecimal::roundoff_1d(string s)const{
     int index = s.size()-1;
     if(s[index]>='5'){
         int increment = 1;
