@@ -42,6 +42,9 @@ public:
 	void to_string(char* str);
 
 	/* #### Please add your overloading methods below. #### */
+	friend ostream& operator<<(ostream& o, const BigDecimal& f);
+	friend istream& operator>>(istream& i, BigDecimal bi);
+	
 	bool operator>(const BigDecimal &bi)const;	
 	
 	BigDecimal& operator=(const BigDecimal &bi);
@@ -86,9 +89,12 @@ private:
 	int dot_index() const;
 	BigDecimal& copy(const BigDecimal& bi);
 	BigDecimal multi(const BigDecimal& bi, bool root) const;
-	string div(const BigDecimal& bi, bool root,string s) const;
+	string div(const BigDecimal bi, bool root,string s) const;
 	bool greater(string a, string b)const;
 	BigDecimal abs()const;
+	void remove_dot();
+	void append(char data);
+	int precision()const{return pure_num().size()-dot_index();}
 };
 
 #endif 

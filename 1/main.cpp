@@ -15,6 +15,11 @@ using namespace std;
 char str[1024];
 
 int main(){
+    
+//    BigDecimal a;
+//    a.from_string("-00001.4003000");
+//    a.print();
+    
 //    printf("hello world\n");
 //    BigDecimal a("90000"),b("12345");
 //    BigDecimal c(a+b);
@@ -25,7 +30,7 @@ int main(){
 //    cout<<"c:";
 //    c.print();
 
-    BigDecimal a("45.678"),b("11");
+    BigDecimal a("11.345"),b("13");
     BigDecimal c(a/b);
     cout<<"c:";
     c.print();

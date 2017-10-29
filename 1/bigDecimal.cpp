@@ -50,27 +50,33 @@ BigDecimal::~BigDecimal(){
 }
 
 //****************
-//* Helpers *
+//* Methods *
 //****************
-void BigDecimal::clear(){
-    Node* temp2 = NULL;
-    while(linkList!=NULL){
-        if(linkList->next==linkList->next)temp2 = linkList->next;
-        delete linkList;
-        if(linkList->next==linkList->next)linkList = temp2;
-    }
-}
 
 bool BigDecimal::from_string(const char* str){
+    return from_string(string(str));
+}
+
+bool BigDecimal::from_string(string str){
     //check if valid string
     if(str[0]=='\0')return false;
     if(str[0]!='+'&&str[0]!='-'&&!(str[0]>='0'&&str[0]<='9'))return false;
+    if(str[0]!='+'&&str[0]!='-')str='+'+str;
+    //shrink front zero
+    int start=1;
+    for(;str[start+1]!='\0'&&str[start]=='0';start++);
+    
     bool contain_decimal = false;
     int length=1;
     for(int i=1; str[i];i++,length++){
-        if(str[i]<'0'&&str[i]>'9'&&str[i]!='.') return false;
-        if(str[i]=='.')contain_decimal = true;
+        if(str[i]<'0'&&str[i]>'9'&&str[i]!='.') return false;   //non digit
+        if(str[i]=='.'){
+            if(!contain_decimal)contain_decimal = true;         //mark contain decimal
+            else return false;                                  //more than one decimal
+        }
     }
+    
+    //shrink back zeros
     if(contain_decimal){
         for(int i=length-1;i>=0;i--){
             if(str[i]=='0')length--;
@@ -88,7 +94,7 @@ bool BigDecimal::from_string(const char* str){
     clear();        
     
     Node* head = new Node,*temp = head;
-    for(int i=0;i<length; i++){
+    for(int i=start;i<length; i++){
         temp->data = str[i];
         if(i+1<length){
             temp->next = new Node;
@@ -99,19 +105,10 @@ bool BigDecimal::from_string(const char* str){
         }
     }
     temp->next = NULL;
-    if(str[0]!='+'&&str[0]!='-'){
-        linkList = new Node;
-        linkList->data = '+';
-        linkList->next = head;
-    }
-    else{
-        linkList = head;
-    }
+    linkList = new Node;
+    linkList->data = str[0];
+    linkList->next = head;
     return true;
-}
-
-bool BigDecimal::from_string(string str){
-    return from_string(str.c_str());
 }
 
 void BigDecimal::to_string(char* str){
@@ -124,32 +121,19 @@ void BigDecimal::to_string(char* str){
     str[i]='\0';
 }
 
-string BigDecimal::numerical_part() const {
-    Node* temp = linkList;
-    string str="";
-    int i=0;
-    while(temp){
-        if(!(temp->data=='-'||temp->data=='+'))str+=temp->data;
-        temp = temp->next;
-        i++;
-    }
-    return str;
+//*************
+//* Operators *
+//*************
+ostream& operator<<(ostream& o, const BigDecimal& f){
+    f.print();
+    return o;
 }
 
-string BigDecimal::pure_num()const{
-    Node* temp = linkList;
-    string str="";
-    int i=0;
-    while(temp){
-        if(!(temp->data=='-'||temp->data=='+'||temp->data=='.'))str+=temp->data;
-        temp = temp->next;
-        i++;
-    }
-    return str;
-}
-
-char BigDecimal::sign() const {
-    return (linkList->data=='-'?'-':'+');
+istream& operator>>(istream& i, BigDecimal bi){
+    string s;
+    i>>s;
+    bi.from_string(s);
+    return i;
 }
 
 bool BigDecimal::operator>(const BigDecimal &bi)const{
@@ -385,39 +369,37 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
 
 BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     cout<<"hi"<<endl;
-    BigDecimal temp(div(bi,true,"").c_str());
-    
-    return temp;
+    string s = div(bi,true,"");
+    s='0'+s;
+    cout<<"ending:"<<s<<endl;
+    print();
+    int precision = bi.precision()-this->precision()-max(bi.precision(),this->precision())-1;
+    cout<<"precision"<<precision<<endl;
+    char last = s[s.size()-1];
+    s = s.substr(0,s.size()-2);
+    BigDecimal result(s.c_str());
+    cout<<"result:"<<endl;
+    result.print();
+    if(last>='5')result = result + 1;
+    BigDecimal m(1);
+    while(++precision)m=m*0.1;
+    return m*result;
 }
 
-string BigDecimal::div(const BigDecimal &bi, bool root,string s) const{
+string BigDecimal::div(BigDecimal bi, bool root,string s) const{
     int original_decimal=0;
+    BigDecimal ai(*this);
     //root remove dot and add one more ditgit at the back for rounding off
     if(root){
-        original_decimal = dot_index();
-        Node* temp = linkList->next, *prev=linkList;
-        while(temp){
-            cout<<"still not GG:"<<temp->data<<endl;
-            if(temp->data=='.'){
-                prev->next = temp->next;
-                delete temp;
-                temp = prev->next;
-                continue;
-            }
-            if(!temp->next)break;
-            prev = prev->next;
-            temp = temp->next;
-        }
-        temp->next = new Node;
-        temp = temp->next;
-        temp->data = '0';
-        temp->next = NULL;
+        for(int j=0; j<max(precision(),bi.precision())+1;j++)ai.append('0');
+        ai.remove_dot();
+        bi.remove_dot();
     }
-    string a=pure_num(),b=bi.pure_num();
+    string a=ai.pure_num(),b=bi.pure_num();
     cout<<a<<"/"<<b<<endl;
     BigDecimal result;
-    cout<<"greater:"<<(bi>*this)<<endl;
-    if(bi>*this)return s;
+    cout<<"greater:"<<(bi>ai)<<endl;
+    if(bi>ai)return s;
     int index=0;
     if(greater(b,a.substr(0,b.size()))){
         index=b.size()+1;
@@ -437,24 +419,26 @@ string BigDecimal::div(const BigDecimal &bi, bool root,string s) const{
     cout<<"i:"<<i<<endl;
     
     s+=i+'0';
-    
+//    cout<<"a.size-index = "<<a.size()<<"-"<<index<<"="<<a.size()-index<<endl;
     int m=1;
     for(int j=0;j<a.size()-index;j++)m*=10;
-    cout<<"m:"<<m<<endl;
+//    cout<<"m:"<<m<<endl;
     BigDecimal dd(i*m*bi);
+    cout<<"dd:"<<endl;
     dd.print();
-    BigDecimal leftover(*this-i*m*bi);
-    cout<<"leftove:"<<endl;
+    BigDecimal leftover(ai-i*m*bi);
+    cout<<"leftover:"<<endl;
     leftover.print();
     cout<<"bi:"<<endl;
     bi.print();
     cout<<"bi>leftover"<<(bi>leftover)<<endl;
     if(bi>leftover){
+        while(index++<a.size())s+='0';
     }
     else s= leftover.div(bi,false,s);
-    cout<<"GGtest"<<endl;
-    result.print();
-    if(root)cout<<"crash right at root"<<endl;
+//    cout<<"GGtest"<<endl;
+//    result.print();
+//    if(root)cout<<"root exit"<<endl;
     return s;
 }
 
@@ -478,6 +462,47 @@ BigDecimal& BigDecimal::operator=(const double &d){
     return *this;
 }
 
+//***********
+//* Helpers *
+//***********
+
+string BigDecimal::numerical_part() const {
+    Node* temp = linkList;
+    string str="";
+    int i=0;
+    while(temp){
+        if(!(temp->data=='-'||temp->data=='+'))str+=temp->data;
+        temp = temp->next;
+        i++;
+    }
+    return str;
+}
+
+string BigDecimal::pure_num()const{
+    Node* temp = linkList;
+    string str="";
+    int i=0;
+    while(temp){
+        if(!(temp->data=='-'||temp->data=='+'||temp->data=='.'))str+=temp->data;
+        temp = temp->next;
+        i++;
+    }
+    return str;
+}
+
+char BigDecimal::sign() const {
+    return (linkList->data=='-'?'-':'+');
+}
+
+void BigDecimal::clear(){
+    Node* temp2 = NULL;
+    while(linkList!=NULL){
+        if(linkList->next==linkList->next)temp2 = linkList->next;
+        delete linkList;
+        if(linkList->next==linkList->next)linkList = temp2;
+    }
+}
+
 int BigDecimal::dot_index() const{
     Node* temp = linkList;
     int i=0;
@@ -491,10 +516,9 @@ int BigDecimal::dot_index() const{
 void BigDecimal::print() const{
     Node* temp = linkList;
     while(temp){
-        cout<<temp->data<<" ";
+        cout<<temp->data;
         temp = temp->next;
     }
-    cout<<endl;
 }
 
 BigDecimal& BigDecimal::copy(const BigDecimal& bi){
@@ -530,4 +554,31 @@ BigDecimal BigDecimal::abs()const{
     BigDecimal a(*this);
     a.linkList->data = '+';
     return a;
+}
+
+void BigDecimal::remove_dot(){
+    Node* temp = linkList->next, *prev=linkList;
+    while(temp){
+        if(temp->data=='.'){
+            prev->next = temp->next;
+            delete temp;
+            temp = prev->next;
+            continue;
+        }
+        if(!temp->next)break;
+        prev = prev->next;
+        temp = temp->next;
+    }
+}
+
+void BigDecimal::append(char data){
+    Node* temp = linkList->next;
+    while(temp){
+        if(!temp->next)break;
+        temp = temp->next;
+    }
+    temp->next = new Node;
+    temp = temp->next;
+    temp->data = data;
+    temp->next = NULL;
 }
