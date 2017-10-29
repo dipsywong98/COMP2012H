@@ -25,7 +25,7 @@ int main(){
 //    cout<<"c:";
 //    c.print();
 
-    BigDecimal a("4556"),b("11");
+    BigDecimal a("45.678"),b("11");
     BigDecimal c(a/b);
     cout<<"c:";
     c.print();

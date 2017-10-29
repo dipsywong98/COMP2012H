@@ -389,6 +389,28 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
 }
 
 BigDecimal BigDecimal::div(const BigDecimal &bi, bool root) const{
+    int original_decimal=0;
+    //root remove dot and add one more ditgit at the back
+    if(root){
+        original_decimal = dot_index();
+        Node* temp = linkList->next, *prev=linkList;
+        while(temp){
+            cout<<"still not GG:"<<temp->data<<endl;
+            if(temp->data=='.'){
+                prev->next = temp->next;
+                delete temp;
+                temp = prev->next;
+                continue;
+            }
+            if(!temp->next)break;
+            prev = prev->next;
+            temp = temp->next;
+        }
+        temp->next = new Node;
+        temp = temp->next;
+        temp->data = '0';
+        temp->next = NULL;
+    }
     string a=pure_num(),b=bi.pure_num();
     cout<<a<<"/"<<b<<endl;
     BigDecimal result;
@@ -429,6 +451,7 @@ BigDecimal BigDecimal::div(const BigDecimal &bi, bool root) const{
     if(bi>leftover)node->next=NULL;
     else node->next = BigDecimal(leftover.div(bi,false)).linkList->next;
     cout<<"GGtest"<<endl;
+    result.print();
     if(root)cout<<"crash right at root"<<endl;
     return result;
 }
