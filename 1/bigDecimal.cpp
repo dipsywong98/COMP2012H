@@ -2,6 +2,9 @@
 
 typedef unsigned long long int ull;
 
+//****************
+//* Constructors *
+//****************
 BigDecimal::BigDecimal(){
 //    from_string("0");
     linkList = new Node;
@@ -39,13 +42,16 @@ BigDecimal::BigDecimal(double f){
 
 BigDecimal::BigDecimal(const BigDecimal& bi){
     linkList = NULL;
-    
+    copy(bi);
 }
 
 BigDecimal::~BigDecimal(){
     clear();
 }
 
+//****************
+//* Helpers *
+//****************
 void BigDecimal::clear(){
     Node* temp2 = NULL;
     while(linkList!=NULL){
@@ -146,20 +152,42 @@ char BigDecimal::sign() const {
     return (linkList->data=='-'?'-':'+');
 }
 
+bool BigDecimal::operator>(const BigDecimal &bi)const{
+    if(sign()=='+'&&bi.sign()=='-')return true;
+    if(sign()=='-'&&bi.sign()=='+')return false;
+    if(sign()=='+'){
+        if(dot_index()>bi.dot_index())return true;
+        if(dot_index()<bi.dot_index())return false;
+        Node* temp1 = linkList->next,*temp2=bi.linkList->next;
+        while(temp1&&temp2){
+            if(temp1->data > temp2->data)return true;
+            if(temp1->data < temp2->data)return false;
+            temp1=temp1->next,temp2=temp2->next;
+        }
+        if(temp1!=temp2)return !!temp1;
+        return false;
+    }
+    if(sign()=='-'){
+        if(dot_index()>bi.dot_index())return !true;
+        if(dot_index()<bi.dot_index())return !false;
+        Node* temp1 = linkList->next,*temp2=bi.linkList->next;
+        while(temp1&&temp2){
+            if(temp1->data > temp2->data)return !true;
+            if(temp1->data < temp2->data)return !false;
+            temp1=temp1->next,temp2=temp2->next;
+        }
+        if(temp1!=temp2)return !temp1;
+        return false;
+    }
+}
+
 BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
     string a, b;
     int c,d;
     char sa,sb;
     
     //find bigger absolute value
-    bool this_larger=false;
-    if(dot_index()>bi.dot_index()){
-        this_larger=true;
-    }
-    else if(dot_index()==bi.dot_index()&&linkList->next->data > bi.linkList->next->data){
-        this_larger=true;
-    }
-    if(this_larger){
+    if(abs()>bi.abs()){
         a=pure_num(),b=bi.pure_num(),c=dot_index(),d=bi.dot_index(),sa=sign(),sb=bi.sign();
     }
     else{
@@ -218,6 +246,7 @@ BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
         
     }
     if(increment==1)s='1'+s;
+    if(s[0]=='0')s=s.substr(1,s.size()-1);
     s=sa+s;
 
 //    cout<<endl<<sa<<a<<" + "<<sb<<b<<"="<<s<<endl;
@@ -354,6 +383,52 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
     return result;
 }
 
+BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
+    cout<<"hi"<<endl;
+    return div(bi,true);
+}
+
+BigDecimal BigDecimal::div(const BigDecimal &bi, bool root) const{
+    string a=pure_num(),b=bi.pure_num();
+    cout<<a<<"/"<<b<<endl;
+    BigDecimal result;
+    cout<<"greater:"<<(bi>*this)<<endl;
+    if(bi>*this)return result;
+    int index=0;
+    if(greater(b,a.substr(0,b.size()))){
+        index=b.size()+1;
+    }
+    else{
+        index = b.size();
+    } 
+    cout<<"index:"<<index<<endl;
+    string c=a.substr(0,index);    
+    BigDecimal d;
+    d.print();
+    int i=0;
+    for(;!greater(BigDecimal(d+bi).pure_num(),c);i++){
+        cout<<"c:"<<c<<" "<<BigDecimal(d+bi).pure_num()<<endl;
+        d=d+bi;
+    }
+    cout<<"i:"<<i<<endl;
+    result.linkList->next = new Node;
+    Node* node = result.linkList->next;
+    node->data = i+'0';
+    
+    int m=1;
+    for(int j=0;j<a.size()-index;j++)m*=10;
+    cout<<"m:"<<m<<endl;
+    BigDecimal dd(i*m*bi);
+    dd.print();
+    BigDecimal leftover(*this-i*m*bi);
+    cout<<"leftove:"<<endl;
+    leftover.print();
+    cout<<"pn"<<leftover.pure_num()<<endl;
+    if(leftover.pure_num()[0]=='0')node->next=NULL;
+    else node->next = BigDecimal(leftover/bi).linkList->next;
+    return result;
+}
+
 BigDecimal& BigDecimal::operator=(const BigDecimal &bi){
     copy(bi);
     return *this;
@@ -410,4 +485,20 @@ BigDecimal& BigDecimal::copy(const BigDecimal& bi){
         }
     }
     return *this;   
+}
+
+bool BigDecimal::greater(string a, string b)const{
+    if(a.size()>b.size())return true;
+    if(a.size()<b.size())return false;
+    for(int i=0;i<a.size();i++){
+        if(a[i]>b[i])return true;
+        if(a[i]<b[i])return false;
+    }
+    return false;
+}
+
+BigDecimal BigDecimal::abs()const{
+    BigDecimal a(*this);
+    a.linkList->data = '+';
+    return a;
 }

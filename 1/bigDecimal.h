@@ -42,6 +42,8 @@ public:
 	void to_string(char* str);
 
 	/* #### Please add your overloading methods below. #### */
+	bool operator>(const BigDecimal &bi)const;	
+	
 	BigDecimal& operator=(const BigDecimal &bi);
 	BigDecimal& operator=(const int &i);
 	BigDecimal& operator=(const float &f);
@@ -71,6 +73,8 @@ public:
 	friend BigDecimal operator*(const float& f,const BigDecimal& bi);
 	friend BigDecimal operator*(const double& d,const BigDecimal& bi);
 
+    BigDecimal operator/(const BigDecimal& bi) const;
+
     void print();
 private:
 	Node* linkList;
@@ -82,6 +86,9 @@ private:
 	int dot_index() const;
 	BigDecimal& copy(const BigDecimal& bi);
 	BigDecimal multi(const BigDecimal& bi, bool root) const;
+	BigDecimal div(const BigDecimal& bi, bool root) const;
+	bool greater(string a, string b)const;
+	BigDecimal abs()const;
 };
 
 #endif 

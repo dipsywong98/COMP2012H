@@ -20,8 +20,21 @@ int main(){
 //    BigDecimal c(a+b);
 //    c.print();
 
-    BigDecimal a("12.3450"),b("2.4690");
-    BigDecimal c(a*-2.4690);
+//    BigDecimal a("12.3450"),b("2.4690");
+//    BigDecimal c(a*-2.4690);
 //    cout<<"c:";
+//    c.print();
+
+    BigDecimal a("4556"),b("11");
+    BigDecimal c(a/b);
+    cout<<"c:";
     c.print();
+
+//    BigDecimal a("4556"),b("-4400");
+//    BigDecimal c(a+b);
+//    cout<<"c:";
+//    c.print();
+
+//    BigDecimal a("-10.234"),b("-10.234");
+//    cout<<(a>b);
 }
