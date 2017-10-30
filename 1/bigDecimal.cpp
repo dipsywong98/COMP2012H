@@ -65,7 +65,7 @@ bool BigDecimal::from_string(string str){
     if(str[0]!='+'&&str[0]!='-')str='+'+str;
     //shrink front zero
     int start=1;
-    for(;str[start+1]!='\0'&&str[start]=='0';start++);
+    for(;str[start+1]!='\0'&&str[start]=='0'&&str[start+1]!='.';start++);
     
     bool contain_decimal = false;
     int length=1;
@@ -382,7 +382,7 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     while(1+precision>s.size())s='0'+s;
     cout<<s<<endl;
     s.insert(s.size()-precision,1,'.');
-    cout<<"insert precision"<<s<<" "<<precision<<endl;
+    cout<<"insert precision : "<<s<<" "<<precision<<endl;
     
     return BigDecimal(s.c_str());
 }
