@@ -373,82 +373,12 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     
     string s = div(bi,true,"",max(bi.precision(),this->precision()));
     
-    //round off
-    cout<<"ending:"<<s<<endl;
-    s = roundoff_1d(s);
-    cout<<"rounded:"<<s<<endl;
-    
-    int precision = this->precision()+max(bi.precision(),this->precision())-bi.precision();
-    cout<<precision<<endl;
-    while(1+precision>s.size())s='0'+s;
-    cout<<s<<endl;
-    s.insert(s.size()-precision,1,'.');
-    cout<<"insert precision : "<<s<<" "<<precision<<endl;
     
     return BigDecimal(s.c_str());
 }
 
 string BigDecimal::div(BigDecimal bi, bool root,string s, int precision_quota) const{
-    int original_decimal=0;
-    BigDecimal ai(*this);
-    //root remove dot and add one more ditgit at the back for rounding off
-//    if(root){
-//        for(int j=0; j<max(ai.precision(),bi.precision())+1;j++)ai.append('0');
-//        ai.remove_dot();
-//        bi.remove_dot();
-//    }
-    string a=ai.pure_num(),b=bi.pure_num();
-    cout<<a<<"/"<<b<<endl;
-    BigDecimal result;
-    cout<<"greater:"<<(bi>ai)<<endl;
-    if(bi>ai){
-        if(precision_quota>0){
-            return s=BigDecimal(ai*10).div(bi,false,s,--precision_quota);
-        }
-        else return s;
-    }
-    int index=0;
-    if(greater(b,a.substr(0,b.size()))){
-        index=b.size()+1;
-    }
-    else{
-        index = b.size();
-    } 
-    cout<<"index:"<<index<<endl;
-    string c=a.substr(0,index);    
-    BigDecimal d;
-    d.print();
-    int i=0;
-    for(;!greater(BigDecimal(d+bi).pure_num(),c);i++){
-        cout<<"c:"<<c<<" "<<BigDecimal(d+bi).pure_num()<<endl;
-        d=d+bi;
-    }
-    cout<<"i:"<<i<<endl;
     
-    s+=i+'0';
-//    cout<<"a.size-index = "<<a.size()<<"-"<<index<<"="<<a.size()-index<<endl;
-    int m=1;
-    for(int j=0;j<a.size()-index;j++)m*=10;
-    cout<<"m:"<<m<<" d: "<<d<<endl;
-    BigDecimal dd(m*d);
-    cout<<"dd:"<<endl;
-    dd.print();
-    BigDecimal leftover(ai-dd);
-    cout<<"leftover:"<<endl;
-    leftover.print();
-    cout<<"bi:"<<endl;
-    bi.print();
-    cout<<"bi>leftover"<<(bi>leftover)<<endl;
-    if(bi>leftover){
-        if(precision_quota>0){
-            s=BigDecimal(leftover*10).div(bi,false,s,--precision_quota);
-        }
-        else while(index++<a.size())s+='0';
-    }
-    else s= leftover.div(bi,false,s,precision_quota);
-//    cout<<"GGtest"<<endl;
-//    result.print();
-//    if(root)cout<<"root exit"<<endl;
     return s;
 }
 
