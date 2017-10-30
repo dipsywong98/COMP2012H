@@ -370,7 +370,8 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
 
 BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     cout<<"hi"<<endl;
-    string s = div(bi,true,"");
+    
+    string s = div(bi,true,"",max(bi.precision(),this->precision()));
     
     //round off
     cout<<"ending:"<<s<<endl;
@@ -387,20 +388,25 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     return BigDecimal(s.c_str());
 }
 
-string BigDecimal::div(BigDecimal bi, bool root,string s) const{
+string BigDecimal::div(BigDecimal bi, bool root,string s, int precision_quota) const{
     int original_decimal=0;
     BigDecimal ai(*this);
     //root remove dot and add one more ditgit at the back for rounding off
-    if(root){
-        for(int j=0; j<max(precision(),bi.precision())+1;j++)ai.append('0');
-        ai.remove_dot();
-        bi.remove_dot();
-    }
+//    if(root){
+//        for(int j=0; j<max(ai.precision(),bi.precision())+1;j++)ai.append('0');
+//        ai.remove_dot();
+//        bi.remove_dot();
+//    }
     string a=ai.pure_num(),b=bi.pure_num();
     cout<<a<<"/"<<b<<endl;
     BigDecimal result;
     cout<<"greater:"<<(bi>ai)<<endl;
-    if(bi>ai)return s;
+    if(bi>ai){
+        if(precision_quota>0){
+            return s=BigDecimal(ai*10).div(bi,false,s,--precision_quota);
+        }
+        else return s;
+    }
     int index=0;
     if(greater(b,a.substr(0,b.size()))){
         index=b.size()+1;
@@ -434,9 +440,12 @@ string BigDecimal::div(BigDecimal bi, bool root,string s) const{
     bi.print();
     cout<<"bi>leftover"<<(bi>leftover)<<endl;
     if(bi>leftover){
-        while(index++<a.size())s+='0';
+        if(precision_quota>0){
+            s=BigDecimal(leftover*10).div(bi,false,s,--precision_quota);
+        }
+        else while(index++<a.size())s+='0';
     }
-    else s= leftover.div(bi,false,s);
+    else s= leftover.div(bi,false,s,precision_quota);
 //    cout<<"GGtest"<<endl;
 //    result.print();
 //    if(root)cout<<"root exit"<<endl;

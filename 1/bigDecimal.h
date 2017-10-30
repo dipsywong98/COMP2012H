@@ -91,7 +91,7 @@ private:
 	int dot_index() const;
 	BigDecimal& copy(const BigDecimal& bi);
 	BigDecimal multi(const BigDecimal& bi, bool root) const;
-	string div(const BigDecimal bi, bool root,string s) const;
+	string div(const BigDecimal bi, bool root,string s,int precision) const;
 	bool greater(string a, string b)const;
 	BigDecimal abs()const;
 	void remove_dot();

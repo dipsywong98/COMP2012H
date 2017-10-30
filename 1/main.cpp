@@ -40,12 +40,12 @@ int main(){
 //    a = a + b;
 //    cout<<"c:"<<a;
 
-//    BigDecimal a("11.345"),b("13");
-//    BigDecimal c(a/b);
-//    cout<<"c:";
-//    c.print();
+    BigDecimal a("11"),b("13.345");
+    BigDecimal c(a/b);
+    cout<<"c:";
+    c.print();
 
-    cout<<BigDecimal("0010.123445");
+//    cout<<BigDecimal("0010.123445");
 
 //    BigDecimal a("4556"),b("-4400");
 //    BigDecimal c(a+b);
