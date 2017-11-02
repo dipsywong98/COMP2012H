@@ -17,8 +17,17 @@ char str[1024];
 string val[5] = {"0","1","-1","12.345","-12.345"};
 
 int main(){
-    
-    cout<<(BigDecimal("12.345")>=BigDecimal("12.345"))<<endl<<endl;
+    BigDecimal bd[5] = {};
+    for(int i=0;i<5;i++)
+    bd[i]=BigDecimal(val[i].c_str());
+    cout<<"WTF?"<<BigDecimal("-0")<<endl;
+    bd[1]*bd[3];
+//    BigDecimal b("12345");
+//    BigDecimal c(b);
+//    cout<<c<<endl;
+//    cout<<((c*1)>c)<<endl;
+//    cout<<c<<endl;
+    cout<<"division result:"<<(BigDecimal("12345")/BigDecimal("12345"))<<endl<<endl;
     
 //    BigDecimal a;
 //    cout<<a.roundoff_1d("999999");
@@ -45,10 +54,10 @@ int main(){
 //    a = a + b;
 //    cout<<"c:"<<a;
 
-    BigDecimal a("11"),b("13.345");
-    BigDecimal c(a/b);
-    cout<<"c:";
-    c.print();
+//    BigDecimal a("11"),b("13.345");
+//    BigDecimal c(a/b);
+//    cout<<"c:";
+//    c.print();
 
 //    cout<<BigDecimal("0010.123445");
 

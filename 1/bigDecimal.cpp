@@ -470,7 +470,7 @@ BigDecimal operator-(const double& d,const BigDecimal& bi){
 }
 
 BigDecimal BigDecimal::operator*(const BigDecimal& bi)const {
-    return multi(bi,true);
+    return multi(*this,bi,true);
 }
 
 BigDecimal BigDecimal::operator*(const int& i) const{
@@ -497,15 +497,15 @@ BigDecimal operator*(const double& i, const BigDecimal& bi){
     return bi*BigDecimal(i);
 }
 
-BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
-    string a=pure_num(),b=bi.pure_num();
+BigDecimal BigDecimal::multi(BigDecimal th, const BigDecimal& bi, bool root)const{
+    string a=th.pure_num(),b=bi.pure_num();
     
-//    cout<<a<<"*"<<b<<endl;
+    cout<<a<<"*"<<b<<endl;
     
     BigDecimal result;
     if(b.size()==0)return result;
     int index = 1;
-    cout<<"b:"<<b[b.size()-1]<<endl;
+//    cout<<"last of b:"<<b[b.size()-1]<<endl;
     for(int i=a.size()-1; i>=0;i--,index*=10){
 //        cout<<"index plus:"<<index*(b[b.size()-1]-'0')*(a[i]-'0')<<" | "<<result<<" | ";
         result = result + (index*(b[b.size()-1]-'0')*(a[i]-'0'));
@@ -513,7 +513,7 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
     }
     BigDecimal delta;
     if(b.size()>1){
-        delta = this->multi(BigDecimal(b.substr(0,b.size()-1).c_str()),false);
+        delta = this->multi(th, BigDecimal(b.substr(0,b.size()-1).c_str()),false);
 //        cout<<b.size()<<" delta:"<<delta<<endl;
         Node* temp=delta.linkList;
         while(temp->next!=NULL)temp=temp->next;
@@ -527,15 +527,15 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
     result = result+delta;
 //    cout<<b.size()<<"result+delta:"<<result<<endl;
     //give back sign and decimal point
-    if(sign()!=bi.sign())result.linkList->data = '-';
+    if(th.sign()!=bi.sign())result.linkList->data = '-';
     int length = result.pure_num().size();
-//    cout<<"l"<<length<<" a"<<a.size()<<" b"<<b.size()<<" c"<<dot_index()<<" d"<<bi.dot_index()<<endl;
-    int dot = length-(a.size()+b.size()-dot_index()-bi.dot_index());
+//    cout<<"l"<<length<<" a"<<a.size()<<" b"<<b.size()<<" c"<<th.dot_index()<<" d"<<bi.dot_index()<<endl;
+    int dot = length-(a.size()+b.size()-th.dot_index()-bi.dot_index());
     if(dot<length&&root){
 //        cout<<"Ydecimal point "<<dot<<endl;
         Node* temp = result.linkList;
         while(dot--)temp=temp->next;
-        cout<<temp->data<<endl;         //temp is pointing right before dot
+//        cout<<temp->data<<endl;         //temp is pointing right before dot
         Node* temp2 = temp->next;
         temp->next = new Node;
         temp = temp->next;
@@ -549,15 +549,41 @@ BigDecimal BigDecimal::multi(const BigDecimal& bi, bool root)const{
 BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     cout<<"hi"<<endl;
     
-    string s = div(bi,true,"",max(bi.precision(),this->precision()));
-    
+    BigDecimal a(abs());
+    BigDecimal b(bi.abs());
+    a.remove_dot();
+    b.remove_dot();
+    a.append('0');
+    cout<<"before "<<a<<" / "<<b<<endl;
+    string s = div(a,b,"");
+    cout<<"this string"<<s<<endl;
     
     return BigDecimal(s.c_str());
 }
 
-string BigDecimal::div(BigDecimal bi, bool root,string s, int precision_quota) const{
-    
-    return s;
+string BigDecimal::div(BigDecimal a, BigDecimal b,string s) const{
+//    string sa = a.pure_num(), sb = b.pure_num();
+    if(b>a)return s;
+    BigDecimal c(b);
+    char d='0',e=0;
+    cout<<endl<<"DIV1"<<endl<<a<<" > "<<c<<endl;
+    while(a>=10*c){
+        cout<<endl<<"DIV2"<<endl<<a<<" > "<<c<<endl;
+        c=c*10;
+        cout<<"********"<<endl;
+        e++;
+    }
+    cout<<endl<<"DIV3"<<endl<<a<<" >= "<<c<<endl;
+    while(a>=c){
+        a = a - c;
+        d++;
+    }
+    cout<<endl<<"DIV4"<<endl<<a<<" > "<<c<<endl;
+    if(a==0){
+        cout<<"e"<<e<<endl;
+        while(e--)s+="0";
+    }
+    return s+d+div(a,b,s);
 }
 
 //**************
@@ -691,6 +717,7 @@ void BigDecimal::remove_dot(){
         prev = prev->next;
         temp = temp->next;
     }
+    
 }
 
 void BigDecimal::append(char data){

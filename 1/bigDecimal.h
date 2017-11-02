@@ -131,8 +131,8 @@ private:
 	char sign()const ;
 	int dot_index() const;
 	BigDecimal& copy(const BigDecimal& bi);
-	BigDecimal multi(const BigDecimal& bi, bool root) const;
-	string div(const BigDecimal bi, bool root,string s,int precision) const;
+	BigDecimal multi(BigDecimal th, const BigDecimal& bi, bool root) const;
+	string div(BigDecimal a, BigDecimal b,string s) const;
 	bool greater(string a, string b)const;
 	BigDecimal abs()const;
 	void remove_dot();
