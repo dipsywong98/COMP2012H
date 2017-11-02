@@ -122,9 +122,10 @@ void BigDecimal::to_string(char* str){
     str[i]='\0';
 }
 
-//*************
-//* Operators *
-//*************
+//****************
+//* IO Operators *
+//****************
+
 ostream& operator<<(ostream& o, const BigDecimal& f){
     f.print();
     return o;
@@ -135,6 +136,48 @@ istream& operator>>(istream& i, BigDecimal bi){
     i>>s;
     bi.from_string(s);
     return i;
+}
+
+//********************
+//* Compare operator *
+//********************
+bool BigDecimal::operator==(const BigDecimal &bi)const{
+    Node* temp1 = linkList, *temp2 = bi.linkList;
+    while(temp1&&temp2){
+        if(temp1->data!=temp2->data)return false;
+        temp1 = temp1->next;
+        temp2 = temp2->next;
+    }
+    if(temp1==temp2)return true;
+    return false;
+}
+
+bool BigDecimal::operator==(const int &bi)const{
+    return *this==BigDecimal(bi);
+}
+
+bool BigDecimal::operator==(const float &bi)const{
+    return *this==BigDecimal(bi);
+}
+
+bool BigDecimal::operator==(const double &bi)const{
+    return *this==BigDecimal(bi);
+}
+
+bool BigDecimal::operator!=(const BigDecimal &bi)const{
+    return !(*this==bi);
+}
+
+bool BigDecimal::operator!=(const int &bi)const{
+    return !(*this==bi);
+}
+
+bool BigDecimal::operator!=(const float &bi)const{
+    return !(*this==bi);
+}
+
+bool BigDecimal::operator!=(const double &bi)const{
+    return !(*this==bi);
 }
 
 bool BigDecimal::operator>(const BigDecimal &bi)const{
@@ -165,6 +208,141 @@ bool BigDecimal::operator>(const BigDecimal &bi)const{
         return false;
     }
 }
+
+bool BigDecimal::operator>(const int &bi)const{
+    return *this>BigDecimal(bi);
+}
+
+bool BigDecimal::operator>(const float &bi)const{
+    return *this>BigDecimal(bi);
+}
+
+bool BigDecimal::operator>(const double &bi)const{
+    return *this>BigDecimal(bi);
+}
+
+bool BigDecimal::operator<(const BigDecimal &bi)const{
+    return bi>*this;
+}
+
+bool BigDecimal::operator<(const int &bi)const{
+    return BigDecimal(bi)>*this;
+}
+
+bool BigDecimal::operator<(const float &bi)const{
+    return BigDecimal(bi)>*this;
+}
+
+bool BigDecimal::operator<(const double &bi)const{
+    return BigDecimal(bi)>*this;
+}
+
+bool BigDecimal::operator<=(const BigDecimal &bi)const{
+    return !(*this>bi);
+}
+
+bool BigDecimal::operator<=(const int &bi)const{
+    return !(*this>BigDecimal(bi));
+}
+
+bool BigDecimal::operator<=(const float &bi)const{
+    return !(*this>BigDecimal(bi));
+}
+
+bool BigDecimal::operator<=(const double &bi)const{
+    return !(*this>BigDecimal(bi));
+}
+
+bool BigDecimal::operator>=(const BigDecimal &bi)const{
+    return !(*this<bi);
+}
+
+bool BigDecimal::operator>=(const int &bi)const{
+    return !(*this<BigDecimal(bi));
+}
+
+bool BigDecimal::operator>=(const float &bi)const{
+    return !(*this<BigDecimal(bi));
+}
+
+bool BigDecimal::operator>=(const double &bi)const{
+    return !(*this<BigDecimal(bi));
+}
+
+bool operator==(const int &bi, const BigDecimal& th){
+    return th==bi;
+}
+
+bool operator==(const float &bi, const BigDecimal& th){
+    return th==bi;
+}
+
+bool operator==(const double &bi, const BigDecimal& th){
+    return th==bi;
+}
+
+bool operator!=(const int &bi, const BigDecimal& th){
+    return th!=bi;
+}
+
+bool operator!=(const float &bi, const BigDecimal& th){
+    return th!=bi;
+}
+
+bool operator!=(const double &bi, const BigDecimal& th){
+    return th!=bi;
+}
+
+bool operator>(const int &bi, const BigDecimal& th){
+    return th<bi;
+}
+
+bool operator>(const float &bi, const BigDecimal& th){
+    return th<bi;
+}
+
+bool operator>(const double &bi, const BigDecimal& th){
+    return th<bi;
+}
+
+bool operator<(const int &bi, const BigDecimal& th){
+    return th>bi;
+}
+
+bool operator<(const float &bi, const BigDecimal& th){
+    return th>bi;
+}
+
+bool operator<(const double &bi, const BigDecimal& th){
+    return th>bi;
+}
+
+bool operator<=(const int &bi, const BigDecimal& th){
+    return th>=bi;
+}
+
+bool operator<=(const float &bi, const BigDecimal& th){
+    return th>=bi;
+}
+
+bool operator<=(const double &bi, const BigDecimal& th){
+    return th>=bi;
+}
+
+bool operator>=(const int &bi, const BigDecimal& th){
+    return th<=bi;
+}
+
+bool operator>=(const float &bi, const BigDecimal& th){
+    return th<=bi;
+}
+
+bool operator>=(const double &bi, const BigDecimal& th){
+    return th<=bi;
+}
+//****************
+//* Arithemetics *
+//****************
 
 BigDecimal BigDecimal::operator+(const BigDecimal& bi) const {
     string a, b;
@@ -381,6 +559,10 @@ string BigDecimal::div(BigDecimal bi, bool root,string s, int precision_quota) c
     
     return s;
 }
+
+//**************
+//* Assignment *
+//**************
 
 BigDecimal& BigDecimal::operator=(const BigDecimal &bi){
     copy(bi);

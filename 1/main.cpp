@@ -14,7 +14,12 @@ using namespace std;
 
 char str[1024];
 
+string val[5] = {"0","1","-1","12.345","-12.345"};
+
 int main(){
+    
+    cout<<(BigDecimal("12.345")>=BigDecimal("12.345"))<<endl<<endl;
+    
 //    BigDecimal a;
 //    cout<<a.roundoff_1d("999999");
     
