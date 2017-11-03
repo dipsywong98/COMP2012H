@@ -107,7 +107,8 @@ bool BigDecimal::from_string(string str){
     }
     temp->next = NULL;
     linkList = new Node;
-    linkList->data = str[0];
+    if(head->data=='0'&&head->next==NULL)linkList->data = '+';
+    else linkList->data = str[0];
     linkList->next = head;
     return true;
 }
