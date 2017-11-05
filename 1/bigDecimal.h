@@ -132,7 +132,7 @@ private:
 	char sign()const ;
 	int dot_index() const;
 	BigDecimal& copy(const BigDecimal& bi);
-	BigDecimal multi(BigDecimal th, const BigDecimal& bi, bool root) const;
+	BigDecimal multi(string a, string b) const;
 	string div(BigDecimal a, BigDecimal b,string s) const;
 	bool greater(string a, string b)const;
 	BigDecimal abs()const;
