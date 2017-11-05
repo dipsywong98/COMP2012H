@@ -459,19 +459,25 @@ BigDecimal BigDecimal::operator-(const double& d) const {
 }
 
 BigDecimal operator-(const int& i,const BigDecimal& bi){
-    return bi-BigDecimal(i);
+    BigDecimal b(bi);
+    b.linkList->data = (bi.sign()=='+'?'-':'+');
+    return b+BigDecimal(i);
 }
 
 BigDecimal operator-(const float& f,const BigDecimal& bi){
-    return bi-BigDecimal(f);
+    BigDecimal b(bi);
+    b.linkList->data = (bi.sign()=='+'?'-':'+');
+    return b+BigDecimal(f);
 }
 
 BigDecimal operator-(const double& d,const BigDecimal& bi){
-    return bi-BigDecimal(d);
+    BigDecimal b(bi);
+    b.linkList->data = (bi.sign()=='+'?'-':'+');
+    return b+BigDecimal(d);
 }
 
 BigDecimal BigDecimal::operator*(const BigDecimal& bi)const {
-    return multi(*this,bi,true);
+    return BigDecimal(multi(*this,bi,true).to_string().c_str());
 }
 
 BigDecimal BigDecimal::operator*(const int& i) const{
@@ -552,12 +558,28 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     
     BigDecimal a(abs());
     BigDecimal b(bi.abs());
-    a.remove_dot();
-    b.remove_dot();
-    a.append('0');
+    int compensate = max(a.precision(),b.precision());
+    
+    while(b.precision()>0){
+        cout<<"precisions a: "<<a.precision()<<" b: "<<b.precision()<<endl;
+        a=a*10;
+        b=b*10;
+    }
+//    while(a.precision()>0){
+//        cout<<"precisions a: "<<a.precision()<<endl;
+//        a=a*10;
+//        compensate++;
+//    }
+    for(int i=0; i<compensate; i++)a=a*10;
+    a=a*10;
     cout<<"before "<<a<<" / "<<b<<endl;
     string s = div(a,b,"");
     cout<<"this string"<<s<<endl;
+    s=roundoff_1d(s);
+    cout<<"rounded "<<s<<endl;
+    cout<<"compensate "<<compensate<<endl;
+    if(compensate>0) s.insert(s.size()-compensate,".");
+    cout<<"added dot"<<s<<endl;
     
     return BigDecimal(s.c_str());
 }
@@ -566,25 +588,30 @@ string BigDecimal::div(BigDecimal a, BigDecimal b,string s) const{
 //    string sa = a.pure_num(), sb = b.pure_num();
     if(b>a)return s;
     BigDecimal c(b);
-    char d='0',e=0;
+    char d='0';
+    int e=0;
     cout<<endl<<"DIV1"<<endl<<a<<" > "<<c<<endl;
-    while(a>=10*c){
+    while(a>=(BigDecimal(10)*c)){
         cout<<endl<<"DIV2"<<endl<<a<<" > "<<c<<endl;
-        c=c*10;
+        c=BigDecimal(10)*c;
         cout<<"********"<<endl;
         e++;
     }
     cout<<endl<<"DIV3"<<endl<<a<<" >= "<<c<<endl;
     while(a>=c){
         a = a - c;
+        cout<<"a : "<<a<<endl;
         d++;
     }
     cout<<endl<<"DIV4"<<endl<<a<<" > "<<c<<endl;
-    if(a==0){
+    string s0 = div(a,b,s);
+    s+=d;
+    if(s0==""){
         cout<<"e"<<e<<endl;
         while(e--)s+="0";
+        cout<<"s"<<s<<endl;
     }
-    return s+d+div(a,b,s);
+    return s+s0;
 }
 
 //**************
@@ -614,6 +641,18 @@ BigDecimal& BigDecimal::operator=(const double &d){
 //***********
 //* Helpers *
 //***********
+
+string BigDecimal::to_string() const {
+    Node* temp = linkList;
+    string str="";
+    int i=0;
+    while(temp){
+        str+=temp->data;
+        temp = temp->next;
+        i++;
+    }
+    return str;
+}
 
 string BigDecimal::numerical_part() const {
     Node* temp = linkList;

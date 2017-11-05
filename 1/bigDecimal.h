@@ -122,6 +122,7 @@ public:
 
     void print() const;
 	string roundoff_1d(string s)const;
+	string to_string()const;
 private:
 	Node* linkList;
 	void clear();

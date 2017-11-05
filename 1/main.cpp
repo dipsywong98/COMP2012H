@@ -9,25 +9,68 @@
 #include <iostream>
 #include <sstream>
 #include <string.h>
+#include <vector>
+#include <time.h>
 
 using namespace std;
 
 char str[1024];
 
-string val[5] = {"0","1","-1","12.345","-12.345"};
+vector<double> val = {0,1,-2,12.5,-12.3456789,98765432.1};
+
+void test_sum(){
+    for(int i=0; i<val.size();i++){
+        for(int j=i+1; j<val.size();j++){
+            BigDecimal a(val[i]),b(val[j]);
+            cout<<"i + j = "<<val[i]<<" + "<<val[j]<<" = "<<val[i]+val[j]<<endl
+            <<a+b<<endl
+            <<a+val[j]<<endl
+            <<val[i]+b<<endl<<endl;
+        }
+    }
+}
+
+void test_minus(){
+    for(int i=0; i<val.size();i++){
+        for(int j=i+1; j<val.size();j++){
+            BigDecimal a(val[i]),b(val[j]);
+            cout<<"i - j = "<<val[i]<<" - "<<val[j]<<" = "<<val[i]-val[j]<<endl
+            <<a-b<<endl
+            <<a-val[j]<<endl
+            <<val[i]-b<<endl<<endl;
+        }
+    }
+}
+
+void test_multi(){
+    for(int i=0; i<val.size();i++){
+        for(int j=i+1; j<val.size();j++){
+            BigDecimal a(val[i]),b(val[j]);
+            cout<<"i * j = "<<val[i]<<" * "<<val[j]<<" = "<<val[i]*val[j]<<endl
+            <<a*b<<endl
+            <<a*val[j]<<endl
+            <<val[i]*b<<endl<<endl;
+        }
+    }
+}
 
 int main(){
-    BigDecimal bd[5] = {};
-    for(int i=0;i<5;i++)
-    bd[i]=BigDecimal(val[i].c_str());
-    cout<<"WTF?"<<BigDecimal("-0")<<endl;
-    bd[1]*bd[3];
+//    srand(time(NULL));
+    test_sum();
+    test_minus();
+    test_multi();
+    cout<<"pause"<<endl;
+    while(1);
+    
 //    BigDecimal b("12345");
 //    BigDecimal c(b);
 //    cout<<c<<endl;
 //    cout<<((c*1)>c)<<endl;
 //    cout<<c<<endl;
-    cout<<"division result:"<<(BigDecimal("12345")/BigDecimal("12345"))<<endl<<endl;
+//cout<<"division result:"<<(BigDecimal("0.5")-BigDecimal("0.5"))<<endl<<endl;
+//    cout<<"division result:"<<(BigDecimal("45.12")/BigDecimal("0.798612"))<<endl<<endl;
+    cout<<"division result:"<<BigDecimal(BigDecimal("79861200000").to_string().c_str())<<endl<<endl;
+//cout<<"division result:"<<(BigDecimal("0.1")*BigDecimal("10"))<<endl<<endl;
     
 //    BigDecimal a;
 //    cout<<a.roundoff_1d("999999");
