@@ -631,10 +631,31 @@ string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_qu
 
 BigDecimal BigDecimal::operator^(const BigDecimal& bi)const{
     if(bi<0)return 1/((*this)^(bi.abs()));
-    string bit;
-    while(bi>1){
+    if(bi==0)return BigDecimal(1);
+    if(bi==1)return *this;
+    if(bi==2)return (*this)*(*this);
+    BigDecimal b(bi);
+    b.drop_decimal();
+    string bits;
+    while(b!=0){
+//        cout<<b<<endl;
+        if(b.odd()){
+            bits=bits+"1";
+            b=(b-1)/2;
+        }
+        else{
+            bits=bits+"0";
+            b=b/2;
+        } 
         
     }
+    cout<<"bits"<<bits<<endl;
+    BigDecimal result(1), temp=*this;
+    for(int i=0; i<bits.size();i++){
+        if(bits[i]=='1')result=result*temp;
+        temp=temp*temp;
+    }
+    return result;
 }
 
 //**************
