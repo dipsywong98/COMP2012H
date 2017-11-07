@@ -78,9 +78,9 @@ int main(){
 //    cout<<"pause"<<endl;
 //    while(1);
 
-    BigDecimal a("-1");
+    BigDecimal a("-13");
 //    a.drop_decimal();
-    cout<<(a^3);
+    cout<<(a^BigDecimal(-2.234));
     
 //    2353.65320 / 2.15262
     

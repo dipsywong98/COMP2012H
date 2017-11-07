@@ -630,7 +630,12 @@ string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_qu
 }
 
 BigDecimal BigDecimal::operator^(const BigDecimal& bi)const{
-    if(bi<0)return 1/((*this)^(bi.abs()));
+    if(bi<0){
+        BigDecimal reciprocal = (*this)^(bi.abs());
+        int quota = max(bi.precision(),this->precision())+1;
+        string result = reciprocal.sign()+div(BigDecimal(1),reciprocal.abs(),quota,false,-1,false);
+        return BigDecimal(result.c_str());
+    }
     if(bi==0)return BigDecimal(1);
     if(bi==1)return *this;
     if(bi==2)return (*this)*(*this);
