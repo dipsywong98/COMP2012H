@@ -568,9 +568,31 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     return BigDecimal(reduced.c_str());
 }
 
-string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_quota, int max_d, bool combo=false) const{
-    
+BigDecimal BigDecimal::operator/(const int &i) const{
+    return (*this)/BigDecimal(i);
+}
 
+BigDecimal BigDecimal::operator/(const float &f) const{
+    return (*this)/BigDecimal(f);
+}
+
+BigDecimal BigDecimal::operator/(const double &d) const{
+    return (*this)/BigDecimal(d);
+}
+
+BigDecimal operator/(const int &i,const BigDecimal &bi){
+    return BigDecimal(i)/bi;
+}
+
+BigDecimal operator/(const float &f,const BigDecimal &bi){
+    return BigDecimal(f)/bi;
+}
+
+BigDecimal operator/(const double &d,const BigDecimal &bi){
+    return BigDecimal(d)/bi;
+}
+
+string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_quota, int max_d, bool combo=false) const{
     if(a<b){
 //        cout<<"a<b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
         if(max_d>0)return "0"+div(a,b,quota,start_using_quota,max_d-1);
@@ -579,11 +601,9 @@ string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_qu
         }
         else{
             if(!start_using_quota){
-                
                 string result = div(a*10,b,quota-1,true,-2,true);
                 if(result=="")return ".0";
                 else return "."+result;
-                
             }
             else if(combo)return "0"+div(a*10,b,quota-1,true,-2,true);
             else return div(a*10,b,quota-1,true,-2,true);

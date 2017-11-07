@@ -56,12 +56,12 @@ void test_multi(){
 
 void test_div(){
     for(int i=0; i<val.size();i++){
-        for(int j=i+1; j<val.size();j++){
+        for(int j=0; j<val.size();j++){
             BigDecimal a(val[i]),b(val[j]);
             cout<<"i / j = "<<val[i]<<" / "<<val[j]<<" = "<<val[i]/val[j]<<endl
-            <<a/b<<endl;
-//            <<a/val[j]<<endl;
-//            <<val[i]/b<<endl<<endl;
+            <<a/b<<endl
+            <<a/val[j]<<endl
+            <<val[i]/b<<endl<<endl;
         }
     }
 }
@@ -74,9 +74,9 @@ int main(){
 //    test_minus();
 //    test_multi();
 //cout<<BigDecimal("0.00000346")*1.234<<" "<<0.00000346*1234<<endl;
-//    test_div();
-//    cout<<"pause"<<endl;
-//    while(1);
+    test_div();
+    cout<<"pause"<<endl;
+    while(1);
     
 //    2353.65320 / 2.15262
     
@@ -87,7 +87,7 @@ int main(){
 //    cout<<c<<endl;
 //cout<<"division result:"<<(BigDecimal("0.5")-BigDecimal("0.5"))<<endl<<endl;
 //cout<<-2.00000<<"/" <<12446.00000<<"="<<-2.00000 / 12446.00000<<endl;
-    cout<<"division result:"<<(BigDecimal("900")/BigDecimal("10"))<<endl<<endl;
+//    cout<<"division result:"<<(BigDecimal("900")/BigDecimal("10"))<<endl<<endl;
 //    cout<<"division result:"<<BigDecimal(BigDecimal("79861200000").to_string().c_str())<<endl<<endl;
 //cout<<"division result:"<<(BigDecimal("0.1")*BigDecimal("10"))<<endl<<endl;
     
