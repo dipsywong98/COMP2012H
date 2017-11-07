@@ -74,9 +74,11 @@ int main(){
 //    test_minus();
 //    test_multi();
 //cout<<BigDecimal("0.00000346")*1.234<<" "<<0.00000346*1234<<endl;
-    test_div();
-    cout<<"pause"<<endl;
-    while(1);
+//    test_div();
+//    cout<<"pause"<<endl;
+//    while(1);
+    
+//    2353.65320 / 2.15262
     
 //    BigDecimal b("12345");
 //    BigDecimal c(b);
@@ -84,7 +86,8 @@ int main(){
 //    cout<<((c*1)>c)<<endl;
 //    cout<<c<<endl;
 //cout<<"division result:"<<(BigDecimal("0.5")-BigDecimal("0.5"))<<endl<<endl;
-    cout<<"division result:"<<(BigDecimal("45.12")/BigDecimal("0.798612"))<<endl<<endl;
+cout<<2353.65320 <<"/" <<2.15262<<"="<<2353.65320 / 2.15262<<endl;
+    cout<<"division result:"<<(BigDecimal("2353.6532")/BigDecimal("2.15262"))<<endl<<endl;
 //    cout<<"division result:"<<BigDecimal(BigDecimal("79861200000").to_string().c_str())<<endl<<endl;
 //cout<<"division result:"<<(BigDecimal("0.1")*BigDecimal("10"))<<endl<<endl;
     

@@ -579,8 +579,9 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
 
 string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_quota, int max_d) const{
     
-//    cout<<"a<b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
+
     if(a<b){
+        cout<<"a<b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
         if(quota==0){
             return "0";
         }
@@ -590,6 +591,7 @@ string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_qu
         }
     }
     else{
+        cout<<"a>=b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
         BigDecimal c(b);
         int f=0;
         while(a>=c*10){
@@ -597,11 +599,13 @@ string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_qu
             f++;
             if(max_d!=-1&&f>=max_d)break;
         }
+        if(max_d-1>f)return "0"+div(a,b,quota,start_using_quota,f+1);
         int d='0';
         while(a>=c){
             a=a-c;
             d++;
         }
+        cout<<(char) d<<endl;
         return char(d)+div(a,b,quota,start_using_quota,f);
     }
 }
