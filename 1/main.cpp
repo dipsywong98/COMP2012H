@@ -16,7 +16,7 @@ using namespace std;
 
 char str[1024];
 
-vector<double> val = {0,1,-2,12.5,-12.3456789,98765432.1};
+vector<double> val = {0,1,-2,12.5,-12.34567,98765432.1,12446,356.25,43.6725,2353.6532,2.15262,0.00003};
 
 void test_sum(){
     for(int i=0; i<val.size();i++){
@@ -47,18 +47,34 @@ void test_multi(){
         for(int j=i+1; j<val.size();j++){
             BigDecimal a(val[i]),b(val[j]);
             cout<<"i * j = "<<val[i]<<" * "<<val[j]<<" = "<<val[i]*val[j]<<endl
-            <<a*b<<endl
-            <<a*val[j]<<endl
+//            <<a*b<<endl
+//            <<a*val[j]<<endl
             <<val[i]*b<<endl<<endl;
         }
     }
 }
 
+void test_div(){
+    for(int i=0; i<val.size();i++){
+        for(int j=i+1; j<val.size();j++){
+            BigDecimal a(val[i]),b(val[j]);
+            cout<<"i / j = "<<val[i]<<" / "<<val[j]<<" = "<<val[i]/val[j]<<endl
+            <<a/b<<endl;
+//            <<a/val[j]<<endl;
+//            <<val[i]/b<<endl<<endl;
+        }
+    }
+}
+
 int main(){
+    std::cout << std::fixed;
+    std::cout.precision(5);
 //    srand(time(NULL));
-    test_sum();
-    test_minus();
-    test_multi();
+//    test_sum();
+//    test_minus();
+//    test_multi();
+//cout<<BigDecimal("0.00000346")*1.234<<" "<<0.00000346*1234<<endl;
+    test_div();
     cout<<"pause"<<endl;
     while(1);
     
@@ -68,8 +84,8 @@ int main(){
 //    cout<<((c*1)>c)<<endl;
 //    cout<<c<<endl;
 //cout<<"division result:"<<(BigDecimal("0.5")-BigDecimal("0.5"))<<endl<<endl;
-//    cout<<"division result:"<<(BigDecimal("45.12")/BigDecimal("0.798612"))<<endl<<endl;
-    cout<<"division result:"<<BigDecimal(BigDecimal("79861200000").to_string().c_str())<<endl<<endl;
+    cout<<"division result:"<<(BigDecimal("45.12")/BigDecimal("0.798612"))<<endl<<endl;
+//    cout<<"division result:"<<BigDecimal(BigDecimal("79861200000").to_string().c_str())<<endl<<endl;
 //cout<<"division result:"<<(BigDecimal("0.1")*BigDecimal("10"))<<endl<<endl;
     
 //    BigDecimal a;

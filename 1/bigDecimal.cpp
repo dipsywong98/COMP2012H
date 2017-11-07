@@ -21,7 +21,7 @@ BigDecimal::BigDecimal(const char* str){
 
 BigDecimal::BigDecimal(int i){
     linkList=NULL;
-    std::ostringstream ss;
+    ostringstream ss;
     ss << i;
     std::string str(ss.str());
     if(!from_string(str))from_string("0"); 
@@ -29,16 +29,20 @@ BigDecimal::BigDecimal(int i){
 
 BigDecimal::BigDecimal(float f){
     linkList=NULL;
-    char str[1024];
-    sprintf(str,"%f",f);
-    if(!from_string(str))from_string("0");
+    ostringstream ss;
+    ss.precision(5);
+    ss <<fixed<< f;
+    std::string str(ss.str());
+    if(!from_string(str))from_string("0"); 
 }
 
 BigDecimal::BigDecimal(double f){
     linkList=NULL;
-    char str[1024];
-    sprintf(str,"%lf",f);
-    if(!from_string(str))from_string("0");
+    ostringstream ss;
+    ss.precision(5);
+    ss <<fixed<< f;
+    std::string str(ss.str());
+    if(!from_string(str))from_string("0"); 
 }
 
 BigDecimal::BigDecimal(const BigDecimal& bi){
@@ -536,21 +540,26 @@ BigDecimal BigDecimal::multi(string a, string b)const{
         }
         return result;
     }
-    return multi(a,b.substr(b.size()-1,1))+10*multi(a,b.substr(0,b.size()-1));
+    BigDecimal x=multi(a,b.substr(b.size()-1,1)),y=multi(a,b.substr(0,b.size()-1));
+//    cout<<x<<"+"<<y<<"*10"<<endl;
+    return x+y*10;
 }
 
 BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     cout<<"hi"<<endl;
-    
+    if(bi==0){
+        cout<<"division by zero"<<endl;
+        return BigDecimal("0");
+    }
     BigDecimal a(abs());
     BigDecimal b(bi.abs());
     int compensate = max(a.precision(),b.precision());
     
-    while(b.precision()>0){
-        cout<<"precisions a: "<<a.precision()<<" b: "<<b.precision()<<endl;
-        a=a*10;
-        b=b*10;
-    }
+//    while(b.precision()>0){
+////        cout<<"precisions a: "<<a.precision()<<" b: "<<b.precision()<<endl;
+//        a=a*10;
+//        b=b*10;
+//    }
 //    while(a.precision()>0){
 //        cout<<"precisions a: "<<a.precision()<<endl;
 //        a=a*10;
@@ -558,14 +567,27 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
 //    }
     for(int i=0; i<compensate; i++)a=a*10;
     a=a*10;
-    cout<<"before "<<a<<" / "<<b<<endl;
+//    cout<<"before "<<a<<" / "<<b<<endl;
     string s = div(a,b,"");
-    cout<<"this string"<<s<<endl;
+//    cout<<"this string"<<s<<endl;
     s=roundoff_1d(s);
-    cout<<"rounded "<<s<<endl;
-    cout<<"compensate "<<compensate<<endl;
-    if(compensate>0) s.insert(s.size()-compensate,".");
-    cout<<"added dot"<<s<<endl;
+//    cout<<"rounded "<<s<<endl;
+//    cout<<"compensate "<<compensate<<endl;
+    if(compensate>0){
+        int index = s.size()-compensate;
+        if(index<0){
+            while(index<0){
+                s="0"+s;
+                index++;
+            }
+            s="0."+s;
+        }
+        else if(index<s.size()){
+            s.insert(index,".");
+        }
+        
+    } 
+//    cout<<"added dot"<<s<<endl;
     
     return BigDecimal(s.c_str());
 }
@@ -576,26 +598,26 @@ string BigDecimal::div(BigDecimal a, BigDecimal b,string s) const{
     BigDecimal c(b);
     char d='0';
     int e=0;
-    cout<<endl<<"DIV1"<<endl<<a<<" > "<<c<<endl;
+//    cout<<endl<<"DIV1"<<endl<<a<<" > "<<c<<endl;
     while(a>=(BigDecimal(10)*c)){
-        cout<<endl<<"DIV2"<<endl<<a<<" > "<<c<<endl;
+//        cout<<endl<<"DIV2"<<endl<<a<<" > "<<c<<endl;
         c=BigDecimal(10)*c;
-        cout<<"********"<<endl;
+//        cout<<"********"<<endl;
         e++;
     }
-    cout<<endl<<"DIV3"<<endl<<a<<" >= "<<c<<endl;
+//    cout<<endl<<"DIV3"<<endl<<a<<" >= "<<c<<endl;
     while(a>=c){
         a = a - c;
-        cout<<"a : "<<a<<endl;
+//        cout<<"a : "<<a<<endl;
         d++;
     }
-    cout<<endl<<"DIV4"<<endl<<a<<" > "<<c<<endl;
+//    cout<<endl<<"DIV4"<<endl<<a<<" > "<<c<<endl;
     string s0 = div(a,b,s);
     s+=d;
     if(s0==""){
-        cout<<"e"<<e<<endl;
+//        cout<<"e"<<e<<endl;
         while(e--)s+="0";
-        cout<<"s"<<s<<endl;
+//        cout<<"s"<<s<<endl;
     }
     return s+s0;
 }
