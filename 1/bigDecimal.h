@@ -133,7 +133,7 @@ private:
 	int dot_index() const;
 	BigDecimal& copy(const BigDecimal& bi);
 	BigDecimal multi(string a, string b) const;
-	string div(BigDecimal a, BigDecimal b, int quota, bool start_using_quota, int max_d) const;
+	string div(BigDecimal a, BigDecimal b, int quota, bool start_using_quota, int max_d,bool combo) const;
 	bool greater(string a, string b)const;
 	BigDecimal abs()const;
 	void remove_dot();

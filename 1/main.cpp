@@ -74,9 +74,9 @@ int main(){
 //    test_minus();
 //    test_multi();
 //cout<<BigDecimal("0.00000346")*1.234<<" "<<0.00000346*1234<<endl;
-//    test_div();
-//    cout<<"pause"<<endl;
-//    while(1);
+    test_div();
+    cout<<"pause"<<endl;
+    while(1);
     
 //    2353.65320 / 2.15262
     
