@@ -553,10 +553,12 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     }
     BigDecimal a(abs());
     BigDecimal b(bi.abs());
-    int quota = max(a.precision(),b.precision());
+    int quota = max(a.precision(),b.precision())+1;
     
-        
-    string result = div(a,b,quota+1,false,-1);
+    for(int i=0 ; i<quota; i++){
+        a=a*10;
+    }
+    string result = div(a,b,-1);
     cout<<"div"<<result<<endl;
 //    if(compensate>0){
 //        int index = s.size()-compensate;
@@ -577,21 +579,14 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     return BigDecimal(result.c_str());
 }
 
-string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_quota, int max_d) const{
+string BigDecimal::div(BigDecimal a, BigDecimal b, int max_d) const{
     
 
     if(a<b){
-        cout<<"a<b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
-        if(quota==0){
-            return "0";
-        }
-        else{
-            if(!start_using_quota)return "."+div(a*10,b,quota-1,true,-1);
-            else return div(a*10,b,quota-1,true,-1);
-        }
+        return "0";
     }
     else{
-        cout<<"a>=b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
+        cout<<"a>=b"<<a<<" "<<b<<endl;
         BigDecimal c(b);
         int f=0;
         while(a>=c*10){
@@ -599,14 +594,17 @@ string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_qu
             f++;
             if(max_d!=-1&&f>=max_d)break;
         }
-        if(max_d-1>f)return "0"+div(a,b,quota,start_using_quota,f+1);
+        if(max_d-1>f){
+            cout<<"0"<<endl;
+            return "0"+div(a,b,f+1);
+        }
         int d='0';
         while(a>=c){
             a=a-c;
             d++;
         }
         cout<<(char) d<<endl;
-        return char(d)+div(a,b,quota,start_using_quota,f);
+        return char(d)+div(a,b,f);
     }
 }
 
