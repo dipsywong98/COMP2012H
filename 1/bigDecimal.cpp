@@ -553,73 +553,57 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     }
     BigDecimal a(abs());
     BigDecimal b(bi.abs());
-    int compensate = max(a.precision(),b.precision());
+    int quota = max(a.precision(),b.precision());
     
-//    while(b.precision()>0){
-////        cout<<"precisions a: "<<a.precision()<<" b: "<<b.precision()<<endl;
-//        a=a*10;
-//        b=b*10;
-//    }
-//    while(a.precision()>0){
-//        cout<<"precisions a: "<<a.precision()<<endl;
-//        a=a*10;
-//        compensate++;
-//    }
-    for(int i=0; i<compensate; i++)a=a*10;
-    a=a*10;
-//    cout<<"before "<<a<<" / "<<b<<endl;
-    string s = div(a,b,"");
-//    cout<<"this string"<<s<<endl;
-    s=roundoff_1d(s);
-//    cout<<"rounded "<<s<<endl;
-//    cout<<"compensate "<<compensate<<endl;
-    if(compensate>0){
-        int index = s.size()-compensate;
-        if(index<0){
-            while(index<0){
-                s="0"+s;
-                index++;
-            }
-            s="0."+s;
-        }
-        else if(index<s.size()){
-            s.insert(index,".");
-        }
         
-    } 
+    string result = div(a,b,quota+1,false,-1);
+    cout<<"div"<<result<<endl;
+//    if(compensate>0){
+//        int index = s.size()-compensate;
+//        if(index<0){
+//            while(index<0){
+//                s="0"+s;
+//                index++;
+//            }
+//            s="0."+s;
+//        }
+//        else if(index<s.size()){
+//            s.insert(index,".");
+//        }
+//        
+//    } 
 //    cout<<"added dot"<<s<<endl;
     
-    return BigDecimal(s.c_str());
+    return BigDecimal(result.c_str());
 }
 
-string BigDecimal::div(BigDecimal a, BigDecimal b,string s) const{
-//    string sa = a.pure_num(), sb = b.pure_num();
-    if(b>a)return s;
-    BigDecimal c(b);
-    char d='0';
-    int e=0;
-//    cout<<endl<<"DIV1"<<endl<<a<<" > "<<c<<endl;
-    while(a>=(BigDecimal(10)*c)){
-//        cout<<endl<<"DIV2"<<endl<<a<<" > "<<c<<endl;
-        c=BigDecimal(10)*c;
-//        cout<<"********"<<endl;
-        e++;
+string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_quota, int max_d) const{
+    
+//    cout<<"a<b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
+    if(a<b){
+        if(quota==0){
+            return "0";
+        }
+        else{
+            if(!start_using_quota)return "."+div(a*10,b,quota-1,true,-1);
+            else return div(a*10,b,quota-1,true,-1);
+        }
     }
-//    cout<<endl<<"DIV3"<<endl<<a<<" >= "<<c<<endl;
-    while(a>=c){
-        a = a - c;
-//        cout<<"a : "<<a<<endl;
-        d++;
+    else{
+        BigDecimal c(b);
+        int f=0;
+        while(a>=c*10){
+            c=c*10;
+            f++;
+            if(max_d!=-1&&f>=max_d)break;
+        }
+        int d='0';
+        while(a>=c){
+            a=a-c;
+            d++;
+        }
+        return char(d)+div(a,b,quota,start_using_quota,f);
     }
-//    cout<<endl<<"DIV4"<<endl<<a<<" > "<<c<<endl;
-    string s0 = div(a,b,s);
-    s+=d;
-    if(s0==""){
-//        cout<<"e"<<e<<endl;
-        while(e--)s+="0";
-//        cout<<"s"<<s<<endl;
-    }
-    return s+s0;
 }
 
 //**************
