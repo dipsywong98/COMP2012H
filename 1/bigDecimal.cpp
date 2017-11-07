@@ -556,8 +556,10 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     int quota = max(a.precision(),b.precision());
     
         
-    string result = (this->sign()==bi.sign()?"+":"-")+div(a,b,quota+1,false,-1,false);
-    cout<<"div"<<result<<endl;
+    string result = div(a,b,quota+1,false,-1,false);
+    if(result[0]=='.')result="0"+result;
+    result = (this->sign()==bi.sign()?"+":"-")+result;
+//    cout<<"div"<<result<<endl;
     
     int index = result.find(".");
     string reduced = roundoff_1d(result.substr(0,index)+result.substr(index+1,result.size()-index));
@@ -570,26 +572,25 @@ string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_qu
     
 
     if(a<b){
-        cout<<"a<b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
+//        cout<<"a<b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
         if(max_d>0)return "0"+div(a,b,quota,start_using_quota,max_d-1);
         if(quota==0){
             return "";
         }
         else{
             if(!start_using_quota){
-                if(max_d==-1)return "0."+div(a*10,b,quota-1,true,-2,true);
-                else{
-                    string result = div(a*10,b,quota-1,true,-2,true);
-                    if(result=="")return ".0";
-                    else return "."+result;
-                }
+                
+                string result = div(a*10,b,quota-1,true,-2,true);
+                if(result=="")return ".0";
+                else return "."+result;
+                
             }
             else if(combo)return "0"+div(a*10,b,quota-1,true,-2,true);
             else return div(a*10,b,quota-1,true,-2,true);
         }
     }
     else{
-        cout<<"a>=b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
+//        cout<<"a>=b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
         BigDecimal c(b);
         int f=0;
         while(a>=c*10){
