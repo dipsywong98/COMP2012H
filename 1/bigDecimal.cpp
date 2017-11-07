@@ -546,7 +546,7 @@ BigDecimal BigDecimal::multi(string a, string b)const{
 }
 
 BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
-    cout<<"hi"<<endl;
+//    cout<<"hi"<<endl;
     if(bi==0){
         cout<<"division by zero"<<endl;
         return BigDecimal("0");
@@ -556,13 +556,13 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     int quota = max(a.precision(),b.precision());
     
         
-    string result = div(a,b,quota+1,false,-1,false);
+    string result = (this->sign()==bi.sign()?"+":"-")+div(a,b,quota+1,false,-1,false);
     cout<<"div"<<result<<endl;
     
     int index = result.find(".");
     string reduced = roundoff_1d(result.substr(0,index)+result.substr(index+1,result.size()-index));
     if(index<reduced.size())reduced.insert(index,".");
-    cout<<"reduced"<<reduced<<endl;
+//    cout<<"reduced"<<reduced<<endl;
     return BigDecimal(reduced.c_str());
 }
 
@@ -603,7 +603,7 @@ string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_qu
             a=a-c;
             d++;
         }
-        cout<<(char) d<<endl;
+//        cout<<(char) d<<endl;
         return char(d)+div(a,b,quota,start_using_quota,f);
     }
 }
