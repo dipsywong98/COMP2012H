@@ -89,11 +89,6 @@ public:
     friend bool operator>=(const float &bi, const BigDecimal& th);
     friend bool operator>=(const double &bi, const BigDecimal& th);
 	
-	BigDecimal& operator=(const BigDecimal &bi);
-	BigDecimal& operator=(const int &i);
-	BigDecimal& operator=(const float &f);
-	BigDecimal& operator=(const double &d);
-	
 	BigDecimal operator+(const BigDecimal& bi) const;
 	BigDecimal operator+(const int& i) const;
 	BigDecimal operator+(const float& f) const;
@@ -125,6 +120,18 @@ public:
     friend BigDecimal operator/(const int &i, const BigDecimal& bi);    
     friend BigDecimal operator/(const float &f, const BigDecimal& bi);
     friend BigDecimal operator/(const double &d, const BigDecimal& bi);
+
+	
+	BigDecimal& operator=(const BigDecimal &bi);
+	BigDecimal& operator=(const int &i);
+	BigDecimal& operator=(const float &f);
+	BigDecimal& operator=(const double &d);
+	
+    BigDecimal& operator++();
+    BigDecimal operator++(int);
+    
+    BigDecimal& operator--();
+    BigDecimal operator--(int);
 
     void print() const;
 	string roundoff_1d(string s)const;

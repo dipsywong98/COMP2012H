@@ -653,6 +653,26 @@ BigDecimal& BigDecimal::operator=(const double &d){
     return *this;
 }
 
+BigDecimal& BigDecimal::operator++(){
+    *this = *this + 1;
+    return *this;
+}
+BigDecimal BigDecimal::operator++(int){
+    BigDecimal temp = *this;
+    ++(*this);
+    return temp;
+}
+
+BigDecimal& BigDecimal::operator--(){
+    *this = *this-1;
+    return *this;
+}
+BigDecimal BigDecimal::operator--(int){
+    BigDecimal temp = *this;
+    --(*this);
+    return temp;
+}
+
 //***********
 //* Helpers *
 //***********
