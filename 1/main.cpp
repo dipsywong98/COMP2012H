@@ -78,10 +78,8 @@ int main(){
 //    cout<<"pause"<<endl;
 //    while(1);
 
-    BigDecimal a("-12.3345");
-    cout<<--a<<endl;
-    cout<<a--<<endl;
-    cout<<a;
+    BigDecimal a("1214.3345");
+    cout<<a.odd();
     
 //    2353.65320 / 2.15262
     

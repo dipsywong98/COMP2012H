@@ -629,6 +629,14 @@ string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_qu
     }
 }
 
+BigDecimal BigDecimal::operator^(const BigDecimal& bi)const{
+    if(bi<0)return 1/((*this)^(bi.abs()));
+    string bit;
+    while(bi>1){
+        
+    }
+}
+
 //**************
 //* Assignment *
 //**************
@@ -825,4 +833,33 @@ string BigDecimal::roundoff_1d(string s)const{
         if(increment)s='1'+s;
     }
     return s.substr(0,s.size()-1);
+}
+
+//remove all digit after dot
+void BigDecimal::drop_decimal(){
+    Node* temp = linkList->next;
+    while(temp->next){
+        if(temp->next->data=='.')goto drop;
+        temp=temp->next;
+    }
+    return;
+drop:
+    Node* temp3 = temp;
+    temp=temp->next;
+    while(temp){
+        Node* temp2=temp->next;
+        delete temp;
+        temp = temp2;
+    }
+    temp3->next=NULL;
+    return;
+}
+
+bool BigDecimal::odd ()const{
+    Node* temp=linkList->next;
+    while(temp->next){
+        if(temp->next->data=='.')break;
+        temp=temp->next;
+    }
+    return (temp->data-'0')%2;
 }

@@ -120,6 +120,8 @@ public:
     friend BigDecimal operator/(const int &i, const BigDecimal& bi);    
     friend BigDecimal operator/(const float &f, const BigDecimal& bi);
     friend BigDecimal operator/(const double &d, const BigDecimal& bi);
+    
+    BigDecimal operator^(const BigDecimal& bi) const;
 
 	
 	BigDecimal& operator=(const BigDecimal &bi);
@@ -136,6 +138,8 @@ public:
     void print() const;
 	string roundoff_1d(string s)const;
 	string to_string()const;
+	void drop_decimal();
+	bool odd()const;
 private:
 	Node* linkList;
 	void clear();
