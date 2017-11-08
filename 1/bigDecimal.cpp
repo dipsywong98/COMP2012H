@@ -633,8 +633,13 @@ BigDecimal BigDecimal::operator^(const BigDecimal& bi)const{
     if(bi<0){
         BigDecimal reciprocal = (*this)^(bi.abs());
         int quota = max(bi.precision(),this->precision())+1;
-        string result = reciprocal.sign()+div(BigDecimal(1),reciprocal.abs(),quota,false,-1,false);
-        return BigDecimal(result.c_str());
+        string result = div(BigDecimal(1),reciprocal.abs(),quota,false,-1,false);
+        if(result[0]=='.')result="0"+result;
+        result = reciprocal.sign()+result;
+        int index = result.find(".");
+        string reduced = roundoff_1d(result.substr(0,index)+result.substr(index+1,result.size()-index));
+        if(index<reduced.size())reduced.insert(index,".");
+        return BigDecimal(reduced.c_str());
     }
     if(bi==0)return BigDecimal(1);
     if(bi==1)return *this;
@@ -773,7 +778,7 @@ int BigDecimal::dot_index() const{
 void BigDecimal::print() const{
     Node* temp = linkList;
     while(temp){
-        cout<<(temp->data)<<" ";
+        cout<<(temp->data);
         temp = temp->next;
     }
 }
@@ -846,7 +851,7 @@ string BigDecimal::roundoff_1d(string s)const{
     if(s[index]>='5'){
         int increment = 1;
         while(--index>=0&&increment){
-            cout<<s[index]<<" ";
+//            cout<<s[index]<<" ";
             s[index]+=1;
             if(s[index]>'9'){
                 s[index]='0';

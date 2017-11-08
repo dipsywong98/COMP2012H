@@ -80,7 +80,7 @@ int main(){
 
     BigDecimal a("-13");
 //    a.drop_decimal();
-    cout<<(a^BigDecimal(-2.234));
+    cout<<(a^BigDecimal(-3.23401));
     
 //    2353.65320 / 2.15262
     
