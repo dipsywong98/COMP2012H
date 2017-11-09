@@ -29,7 +29,16 @@ it is inversing the result of `a==b`
 
    if a is positive and b is negative, a of course bigger than b, true. 
    if a is negative and b is positive, a of course smaller than b, false. 
-   if both are positive, if index of decimal point of a is bigger than that of b, a of course bigger than b, it is true. If index of decimal point of a is smaller than that of b, a of course smaller than b, false.  if index of dot are the same, loop through the two link list from most significant digit to least, pointed digits must be coefficient of same power of ten. Once there is digit from a bigger than corresponding one in b, a is bigger than b, true; inversely there it reach a digit in a smaller than b, a is smaller than b, false; if they are not equal length, if a is longer, it is true, else false. The left over case is all corresponding digits are same and length is the same, it is false also.
+   if both are positive, 
+​	if index of dot in a (from LHS) > that of b, a of course bigger than b, true. 
+​	if index of dot in a (from LHS) < that of b, a of course smaller than b, false.
+​	if length of a > that of b, a of course bigger than b, true.
+​	if length of a < that of b, a of course smaller than b, false.
+​	the exception case is same length and same digit places are present in a and b
+​	check from most significant digit to least digit by digit, once
+​		$a_i$ > $b_i$ =>true
+​		$a_i$ < $b_i$ =>false
+​	till the end no result=>they are the same=>false
    if both are negative, the return result is the inverse of result of both are positive.
 
 ##### d. `a < b`: 
@@ -84,14 +93,29 @@ remove all nodes in the link list, construct new link list by copying the value 
 
 4. set sign of the semi-product, if sign of a and b are the same, sign is +, if not sign is -, and now it is the final product.
 
-##### d. `a / b`: //TODO
+##### d. `a / b`: 
 
 1. if b equals to 0, throw division by zero error
+
 2. remove dot of absolute value of a and b, namely `a'` and `b'`.
+
 3. calculate the quota for decimal points in the quotient, which is max of precision of a and b +1 (for rounding)
-4. Record the biggest possible digit place, which should be dropping one by one in each evaluation, if it skips, 
-5. if `a' < b'`, remove one quota and evaluate a'*10/b'. if it is the first time to use quota, append a dot. If quota have been used in a combo (the previous evaluation is also using quota), append 0. If there is no quota left, see if the max possible digit is 0, not 0 append an amount of "max possible digit" character '0's, and terminate but if the last digit is a dot, append 0 before terminate.
-6. if `a' >= b'`, multiply b' by 10 until it is just smaller than 
+
+4. Evaluate max_d, which is the maximum number of zero can be appended to b' to make it just smaller than a'
+
+5. begin the recurrence relation:
+
+   1. a' > b' 
+      ​	no more quota $=>$ end with NULL
+      ​	have quota
+      ​		do a' * 10 /b and drop one quota, and if it is the first time to use quota, append .
+
+   2. else
+
+      ​	evaluate number of times a' can be subtracted  by ${b'}*10^{max_d}$ and let it be d.
+
+      ​	returned number is d coming with resultant digits of $(a'-d*{b'}*10^{max_d})/b'$ which this / sign 
+      ​	is calling the 	recurrence function with max_d decrease by 1.
 
 ##### e. `a ^ b `:
 
