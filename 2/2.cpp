@@ -2,7 +2,7 @@
 using namespace std;
 
 typedef struct Node{
-    int data;
+    char data;
     Node* next;
 }Node;
 
@@ -18,11 +18,14 @@ int main(){
     char in;
     Node* list = new Node;
     Node* temp = list;
+    cout<<"each node is any numeric charater, other characters implies the end of link list"<<endl;
+    cout<<"sample input: 123456789."<<endl;
+    cout<<"sample output: 1->2->3->4->5->6->7->8->9->NULL"<<endl;
     while(cin>>in){
         if(in>='0'&&in<='9'){
             temp->next = new Node;
             temp = temp->next;
-            temp->data = in-'0';
+            temp->data = in;
         }
         else{
             temp->next = NULL;
@@ -53,5 +56,6 @@ int main(){
 //        print(list);
     }
     
+    cout<<"result:"<<endl;
     print(list->next);
 }

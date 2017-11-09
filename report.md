@@ -116,5 +116,60 @@ remove all nodes in the link list, construct new link list by copying the value 
 
 ## Task 2
 
+The link lists will have dummy heads.
 
+### 1
 
+3 global node pointers in total: 
+
+a. temp: main accessing pointer
+
+b. p: temp's parent node
+
+c. M: pointing to the ${m-1}^{th}$ node
+
+temp traverse the link list from $1^{st}$ data node to last data node, p start from the dummy head.
+
+when temp reach $m^{th}$ node, record M as p
+
+before temp reach $n^{th}$ node, remove the node which temp is pointing and insert it to where M is pointing, and continue with next node. After that, make temp pointing to pointee of p's next and continue.
+
+when temp reach a NULL, print out the resultant link list
+
+### 2
+
+3 global node pointers in total:
+
+a. m: main accessing pointer
+
+b. h: temp's parent node
+
+c. n: m's pointee's next node
+
+temp traverse the link list from $1^{st}$ data node to last data node, h start from the dummy head, n start from $2^{nd}$ data node.
+
+if it sees m data equals to n data, delete n and make the next node as n, repeat this until m not equal to n and remove m. use p's next as m and p's next's next as n and continue.
+
+when m or n reach NULL, print out the resultant link list.
+
+### 3
+
+2 global node pointers in total:
+
+a. m: main accessing pointer
+
+b. h: temp's parent node
+
+temp traverse the link list from $1^{st}$ data node to last data node, h start from the dummy head
+
+record current m's next as n, and n's next is k.
+
+reverse m and n by making h's next as n, n's next as m, m's next as k.
+
+now it change from h->m->n->k to h->n->m->k
+
+if k is actually null, terminate and output the link list.
+
+take h as m and m as m's next and continue.
+
+if m and m's next reach NULL, print out the resultant link list.
