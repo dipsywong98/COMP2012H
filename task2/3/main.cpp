@@ -52,4 +52,11 @@ int main(){
     
     cout<<"result;"<<endl;
     print(list->next);
+    
+    temp = list;
+    while(temp){
+        Node* t = temp->next;
+        delete temp;
+        temp=t;
+    }
 }
