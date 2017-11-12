@@ -631,23 +631,16 @@ BigDecimal BigDecimal::operator^(const BigDecimal& bi)const{
     if(bi==2)return (*this)*(*this);
     BigDecimal b(bi);
     b.drop_decimal();
-    string bits;
+    BigDecimal result(1), temp=*this;
     while(b!=0){
 //        cout<<b<<endl;
         if(b.odd()){
-            bits=bits+"1";
+            result=result*temp;
             b=(b-1)/2;
         }
         else{
-            bits=bits+"0";
             b=b/2;
         } 
-        
-    }
-//    cout<<"bits"<<bits<<endl;
-    BigDecimal result(1), temp=*this;
-    for(int i=0; i<bits.size();i++){
-        if(bits[i]=='1')result=result*temp;
         temp=temp*temp;
     }
     return result;
