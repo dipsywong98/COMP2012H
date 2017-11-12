@@ -559,8 +559,6 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     for(int i=0; i<quota; i++){
         a=a*10;
     }
-    
-//    cout<<"quota "<<quota<<endl;
         
     BigDecimal result = div(a,b);
     result.linkList->data = (sign()==bi.sign()?'+':'-');
