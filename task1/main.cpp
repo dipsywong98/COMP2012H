@@ -579,7 +579,7 @@ int main() {
   test_5(); // tests operator+ and operator-
   test_6(); // tests operator<
   test_7(); // tests operator==
-  test_8(1); // tests operator* and operator/
+  test_8(); // tests operator* and operator/
   test_9(); // tests operator^
 
 

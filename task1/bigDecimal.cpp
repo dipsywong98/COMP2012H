@@ -67,6 +67,7 @@ bool BigDecimal::from_string(string str){
     if(str[0]=='\0')return false;
     if(str[0]!='+'&&str[0]!='-'&&!(str[0]>='0'&&str[0]<='9'))return false;
     if(str[0]!='+'&&str[0]!='-')str='+'+str;
+    if(str[1]=='.')return false;
     //shrink front zero
     int start=1;
     for(;str[start+1]!='\0'&&str[start]=='0'&&str[start+1]!='.';start++);
