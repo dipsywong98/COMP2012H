@@ -553,19 +553,19 @@ BigDecimal BigDecimal::operator/(const BigDecimal &bi) const{
     }
     BigDecimal a(abs());
     BigDecimal b(bi.abs());
-    int quota = max(a.precision(),b.precision());
+    int quota = max(a.precision(),b.precision())+1;
     
+    for(int i=0; i<quota; i++){
+        a=a*10;
+    }
+    
+//    cout<<"quota "<<quota<<endl;
         
-    string result = div(a,b,quota+1,false,-1,false);
-    if(result[0]=='.')result="0"+result;
-    result = (this->sign()==bi.sign()?"+":"-")+result;
-//    cout<<"div"<<result<<endl;
+    BigDecimal result = div(a,b);
+    result.linkList->data = (sign()==bi.sign()?'+':'-');
+    result.set_precision(quota-1,true);
     
-    int index = result.find(".");
-    string reduced = roundoff_1d(result.substr(0,index)+result.substr(index+1,result.size()-index));
-    if(index<reduced.size())reduced.insert(index,".");
-//    cout<<"reduced"<<reduced<<endl;
-    return BigDecimal(reduced.c_str());
+    return result;
 }
 
 BigDecimal BigDecimal::operator/(const int &i) const{
@@ -592,54 +592,38 @@ BigDecimal operator/(const double &d,const BigDecimal &bi){
     return BigDecimal(d)/bi;
 }
 
-string BigDecimal::div(BigDecimal a, BigDecimal b,int quota, bool start_using_quota, int max_d, bool combo=false) const{
-    if(a<b){
-//        cout<<"a<b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
-        if(max_d>0)return "0"+div(a,b,quota,start_using_quota,max_d-1);
-        if(quota==0){
-            return "";
-        }
-        else{
-            if(!start_using_quota){
-                string result = div(a*10,b,quota-1,true,-2,true);
-                if(result=="")return ".0";
-                else return "."+result;
-            }
-            else if(combo)return "0"+div(a*10,b,quota-1,true,-2,true);
-            else return div(a*10,b,quota-1,true,-2,true);
-        }
+BigDecimal BigDecimal::div(BigDecimal a, BigDecimal b) const{
+    if(a<b)return 0;
+    BigDecimal pre = div(a,b*10);
+//    cout<<"a/b*10 = "<<a<<" / "<<b<<"*10"<<" = "<<pre<<endl;
+    pre=pre*10;
+    a = a-b*pre;
+    int d=0;
+    for(;a>=b;d++){
+        a=a-b;
     }
-    else{
-//        cout<<"a>=b"<<a<<" "<<b<<" q "<<quota<<" s "<<start_using_quota<<endl;
-        BigDecimal c(b);
-        int f=0;
-        while(a>=c*10){
-            c=c*10;
-            f++;
-            if(max_d>=0&&f>=max_d)break;
-        }
-        if(max_d-1>f)return "0"+div(a,b,quota,start_using_quota,f-1);
-        int d='0';
-        while(a>=c){
-            a=a-c;
-            d++;
-        }
-//        cout<<(char) d<<endl;
-        return char(d)+div(a,b,quota,start_using_quota,f);
-    }
+    return d+pre;
 }
 
 BigDecimal BigDecimal::operator^(const BigDecimal& bi)const{
+    if(*this==0){
+        if(bi>0)return 0;
+        if(bi==0)return 1;
+        if(bi<0){
+            cout<<"division by zero"<<endl;
+            return 0;
+        }
+    }
     if(bi<0){
         BigDecimal reciprocal = (*this)^(bi.abs());
         int quota = max(bi.precision(),this->precision())+1;
-        string result = div(BigDecimal(1),reciprocal.abs(),quota,false,-1,false);
-        if(result[0]=='.')result="0"+result;
-        result = reciprocal.sign()+result;
-        int index = result.find(".");
-        string reduced = roundoff_1d(result.substr(0,index)+result.substr(index+1,result.size()-index));
-        if(index<reduced.size())reduced.insert(index,".");
-        return BigDecimal(reduced.c_str());
+        BigDecimal a(1);
+        for(int i=0; i<quota; i++){
+            a=a*10;
+        }
+        BigDecimal result = div(a,reciprocal.abs());
+        result.set_precision(quota-1,true);
+        return result;
     }
     if(bi==0)return BigDecimal(1);
     if(bi==1)return *this;
@@ -659,7 +643,7 @@ BigDecimal BigDecimal::operator^(const BigDecimal& bi)const{
         } 
         
     }
-    cout<<"bits"<<bits<<endl;
+//    cout<<"bits"<<bits<<endl;
     BigDecimal result(1), temp=*this;
     for(int i=0; i<bits.size();i++){
         if(bits[i]=='1')result=result*temp;
@@ -893,4 +877,21 @@ bool BigDecimal::odd ()const{
         temp=temp->next;
     }
     return (temp->data-'0')%2;
+}
+
+void BigDecimal::set_precision(int precision,bool roundoff_1d_flag){
+    string s = pure_num();
+    if(roundoff_1d_flag) s=roundoff_1d(s);
+    if(precision>s.size()){
+        while(precision>s.size()){
+            s="0"+s;
+        }
+        s="0."+s;
+    }
+    else{
+        s.insert(s.size()-precision,".");
+        if(s[0]=='.')s="0"+s;
+    }
+    s=sign()+s;
+    from_string(s.c_str());
 }

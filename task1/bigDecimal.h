@@ -150,12 +150,13 @@ private:
 	int dot_index() const;
 	BigDecimal& copy(const BigDecimal& bi);
 	BigDecimal multi(string a, string b) const;
-	string div(BigDecimal a, BigDecimal b, int quota, bool start_using_quota, int max_d,bool combo) const;
+	BigDecimal div(BigDecimal a, BigDecimal b) const;
 	bool greater(string a, string b)const;
 	BigDecimal abs()const;
 	void remove_dot();
 	void append(char data);
 	int precision()const{return pure_num().size()-dot_index();}
+	void set_precision(int precision,bool roundoff_1d_flag=false);
 };
 
 #endif 
