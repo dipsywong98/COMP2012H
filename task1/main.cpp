@@ -16,8 +16,8 @@
 using namespace std;
 
 char str[1024];
-
-vector<double> val = {0,1,-2,12.5,-12.34567,98765432.1,12446,356.25,43.6725,2353.6532,2.15262,0.00003};
+double v[12] = {0,1,-2,12.5,-12.34567,98765432.1,12446,356.25,43.6725,2353.6532,2.15262,0.00003};
+vector<double> val(v,v + sizeof(v) / sizeof(double));
 
 void test_sum(){
     for(int i=0; i<val.size();i++){

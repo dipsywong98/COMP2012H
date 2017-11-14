@@ -137,10 +137,11 @@ ostream& operator<<(ostream& o, const BigDecimal& f){
     return o;
 }
 
-istream& operator>>(istream& i, BigDecimal bi){
+istream& operator>>(istream& i, BigDecimal& bi){
     string s;
     i>>s;
-    bi.from_string(s);
+    cout<<"s"<<s<<endl;
+    bi.from_string(s.c_str());
     return i;
 }
 
@@ -754,7 +755,7 @@ int BigDecimal::dot_index() const{
 void BigDecimal::print() const{
     Node* temp = linkList;
     while(temp){
-        cout<<(temp->data);
+        if(temp->data!='+')cout<<(temp->data);
         temp = temp->next;
     }
 }

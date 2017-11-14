@@ -44,7 +44,7 @@ public:
 
 	/* #### Please add your overloading methods below. #### */
 	friend ostream& operator<<(ostream& o, const BigDecimal& f);
-	friend istream& operator>>(istream& i, BigDecimal bi);
+	friend istream& operator>>(istream& i, BigDecimal& bi);
 	
 	bool operator==(const BigDecimal &bi)const;
 	bool operator==(const int &bi)const;
@@ -135,12 +135,13 @@ public:
     BigDecimal& operator--();
     BigDecimal operator--(int);
 
+    
+private:
     void print() const;
 	string roundoff_1d(string s)const;
 	string to_string()const;
 	void drop_decimal();
 	bool odd()const;
-private:
 	Node* linkList;
 	void clear();
 	bool from_string(string str);
