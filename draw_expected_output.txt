@@ -1,0 +1,81 @@
+Turn 1 Player 1 attacks:
+Player 1
+Turtle:33 Jaguar:23 Wolf:30 Wolf:30 Wolf:30 
+Player 2
+Crocodile:28 Crocodile:24 Wolf:25 Wolf:25 Wolf:25 
+Turn 2 Player 2 attacks:
+Player 1
+Turtle:30 Jaguar:16 Wolf:25 Wolf:25 Wolf:25 
+Player 2
+Crocodile:27 Crocodile:23 Wolf:25 Wolf:25 Wolf:25 
+Turn 3 Player 1 attacks:
+Player 1
+Turtle:28 Jaguar:14 Wolf:25 Wolf:25 Wolf:25 
+Player 2
+Crocodile:25 Crocodile:17 Wolf:20 Wolf:20 Wolf:20 
+Turn 4 Player 2 attacks:
+Player 1
+Turtle:25 Jaguar:7 Wolf:20 Wolf:20 Wolf:20 
+Player 2
+Crocodile:24 Crocodile:16 Wolf:20 Wolf:20 Wolf:20 
+Turn 5 Player 1 attacks:
+Player 1
+Turtle:23 Jaguar:5 Wolf:20 Wolf:20 Wolf:20 
+Player 2
+Crocodile:22 Crocodile:7 Wolf:15 Wolf:15 Wolf:15 
+Turn 6 Player 2 attacks:
+Player 1
+Turtle:20 Jaguar:DEAD Wolf:15 Wolf:15 Wolf:15 
+Player 2
+Crocodile:21 Crocodile:6 Wolf:15 Wolf:15 Wolf:15 
+Turn 7 Player 1 attacks:
+Player 1
+Turtle:18 Jaguar:DEAD Wolf:15 Wolf:15 Wolf:15 
+Player 2
+Crocodile:19 Crocodile:6 Wolf:10 Wolf:10 Wolf:10 
+Turn 8 Player 2 attacks:
+Player 1
+Turtle:12 Jaguar:DEAD Wolf:10 Wolf:10 Wolf:10 
+Player 2
+Crocodile:18 Crocodile:5 Wolf:10 Wolf:10 Wolf:10 
+Turn 9 Player 1 attacks:
+Player 1
+Turtle:10 Jaguar:DEAD Wolf:10 Wolf:10 Wolf:10 
+Player 2
+Crocodile:16 Crocodile:5 Wolf:5 Wolf:5 Wolf:5 
+Turn 10 Player 2 attacks:
+Player 1
+Turtle:4 Jaguar:DEAD Wolf:5 Wolf:5 Wolf:5 
+Player 2
+Crocodile:15 Crocodile:4 Wolf:5 Wolf:5 Wolf:5 
+Turn 11 Player 1 attacks:
+Player 1
+Turtle:2 Jaguar:DEAD Wolf:5 Wolf:5 Wolf:5 
+Player 2
+Crocodile:13 Crocodile:4 Wolf:DEAD Wolf:DEAD Wolf:DEAD 
+Turn 12 Player 2 attacks:
+Player 1
+Turtle:DEAD Jaguar:DEAD Wolf:DEAD Wolf:5 Wolf:5 
+Player 2
+Crocodile:12 Crocodile:3 Wolf:DEAD Wolf:DEAD Wolf:DEAD 
+Turn 13 Player 1 attacks:
+Player 1
+Turtle:DEAD Jaguar:DEAD Wolf:DEAD Wolf:5 Wolf:3 
+Player 2
+Crocodile:7 Crocodile:DEAD Wolf:DEAD Wolf:DEAD Wolf:DEAD 
+Turn 14 Player 2 attacks:
+Player 1
+Turtle:DEAD Jaguar:DEAD Wolf:DEAD Wolf:DEAD Wolf:3 
+Player 2
+Crocodile:6 Crocodile:DEAD Wolf:DEAD Wolf:DEAD Wolf:DEAD 
+Turn 15 Player 1 attacks:
+Player 1
+Turtle:DEAD Jaguar:DEAD Wolf:DEAD Wolf:DEAD Wolf:1 
+Player 2
+Crocodile:1 Crocodile:DEAD Wolf:DEAD Wolf:DEAD Wolf:DEAD 
+Turn 16 Player 2 attacks:
+Player 1
+Turtle:DEAD Jaguar:DEAD Wolf:DEAD Wolf:DEAD Wolf:DEAD 
+Player 2
+Crocodile:DEAD Crocodile:DEAD Wolf:DEAD Wolf:DEAD Wolf:DEAD 
+Draws!
