@@ -1,0 +1,495 @@
+
+<!-- saved from url=(0069)https://course.cse.ust.hk/comp2012h/assignment/assignment2/index.html -->
+<html class="gr__course_cse_ust_hk"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<title>Assignment 2</title>
+
+<style type="text/css">
+
+html {
+
+	background: repeat #f5f5f4;
+
+	height: 100%;
+
+}
+
+body {
+
+	padding: 0;
+
+	font-family: Arial, Helvetica, sans-serif;
+
+	font-size: 14px;
+
+	margin: 20px auto 20px auto;
+
+	color: #484848;
+
+	height: 100%;
+
+	max-width: 950px;
+
+}
+
+div {
+
+	margin: 20px auto 20px auto;
+
+}
+
+a {
+
+	color: #0091ed;
+
+	text-decoration: none;
+
+}
+
+a:hover {
+
+	text-decoration: none;
+
+}
+
+li {
+
+	line-height: 20px;
+
+}
+
+p {
+
+	text-align: justify;
+
+	padding: 5px 0 5px 0;
+
+	margin: 0px;
+
+	line-height: 20px;
+
+}
+
+.clear {
+
+	clear: both;
+
+}
+
+h1 {
+
+	padding: 15px 0px 0 0;
+
+	margin: 0px;
+
+	color: #484848;
+
+	font-weight: bold;
+
+	font-size: 28px;
+
+}
+
+h2 {
+
+	padding: 20px 0px 10px 0;
+
+	margin: 0px;
+
+	color: #484848;
+
+	font-weight: bold;
+
+	font-size: 20px;
+
+}
+
+h3 {
+
+	padding: 20px 0px 0 0;
+
+	margin: 0px;
+
+	color: #484848;
+
+	font-weight: bold;
+
+	font-size: 20px;
+
+}
+
+h4 {
+
+	padding: 0px 0px 0 0;
+
+	margin: 0px;
+
+	color: #484848;
+
+	font-weight: bold;
+
+	font-size: 18px;
+
+}
+
+</style>
+
+<style type="text/css"></style></head>
+
+<body data-gr-c-s-loaded="true" cz-shortcut-listen="true">
+
+<div style="margin: 20px auto 20px auto;max-width: 950px;">
+
+  <div>
+
+    <h1><strong>Assignment 2: Big Decimal ADT and Linked list</strong></h1>
+
+  </div>
+
+  <div>
+
+    <h2> Contents </h2>
+
+    <ul>
+
+      <li><a href="https://course.cse.ust.hk/comp2012h/assignment/assignment2/index.html#news">News</a></li>
+
+      <li><a href="https://course.cse.ust.hk/comp2012h/assignment/assignment2/index.html#introduction">Introduction</a></li>
+
+      <li><a href="https://course.cse.ust.hk/comp2012h/assignment/assignment2/index.html#structure">BigDecimal Data Structure</a></li>
+
+      <li><a href="https://course.cse.ust.hk/comp2012h/assignment/assignment2/index.html#requirement">Assignment Requirements</a></li>
+
+      <li><a href="https://course.cse.ust.hk/comp2012h/assignment/assignment2/index.html#grading">Grading Scheme</a></li>
+
+      <li><a href="https://course.cse.ust.hk/comp2012h/assignment/assignment2/index.html#bonus">Bonus</a></li>
+
+    </ul>
+
+  </div>
+
+  <div id="news">
+
+    <h2> News </h2>
+
+    <p>1. <strong>Submission deadline: 11:59 pm, Wednesday, Nov. 15, 2017</strong></p>
+    <p>2. <strong>Do not use other header file not included in our skeleton code. Note: sstream is a useful header file. You need to search online how to use it.</strong></p>
+    <p>3. <strong>For the task 2, you should implement the linked list yourself, do not use STL library or other library. </strong></p>
+    <p>4. <strong>For the <code>^</code> operator overloading, the <em>power</em> is integer.
+    </strong></p>
+    <p>5. <strong>For the constructor by float or double in task 1, you should keep the precision at most 5. For example, the input is 1.23333333, then the output for BigDecimal is 1.23333. If the input is 1.2000000, the output is 1.2.</strong></p>
+    <p>6. <strong>In the task 1, if you encounter the approximation problem, please follow the round rule: 1.233333-&gt;1.23333, 1.233335-&gt;1.23334. </strong></p>
+    <p>7. Hint:<strong> For the operator overloading, you can implement two helper functions <code>positive_addition</code> and <code>positive_subtraction</code>  for two positive BigDecimals. Then for "+" operator overloading, if the two BigDecmials are both positive, the <code>positive_addition</code> function can be used. If one of the two BigDecimals is positive, the other is negative, it is a subtraction in fact. So the <code>positive_subtraction</code> function can be used.
+    </strong></p>
+    <p>8. Hint:<strong> For the "*" operator overloading, addition can be used in fact. Because <code>5 * 4 = 5 + 5 + 5 + 5</code>, for two bigDecimal, you can firstly move the "." in one bigDecimal so that the bigDecimal becomes an integer. For example, 2.978 * 100.123 = 2978 * 0.100123 = 0.100123 + 0.100123 +...+0.100123 (2977 addition). Thus, multiplication can be changed into addition. For the "/" operator overloading, subtraction can be used. For the "^" operator overloading, multiplication can be used.
+    </strong></p>
+  
+    
+<!--     <p>2. <font color="red">[NEW]</font>There are some revision on <a href="code/bigint.h">bigint.h</a> and <a href="code/main.cpp">main.cpp</a>. Please use the latest version for your assignment. (Thanks to Brian So.)</p> -->
+
+  </div>
+
+  <div id="introduction">
+
+    <h2> Big Decimal ADT (Abstract Data Type) </h2>
+
+    <p>Normally, computers use storage of a certain size to store primitive data types. For example, on x86 PCs, "int" (integer) is of 4 bytes, meaning that it can only represent any integer ranging from -2^31 to 2^31-1 only. "double" (decimal) is of 8 bytes, in which only 52 bits can be used to decide precision of the decimal.
+    <br>
+     </p><center><img src="./Assignment 2_files/double_precision.png" width="50%"></center>
+    <br>
+     If we want to handle bigger number out of this range with high precision, we have to introduce a new abstract data type (ADT), Big Decimal. With this ADT, we can manipulate decimals of <em>any</em> size. In this assignment, you will implement the ADT named BigDecimal which supports all the essential operations of decimal for arbitrary large positive or negative decimals without overflowing.<p></p>
+
+  </div>
+
+  <div id="structure">
+
+    <h2> BigDecimal Data Structure </h2>
+    <p>For the input number, it can be represented with </p>
+        <div align="center">
+          <table border="1" cellspacing="0" cellpadding="0">
+            <tbody><tr>
+              <td width="60" align="center" valign="middle">x<sub>sign</sub></td>
+              <td width="60" align="center" valign="middle">x<sub>m</sub></td>
+              <td width="60" align="center" valign="middle">x<sub>m-1</sub></td>
+              <td width="60" align="center" valign="middle">...</td>
+              <td width="60" align="center" valign="middle">x<sub>0</sub></td>
+              <td width="60" align="center" valign="middle">.</td>
+              <td width="60" align="center" valign="middle">y<sub>0</sub></td>
+              <td width="60" align="center" valign="middle">...</td>
+              <td width="60" align="center" valign="middle">y<sub>n-1</sub></td>
+              <td width="60" align="center" valign="middle">y<sub>n</sub></td>
+            </tr>
+          </tbody></table>
+        </div>
+      where x<sub>sign</sub> is <strong>+</strong> or <strong>-</strong>. And x<sub>m</sub> and y<sub>n</sub> are digits. We can choose the base of 10. The big decimal is <br>
+      <center>
+      x<sub>sign</sub>(x<sub>0</sub>+...+10<sup>m-1</sup>x<sub>m-1</sub>+10<sup>m</sup>x<sub>m</sub>+10<sup>-1</sup>y<sub>0</sub>+...+10<sup>-(n+1)</sup>y<sub>n</sub>)
+      </center>
+    <p>
+    </p>
+    <p>To implement BigDecimal, you should use linked list in BigDecimal class:
+    </p><blockquote> 
+    <strong><code>struct</code></strong> Node { <br>
+      <p><code>
+        &nbsp;&nbsp;char data;<br>
+        &nbsp;&nbsp;Node* next;</code>
+      </p><p><code>}; </code>
+    </p></blockquote>
+    
+
+    <blockquote> 
+    <strong><code>class</code></strong><code> BigDecimal { <br>
+      &nbsp;&nbsp;// public functions here
+      <p></p>
+      </code>
+      <p><code><strong>private</strong>: <br>
+        &nbsp;&nbsp;Node* linkedList;
+        </code>
+      </p><p><code>}; </code>
+    </p></blockquote>
+    The data in each node of linked list is used to represent '+', '-', '.' or  '0' - '9'. <br>
+<!--     <strong>Attention:</strong>
+ -->
+
+  </div>
+
+  <div id="requirement">
+
+    <h2> Assignment Requirements </h2>
+    <h3> Task 1</h3>
+
+    <p>1. You must use the template of class BigDecimal that we provide. Note that you can add your own helper private methods if needed. Public member functions are reserved for the users to call. The header file <a href="https://course.cse.ust.hk/comp2012h/assignment/assignment2/code/bigDecimal.h">bigDecimal.h</a> is provided.</p>
+
+    <p>2. There are 4 ways to construct BigDecimal:
+
+    </p><blockquote> <strong>a. Default</strong><br>
+
+      <p>No parameter can be passed. The default value of the BigDecimal should be 0 (not 0.0).<br>
+
+        Usage example: <code>BigDecimal bd;</code></p>
+
+      <p><strong>b. From a string</strong></p>
+
+      <p>A null-terminated string can be passed.<br>
+
+        Usage example: <code>BigDecimal bd(“-1234567.2223344”);</code> <br>
+        Usage example: <code>BigDecimal bd(“-1234567”);</code>
+      </p>
+
+      <p> <strong>c. From a double</strong>
+
+      </p><p>A double (int or float) can be passed.<br>
+
+        Usage example: <code>BigDecimal bd(-100000.999999);</code></p>
+
+      <p> <strong>d. From a BigDecimal</strong>
+
+      </p><p>A BigDecimal can be passed.<br>
+
+        Usage example: <code>BigDecimal bd(bd2);</code></p>
+
+    </blockquote>
+
+    <p>3. There are two public functions in BigDecimal, namely from_string and to_string, which convert a BigDecimal to a null-terminated string, and vice versa, explained below: </p>
+
+    <blockquote>
+
+      <p>a. <code>bool from_string(const char*)</code> converts a string into the BigDecimal object. If the string is <em>valid</em>, it will be parsed and stored in the object, and then return true. Otherwise, false will be returned. Note that a <em>valid</em> string means that it contains only digits (0-9) and '.' with leading ‘-’ (for negative), or leading ‘+’ or nothing (for positive). For example, "+1.2", "-1.2", "1.0" and "1" is valid, but ".1" is not valid. In addition, for the input "1.0", you should determine the best expression as "1" without ".0" or ".00000".</p>
+
+      <p>b. <code>void to_string(char*)</code> outputs a readable string according to current data in the object. If the BigDecimal is possitive, no leading '+' should be output. Note that all strings must be null-terminated.</p>
+
+    </blockquote>
+
+    <p>4. To achieve all the operations of BigDecimal, you need to overload the following operators. If in doubt, please refer to decimal primitive type operations:</p>
+
+    <div align="center">
+
+      <table border="1" cellspacing="0" cellpadding="0">
+
+        <tbody><tr>
+
+          <td width="50" height="20" align="center" valign="middle"><strong>No.</strong></td>
+
+          <td width="112" align="center" valign="middle"><strong>Operator(s)</strong></td>
+
+          <td width="467" align="center" valign="middle" style="padding: 10px"><strong>Remark</strong></td>
+
+        </tr>
+
+        <tr>
+
+          <td width="50" align="center" valign="middle">1</td>
+
+          <td width="112" align="center" valign="middle"><code>+</code></td>
+
+          <td width="467" style="padding: 10px"><p>You need to implement three types of addition operations, BigDecimal + BigDecimal, BigDecimal + double (or int, float) and double (or int, float) + BigDecimal. The returned type should be BigDecimal.</p></td>
+
+        </tr>
+
+        <tr>
+
+          <td width="50" align="center" valign="middle">2</td>
+
+          <td width="112" align="center" valign="middle"><code>-</code></td>
+
+          <td width="467" style="padding: 10px"><p>The requirements are similar to entry &lt;1&gt;.</p></td>
+
+        </tr>
+
+        <tr>
+
+          <td width="50" align="center" valign="middle">3</td>
+
+          <td width="112" align="center" valign="middle"><code>*</code></td>
+
+          <td width="467" style="padding: 10px"><p>The requirements are similar to entry &lt;1&gt;.</p></td>
+
+        </tr>
+
+        <tr>
+
+          <td width="50" align="center" valign="middle">4</td>
+
+          <td width="112" align="center" valign="middle"><code>/</code></td>
+
+          <td width="467" style="padding: 10px"><p>The requirements are similar to entry &lt;1&gt;. The precision for this operator overloading should not be longer than the original two numbers. For example 1.23333/2, the result precision should be 5.</p></td>
+
+        </tr>
+
+<!--         <tr>
+
+          <td width="50" align="center" valign="middle">5</td>
+
+          <td width="112" align="center" valign="middle"><code>%</code></td>
+
+          <td width="467" style="padding: 10px"><p><em>% is the one similar to integer mod operation for its primitive counterpart.</em> The requirements are similar to entry &lt;1&gt;.</p></td>
+
+        </tr> -->
+
+        <tr>
+
+          <td width="50" align="center" valign="middle">6</td>
+
+          <td width="112" align="center" valign="middle"><code>=</code></td>
+
+          <td width="467" style="padding: 10px"><p>You need to implement both BigDecimal = BigDecimal and BigDecimal = double (and int, float). The returned type should be BigDecimal&amp; to support concatenation.</p></td>
+
+        </tr>
+
+        <tr>
+
+          <td width="50" align="center" valign="middle">7</td>
+
+          <td width="112" align="center" valign="middle"><code>++, --</code></td>
+
+          <td width="467" style="padding: 10px"><p>You need to implement both BigDecimal++ (or BigDecimal--) and ++BigDecimal (or --BigDecimal). The returned type should be BigDecimal&amp; for prefix ++ (--) and BigDecimal for postfix ++ (--).</p></td>
+
+        </tr>
+
+        <tr>
+
+          <td width="50" align="center" valign="middle">8</td>
+
+          <td width="112" align="center" valign="middle"><code>&gt;, &gt;=<br>
+
+            &lt;, &lt;=<br>
+
+            ==, !=</code></td>
+
+          <td width="467" style="padding: 10px"><p>You need to implement the comparison between two BigDecimal, or a BigDecimal and a double (and int, float) type. It returns either true or false.</p></td>
+
+        </tr>
+
+        <tr>
+
+          <td align="center" valign="middle">9</td>
+
+          <td align="center" valign="middle"><code>^</code></td>
+
+          <td style="padding: 10px"><p>You need to compute the value of base raised to the power. For example: base ^ power = base<sup>power</sup> where <em>base</em> is BigDecimal and <em>power</em> is also BigDecimal but the digits after "." are ignored. In other words, the <em>power</em> is an integer. The precision is similar to that of "/".</p></td>
+
+        </tr>
+
+        <tr>
+
+          <td width="50" align="center" valign="middle">10</td>
+
+          <td width="112" align="center" valign="middle"><code>&gt;&gt;, &lt;&lt;</code></td>
+
+          <td width="467" style="padding: 10px"><p><em>These two are the input and output operators. </em>The returned type should be istream&amp; (or ostream&amp;) to support concatenation.</p></td>
+
+        </tr>
+
+      </tbody></table>
+
+    </div>
+
+    <p>5. We have provided you a <a href="https://course.cse.ust.hk/comp2012h/assignment/assignment2/code/main.cpp">main.cpp</a> for your basic testing only. You may need to come up with your own testing program. Note that we will use our own testing program to grade your program. </p>
+<p></p>
+    <h3> Task 2</h3>
+    <p>1. Reverse a linked list from position m to n. Do it in-place and in one-pass (1 &#8804; m &#8804; n &#8804; length of list.).<br>
+    &nbsp;&nbsp;&nbsp;For example: <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Given 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL, m = 2 and n = 4, <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1-&gt;4-&gt;3-&gt;2-&gt;5-&gt;NULL.
+    </p>
+    <p>2. Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.<br>
+    &nbsp;&nbsp;&nbsp;For example:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Given 1-&gt;2-&gt;3-&gt;3-&gt;4-&gt;4-&gt;5, return 1-&gt;2-&gt;5.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Given 1-&gt;1-&gt;1-&gt;2-&gt;3, return 2-&gt;3. 
+    </p>
+    <p>3. Given a linked list, swap every two adjacent nodes and return its head.<br>
+    &nbsp;&nbsp;&nbsp;For example,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Given 1-&gt;2-&gt;3-&gt;4, you should return the list as 2-&gt;1-&gt;4-&gt;3.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your algorithm should use only constant space. You may not modify the values in the list, only nodes itself can be changed.<br>
+    </p>
+
+ <div id="grading">
+
+    <h2> Submit </h2>
+
+    <p>1. For task 1, please submit your <strong>bigDecimal.cpp</strong> and <strong>bigDecimal.h</strong> to us (you should write it in two files). If you have a good tester program for us to consider, please also submit it. This will help us understand how your program works and some of the unique features you have implemented.</p>
+    <p>2. For task 2, please submit a <strong>main.cpp</strong> for each question to us. The code can be run directly so that we input something, it can print the result on screen. Please give some prompt for the input format.</p>
+    <p>3. Please submit a file <strong>report.docx</strong> which specifies how you implement the operator overloading and how you implement your algorithm in task 2. Do not paste code and just describe your idea.</p>
+    <p>4. Please zip or gzip all the files into one file and submit to the <a href="https://course.cse.ust.hk/cass/student/submit.php">CASS</a>. When unzipped, there is structure like:<br><strong>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    assigment2/report.docx<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    assigment2/task1/bigDecimal.cpp<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    assigment2/task1/bigDecimal.h<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    assigment2/task2/1/main.cpp<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    assigment2/task2/2/main.cpp<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    assigment2/task2/3/main.cpp
+    </strong></p>
+
+
+  </div>
+    
+
+  </div>
+
+  <div id="grading">
+
+    <h2> Grading Scheme </h2>
+
+    <p>1. The correct implementation of the two helper methods, i.e. <code>from_string(const char*)</code> and <code>to_string(char*)</code> would worth 6 points. </p>
+
+    <p>2. Each of the correct overloaded operators would worth 4 points.</p>
+    <p>3. Each of the correct answer for task 2 would worth 10 points.</p>
+
+  </div>
+
+  <div id="bonus">
+
+    <h2> Bonus </h2>
+
+    <p>In the task 1 above, you only need to implement all the operators without efficiency consideration. For example, there are several ways to implement integer multiplication and division. Let’s take multiplication as an example. The simplest but inefficient one is to obtain the result based on multiple additions. For example, if we want to calculate 4*5, we can add 4 (or 5) for 5 times (or 4 times). Though you get the result with full basic credits, this kind of method is not efficient enough. Division can be similarly but inefficiently done with subtraction.</p>
+
+    <p>If you can implement the operations (not limited to multiplication and division) in a much more efficient way, you can get a maximum of <strong>10</strong> bonus points for them. The same is for task 2. Please explain your approaches in <b>report.docx</b>.</p>
+
+  </div>
+
+</div>
+
+
+
+
+
+</body></html>
