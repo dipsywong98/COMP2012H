@@ -1,6 +1,6 @@
 #include "Crocodile.h"
 
-Crocodile::Crocodile(Game* game, int player, int position): Unit(game,player,position){
+Crocodile::Crocodile(Game* game, int player, int position): Wolf(game,player,position){
 	hp = MAX_HP;
 	atk_damage = DEFAULT_ATK_DAMAGE;
 	name = "Crocodile";
@@ -18,22 +18,15 @@ void Crocodile::defend(Unit* opponent, int damage){
 
 void Crocodile::attack()
 {
-	if(!enemies[pos]->isDead())
-		enemies[pos]->defend(this, atk_damage);
-	else {
-		for(int i = 1; i < 5; i++)
-		{
-			if(pos-i >= 0 && !enemies[pos-i]->isDead())
-			{
-				enemies[pos-i]->defend(this, atk_damage);
-				break;
-			}
-			else if(pos+i < 5 && !enemies[pos+i]->isDead())
-			{
-				enemies[pos+i]->defend(this, atk_damage);
-				break;
-			}
+	Wolf::attack();
+	takeDamage(1);
+}
+
+void Crocodile::specialMove(){
+	for(int i=0 ; i<5; i++){
+		if(!enemies[i]->isDead()){
+			enemies[i]->takeDamage(2);
 		}
 	}
-	takeDamage(1);
+	takeDamage(2);
 }

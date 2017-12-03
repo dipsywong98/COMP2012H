@@ -22,6 +22,8 @@ public:
 	 * You may add data members and functions to this class to help you implement the Special Moves part.
 	 */
 
+	void specialMove(Player p);
+
 	void biteAndScratch(Player p);
 	void harass(Player p);
 	void summonTsunami(Player p);

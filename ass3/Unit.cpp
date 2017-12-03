@@ -52,3 +52,11 @@ int Unit::getAtkDamage() const
 {
         return atk_damage;
 }
+
+void Unit::specialMove(){
+	for(int i=0 ; i<5; i++){
+		if(!enemies[i]->isDead()){
+			enemies[i]->takeDamage(1);
+		}
+	}
+}

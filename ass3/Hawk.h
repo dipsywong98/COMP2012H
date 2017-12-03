@@ -1,9 +1,9 @@
 #ifndef HAWK_H_
 #define HAWK_H_
 
-#include "Unit.h"
+#include "Wolf.h"
 
-class Hawk: public Unit {
+class Hawk: public Wolf {
 public:
 	Hawk(Game* game, int player, int position);
 	virtual ~Hawk();

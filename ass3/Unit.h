@@ -14,13 +14,14 @@ public:
 
 	virtual void attack() = 0;
 	virtual void defend(Unit* opponent, int damage);
+	virtual void specialMove();
 
 	void takeDamage(int damage);
 	void die();
 	bool isDead() const;
 	std::string getName() const;
 	int getCurrentHP() const;
-    int getAtkDamage() const;
+	int getAtkDamage() const;
 protected:
 	int hp;
 	int atk_damage;

@@ -1,15 +1,14 @@
 #ifndef BEE_H_
 #define BEE_H_
 
-#include "Unit.h"
+#include "Wolf.h"
 
-class Bee: public Unit {
+class Bee: public Wolf {
 public:
 	Bee(Game* game, int player, int position);
 	virtual ~Bee();
 
-	virtual void attack();
-
+	virtual void specialMove();
 private:
 	static const int MAX_HP = 15;
 	static const int DEFAULT_ATK_DAMAGE = 1;

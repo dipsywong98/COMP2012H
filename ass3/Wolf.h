@@ -9,7 +9,9 @@ public:
 	virtual ~Wolf();
 
 	virtual void attack();
-
+protected:
+	virtual void positionAttack(bool defenable = true);
+	virtual void positionAttackAction(Unit* enemy, bool denfenable = true);
 private:
 	static const int MAX_HP = 30;
 	static const int DEFAULT_ATK_DAMAGE = 5;

@@ -1,6 +1,6 @@
 #include "Jaguar.h"
 
-Jaguar::Jaguar(Game* game, int player, int position): Unit(game,player,position){
+Jaguar::Jaguar(Game* game, int player, int position): Wolf(game,player,position){
 	hp = MAX_HP;
 	atk_damage = DEFAULT_ATK_DAMAGE;
 	name = "Jaguar";
@@ -19,21 +19,5 @@ void Jaguar::attack()
 	else{
 		atk_damage = DEFAULT_ATK_DAMAGE;
 	}
-	if(!enemies[pos]->isDead())
-		enemies[pos]->defend(this, atk_damage);
-	else {
-		for(int i = 1; i < 5; i++)
-		{
-			if(pos-i >= 0 && !enemies[pos-i]->isDead())
-			{
-				enemies[pos-i]->defend(this, atk_damage);
-				break;
-			}
-			else if(pos+i < 5 && !enemies[pos+i]->isDead())
-			{
-				enemies[pos+i]->defend(this, atk_damage);
-				break;
-			}
-		}
-	}
+	Wolf::attack();
 }

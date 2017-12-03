@@ -120,6 +120,7 @@ void Game::start()
 		 * Hint: You should use dynamic binding, you may add data members/ functions in the Game class to help you implement this part
 		 */
 
+		specialMove(currentPlayer);
 
 		//Output turn info
 		cout << "Turn " << turnCount++ << " Player " << currentPlayer+1 << " attacks:" << endl;
@@ -152,5 +153,31 @@ void Game::start()
 			currentPlayer = P2;
 		else
 			currentPlayer = P1;
+	}
+}
+
+void Game::specialMove(Player p){
+	Unit** allies = units[p];
+	Unit** enemies = units[!p];
+	int mammal_count=0, flying_count=0, swimming_count=0, bee_count=0;
+  for(int i=0; i<5 ; i++){
+		if(allies[i]->isDead())continue;
+    if(allies[i]->getName()=="Wolf"||allies[i]->getName()=="Jaguar"){
+      mammal_count++;
+    }
+    else if(allies[i]->getName()=="Hawk"||allies[i]->getName()=="Bat"||allies[i]->getName()=="Dragon"){
+      flying_count++;
+    }
+		else if(allies[i]->getName()=="Turtle"||allies[i]->getName()=="Crocodile"){
+			swimming_count++;
+		}
+		else if(allies[i]->getName()=="Bee"||allies[i]->getName()=="QueenBee"){
+			bee_count++;
+		}
+  }
+	if(mammal_count>=3){
+		for(int i=0; i<5;i++){
+			
+		}
 	}
 }

@@ -1,14 +1,13 @@
 #ifndef TURTLE_H_
 #define TURTLE_H_
 
-#include "Unit.h"
+#include "Wolf.h"
 
-class Turtle: public Unit {
+class Turtle: public Wolf {
 public:
 	Turtle(Game* game, int player, int position);
 	virtual ~Turtle();
 
-	virtual void attack();
 	virtual void defend(Unit* opponent, int damage);
 private:
 	static const int MAX_HP = 35;
