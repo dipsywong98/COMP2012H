@@ -1,9 +1,9 @@
 #ifndef BAT_H_
 #define BAT_H_
 
-#include "Wolf.h"
+#include "Bee.h"
 
-class Bat: public Wolf {
+class Bat: public Bee{
 public:
 	Bat(Game* game, int player, int position);
 	virtual ~Bat();

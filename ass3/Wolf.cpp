@@ -39,11 +39,12 @@ void Wolf::positionAttack(bool defenable){
 }
 
 void Wolf::positionAttackAction(Unit* enemy, bool defenable){
-	// std::cout<<name<<" attack "<<enemy->getName()<<std::endl;
+	 std::cout<<name<<" attack "<<enemy->getName()<<" "<<enemy->getCurrentHP();
 	if(defenable){
 		enemy->defend(this, atk_damage);
 	}
 	else{
 		enemy->takeDamage(atk_damage);
 	}
+	std::cout<<enemy->getCurrentHP()<<std::endl;
 }

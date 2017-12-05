@@ -1,7 +1,7 @@
 #include "Bat.h"
 inline constexpr int min(int a, int b){return (a<b?a:b);}
 
-Bat::Bat(Game* game, int player, int position): Wolf(game,player,position){
+Bat::Bat(Game* game, int player, int position): Bee(game,player,position){
 	hp = MAX_HP;
 	atk_damage = DEFAULT_ATK_DAMAGE;
 	name = "Bat";
@@ -13,7 +13,7 @@ Bat::~Bat() {
 }
 
 void Bat::defend(Unit* opponent, int damage){
-	takeDamage(damage*0.8);
+	takeDamage(damage*8/10);
 }
 
 void Bat::attack()

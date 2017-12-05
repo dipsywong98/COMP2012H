@@ -4,8 +4,11 @@
 #ifndef UNIT_H_
 #define UNIT_H_
 #include <string>
-
+#include <iostream>
 #include "Game.h"
+
+using namespace std;
+
 class Game;
 
 class Unit {

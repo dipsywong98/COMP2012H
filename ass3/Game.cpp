@@ -116,7 +116,7 @@ void Game::start()
 		 * Hint: You should use dynamic binding, you may add data members/ functions in the Game class to help you implement this part
 		 */
 
-		// specialMove(currentPlayer);
+		 specialMove(currentPlayer);
 
 		//Output turn info
 		cout << "Turn " << turnCount++ << " Player " << currentPlayer+1 << " attacks:" << endl;

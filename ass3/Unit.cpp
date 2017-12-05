@@ -58,7 +58,7 @@ int Unit::getAtkDamage() const
 void Unit::specialMove(){
 	for(int i=0 ; i<5; i++){
 		if(!enemies[i]->isDead()){
-			cout<<name<<" special move"<<enemies[i]<<endl;
+//			cout<<name<<" special move"<<enemies[i]->getName()<<" "<<enemies[i]->getCurrentHP()<<endl;
 			enemies[i]->takeDamage(1);
 		}
 	}

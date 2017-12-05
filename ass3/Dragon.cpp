@@ -14,7 +14,9 @@ Dragon::~Dragon() {
 }
 
 void Dragon::defend(Unit* opponent, int damage){
-	takeDamage(damage*0.6);
+	cout<<"hit by "<<opponent->getName()<<" "<<damage<<" "<<(int)(damage*6/10)<<" "<<hp;
+	takeDamage(damage*6/10);
+	cout<<" "<<hp<<endl;
 }
 
 void Dragon::attack()
@@ -29,23 +31,32 @@ void Dragon::attack()
 		areaAttack();
 	}
 	else{
+		atk_damage = SINGLE_ATK_DAMAGE;
 		Wolf::attack();
 	}
 }
 
 void Dragon::areaAttack(){
 	atk_damage = AREA_ATK_DAMAGE;
+	cout<<"Dragon Area attack";
 	for(int i=max(0,pos-1);i<min(5,pos+2);i++){
 		if(!enemies[i]->isDead()){
+			cout<<i<<" "<<enemies[i]->getCurrentHP();
 			enemies[i]->defend(this, atk_damage);
+			cout<<"->"<<enemies[i]->getCurrentHP()<<",";
 		}
 	}
+	cout<<endl;
 }
 
 void Dragon::specialMove(){
+	cout<<"Dragon Special Move";
 	for(int i=0 ; i<5; i++){
 		if(!enemies[i]->isDead()){
+			cout<<i<<" "<<enemies[i]->getCurrentHP();
 			enemies[i]->takeDamage(2);
+			cout<<"->"<<enemies[i]->getCurrentHP()<<",";
 		}
 	}
+	cout<<endl;
 }

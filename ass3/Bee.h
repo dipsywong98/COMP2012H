@@ -2,7 +2,6 @@
 #define BEE_H_
 
 #include "Wolf.h"
-#include "Bat.h"
 
 class Bee: public Wolf{
 public:
