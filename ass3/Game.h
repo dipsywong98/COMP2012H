@@ -4,6 +4,7 @@
 #include <map>
 #include "Unit.h"
 #include <iostream>
+#include <fstream>
 using namespace std;
 class Unit;
 
@@ -55,6 +56,7 @@ public:
 	void clearStage();
 	void printAttack(Unit* u);
 	void printDefend(Unit* u, int delta);
+	void printNumber(Unit* u, int number);
 	void waitNextFrame();
 
 	int index = 18;
