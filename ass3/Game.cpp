@@ -194,7 +194,12 @@ void Game::specialMove(Player p){
 		if(swimming_count>=3){
 			summonTsunami(allies[i],allies,enemies);
 		}
-		
+		if(bee_count==5||(bee_count==4&&queen_bee_count==1)){
+			marchAndConquer(allies[i],allies,enemies);
+		}
+		if(legendary_count>=3){
+			weatherTheStorm(allies[i],allies,enemies);
+		}
 	}
 	
 }
@@ -266,6 +271,15 @@ void Game::marchAndConquer(Unit* unit, Unit** allies, Unit** enemies){
 		generalKill(enemies,3);
 	}
 	else{
-		
+		for(int i=0; i<5; i++){
+			if(allies[i]->getName()=="Bee"){
+				((Bee*) allies[i])->heal(2);
+			}
+		}
 	}
+}
+
+void Game::weatherTheStorm(Unit* unit, Unit** allies, Unit** enemies){
+	if(!isLivingLegendary(unit))return;
+	generalKill(enemies,3);
 }
