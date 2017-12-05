@@ -9,6 +9,8 @@ using namespace std;
 class Unit;
 
 class Game {
+private:
+	ofstream fout;
 public:
 	enum Player {P1 = 0, P2 = 1 };
 	enum UnitIds {WOLF, JAGUAR, HAWK, BAT, TURTLE, CROCODILE, BEE, QUEEN_BEE, DRAGON };

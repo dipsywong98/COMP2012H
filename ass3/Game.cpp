@@ -34,7 +34,7 @@ ostream& Game::xyout(int x, int y){
 	return cout;
 }
 
-Game::Game(std::string file) {
+Game::Game(std::string file):fout("log.txt") {
 	load(file);
 }
 
@@ -105,15 +105,15 @@ bool Game::isEnd()
 
 	if(deadCount1 == 5 && deadCount2 == 5)
 	{
-		cout << "Draws!" << endl;
+		fout << "Draws!" << endl;
 		stageMessage()<<"Draws"<<endl;
 	}else if (deadCount1 == 5)
 	{
-		cout << "Player " << P2+1 << " Wins!" << endl;
+		fout << "Player " << P2+1 << " Wins!" << endl;
 		stageMessage()<<"Player " << P2+1 << " Wins!"<<endl;
 	} else if (deadCount2 == 5)
 	{
-		cout << "Player " << P1+1 << " Wins!" << endl;
+		fout << "Player " << P1+1 << " Wins!" << endl;
 		stageMessage()<<"Player " << P1+1 << " Wins!"<<endl;
 	} else {
 		return false;
@@ -127,7 +127,6 @@ void Game::start()
 	Player currentPlayer = P1;
 	int turnCount = 1;
 	console_init();
-	ofstream fout("log.txt");
 	while(!isEnd())
 	{
 		printAll();
