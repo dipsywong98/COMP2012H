@@ -27,16 +27,3 @@ void QueenBee::attack()
 {
 }
 
-void QueenBee::specialMove(){
-	for(int i=0; i<5; i++){
-		if(allies[i]->getName()=="Bee"){
-			heal((Bee*) allies[i], 2);
-		}
-	}
-}
-
-void QueenBee::heal(Bee* target, int amount=2){
-	if(!isDead()){
-		target->heal(amount);
-	}
-}

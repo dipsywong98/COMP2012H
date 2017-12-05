@@ -21,12 +21,3 @@ void Crocodile::attack()
 	Wolf::attack();
 	takeDamage(1);
 }
-
-void Crocodile::specialMove(){
-	for(int i=0 ; i<5; i++){
-		if(!enemies[i]->isDead()){
-			enemies[i]->takeDamage(2);
-		}
-	}
-	takeDamage(2);
-}

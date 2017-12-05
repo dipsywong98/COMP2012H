@@ -14,6 +14,26 @@
 
 using namespace std;
 
+#ifdef _WIN32
+#include <windows.h>
+void Game::gotoxy(int x, int y) {
+    COORD coord;
+    coord.X = x; 
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    
+}
+#else
+void Game::gotoxy(int x, int y) {
+    printf("\033[%d;%dH", y, x);
+}
+#endif
+
+ostream& Game::xyout(int x, int y){
+	gotoxy(x,y);
+	return cout;
+}
+
 Game::Game(std::string file) {
 	load(file);
 }
@@ -103,6 +123,8 @@ void Game::start()
 {
 	Player currentPlayer = P1;
 	int turnCount = 1;
+	console_init();
+	ofstream fout("log.txt");
 	while(!isEnd())
 	{
 		for(int i = 0; i < 5; i++)
@@ -110,38 +132,36 @@ void Game::start()
 			if(!units[currentPlayer][i]->isDead())
 				units[currentPlayer][i]->attack();
 		}
+		active_player = currentPlayer;
 
-		/**
-		 * To-Do 2: Codes for Special moves (if any) should be written here
-		 * Hint: You should use dynamic binding, you may add data members/ functions in the Game class to help you implement this part
-		 */
+		printAll();
 
 		 specialMove(currentPlayer);
 
 		//Output turn info
-		cout << "Turn " << turnCount++ << " Player " << currentPlayer+1 << " attacks:" << endl;
-		cout << "Player 1" << endl;
+		fout << "Turn " << turnCount++ << " Player " << currentPlayer+1 << " attacks:" << endl;
+		fout << "Player 1" << endl;
 		for(int i = 0; i < 5; i++)
 		{
 			if(!units[P1][i]->isDead())
-				cout << units[P1][i]->getName() << ":"
+				fout << units[P1][i]->getName() << ":"
 				<< units[P1][i]->getCurrentHP() << " ";
 			else
-				cout << units[P1][i]->getName() << ":"
+				fout << units[P1][i]->getName() << ":"
 				<< "DEAD" << " ";
 		}
-		cout << endl;
-		cout << "Player 2" << endl;
+		fout << endl;
+		fout << "Player 2" << endl;
 		for(int i = 0; i < 5; i++)
 		{
 			if(!units[P2][i]->isDead())
-				cout << units[P2][i]->getName() << ":"
+				fout << units[P2][i]->getName() << ":"
 				<< units[P2][i]->getCurrentHP() << " ";
 			else
-				cout << units[P2][i]->getName() << ":"
+				fout << units[P2][i]->getName() << ":"
 				<< "DEAD" << " ";
 		}
-		cout << endl;
+		fout << endl;
 
 
 		//Switch player turn
@@ -150,7 +170,6 @@ void Game::start()
 		else
 			currentPlayer = P1;
 
-		cout<<endl;
 	}
 }
 
@@ -185,7 +204,6 @@ void Game::specialMove(Player p){
 
 	for(int i=0;i<5;i++){
 		if(mammal_count>=3){
-			cout<<"YOOOO"<<endl;
 			biteAndScratch(allies[i],allies,enemies);
 		}
 		if(flying_count>=3){
@@ -282,4 +300,39 @@ void Game::marchAndConquer(Unit* unit, Unit** allies, Unit** enemies){
 void Game::weatherTheStorm(Unit* unit, Unit** allies, Unit** enemies){
 	if(!isLivingLegendary(unit))return;
 	generalKill(enemies,3);
+}
+
+void Game::console_init(){
+	for(int i=0;i<2;i++){
+		for(int j=0; j<5; j++){
+			position[units[i][j]] = pair<int,int>(14*j,9*i+1);
+		}
+	}
+}
+
+void Game::printUnit(Unit* unit){
+	int x = position[unit].first;
+	int y = position[unit].second;
+	xyout(x,y+0)<<"--------------"<<endl;
+	xyout(x,y+1)<<"|            |"<<endl;
+	xyout(x,y+2)<<"|            |"<<endl;
+	xyout(x,y+3)<<"|            |"<<endl;
+	xyout(x,y+4)<<"|            |"<<endl;
+	xyout(x,y+5)<<"--------------"<<endl;
+	xyout(x+3,y+2)<<unit->getName()<<endl;
+	xyout(x+3,y+3)<<"atk:"<<unit->getAtkDamage()<<endl;
+	if(unit->isDead()){
+		xyout(x+3,y+4)<<"DEAD";
+	}
+	else{
+		xyout(x+3,y+4)<<"hp"<<unit->getCurrentHP();
+	}
+}
+
+void Game::printAll(){
+	for(int i=0;i<2;i++){
+		for(int j=0; j<5; j++){
+			printUnit(units[i][j]);
+		}
+	}
 }

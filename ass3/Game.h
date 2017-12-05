@@ -1,9 +1,11 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+#include <map>
 #include "Unit.h"
+#include <iostream>
+using namespace std;
 class Unit;
-
 
 class Game {
 public:
@@ -37,6 +39,22 @@ public:
 	void weatherTheStorm(Unit* unit, Unit** allies, Unit** enemies);
 
 	void generalKill(Unit** enemies, int amount=1);
+
+	/**
+	 * Console Animation Helper
+	 */
+	void gotoxy(int x, int y);
+	ostream& xyout(int x, int y);
+	int active_player;
+	std::map<Unit*,std::pair<int,int>> position;
+	void console_init();
+	void printUnit(Unit* u);
+	void printAll();
+	void printUnit();
+	void clearAll();
+	void clearStage();
+	void printAttack();
+	void printDefend();
 };
 
 #endif /* GAME_H_ */

@@ -12,14 +12,6 @@ Bee::~Bee() {
 	
 }
 
-void Bee::specialMove(){
-	for(int i=0 ; i<5; i++){
-		if(!enemies[i]->isDead()){
-			enemies[i]->takeDamage(3);
-		}
-	}
-}
-
 void Bee::heal(int amount=1){
 	if(!isDead()){
 		hp = min(hp+amount,MAX_HP);

@@ -17,7 +17,6 @@ public:
 
 	virtual void attack() = 0;
 	virtual void defend(Unit* opponent, int damage);
-	virtual void specialMove();
 
 	void takeDamage(int damage);
 	void die();

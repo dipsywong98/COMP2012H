@@ -10,7 +10,6 @@ public:
 
 	virtual void attack();
 	virtual void defend(Unit* opponent, int damage);
-	virtual void specialMove();
 private:
 	static const int MAX_HP = 40;
 	static const int AREA_ATK_DAMAGE = 4;
