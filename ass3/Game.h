@@ -21,13 +21,12 @@ public:
 	/**
 	 * You may add data members and functions to this class to help you implement the Special Moves part.
 	 */
-
 	void specialMove(Player p);
-
-	void biteAndScratch(Player p);
-	void harass(Player p);
-	void summonTsunami(Player p);
-	void marchAndConquer(Player p);
+	bool isMammal(Unit* unit);
+	bool isFlying(Unit* unit);
+	bool isSwimming(Unit* unit);
+	bool isBee(Unit* unit);
+	bool isQueenBee(Unit* unit);
 };
 
 #endif /* GAME_H_ */

@@ -12,10 +12,6 @@
 #include "QueenBee.h"
 #include "Dragon.h"
 
-/*
- * Remember to include the header file of the unit classes here
- */
-
 using namespace std;
 
 Game::Game(std::string file) {
@@ -120,7 +116,7 @@ void Game::start()
 		 * Hint: You should use dynamic binding, you may add data members/ functions in the Game class to help you implement this part
 		 */
 
-		specialMove(currentPlayer);
+		// specialMove(currentPlayer);
 
 		//Output turn info
 		cout << "Turn " << turnCount++ << " Player " << currentPlayer+1 << " attacks:" << endl;
@@ -153,31 +149,95 @@ void Game::start()
 			currentPlayer = P2;
 		else
 			currentPlayer = P1;
+
+		cout<<endl;
 	}
 }
 
 void Game::specialMove(Player p){
 	Unit** allies = units[p];
-	Unit** enemies = units[!p];
-	int mammal_count=0, flying_count=0, swimming_count=0, bee_count=0;
+//	Unit** enemies = units[!p];
+
+	//counting
+
+	int mammal_count=0, flying_count=0, swimming_count=0, bee_count=0, queen_bee_count=0;
   for(int i=0; i<5 ; i++){
 		if(allies[i]->isDead())continue;
-    if(allies[i]->getName()=="Wolf"||allies[i]->getName()=="Jaguar"){
+    if(isMammal(allies[i])){
       mammal_count++;
     }
-    else if(allies[i]->getName()=="Hawk"||allies[i]->getName()=="Bat"||allies[i]->getName()=="Dragon"){
+    else if(isFlying(allies[i])){
       flying_count++;
     }
-		else if(allies[i]->getName()=="Turtle"||allies[i]->getName()=="Crocodile"){
+		else if(isSwimming(allies[i])){
 			swimming_count++;
 		}
-		else if(allies[i]->getName()=="Bee"||allies[i]->getName()=="QueenBee"){
+		else if(isBee(allies[i])){
 			bee_count++;
 		}
+		else if(isQueenBee(allies[i])){
+			queen_bee_count++;
+		}
   }
+
+	// special move
+
 	if(mammal_count>=3){
-		for(int i=0; i<5;i++){
-			
+		for(int i=0; i<5; i++){
+			if(allies[i]->isDead())continue;
+			if(isMammal(allies[i])){
+				allies[i]->specialMove();
+			}
 		}
 	}
+
+	if(flying_count>=3){
+		for(int i=0; i<5; i++){
+			if(allies[i]->isDead())continue;
+			if(isFlying(allies[i])){
+				allies[i]->specialMove();
+			}
+		}
+	}
+
+	if(swimming_count>=3){
+		for(int i=0; i<5; i++){
+			if(allies[i]->isDead())continue;
+			if(isSwimming(allies[i])){
+				allies[i]->specialMove();
+			}
+		}
+	}
+
+	if((queen_bee_count==1&&bee_count==4)||(bee_count==5)){
+		for(int i=0; i<5; i++){
+			if(allies[i]->isDead())continue;
+			if(isBee(allies[i])){
+				allies[i]->specialMove();
+			}
+			else if(isQueenBee(allies[i])){
+				allies[i]->specialMove();
+			}
+		}
+	}
+}
+
+bool Game::isMammal(Unit* u){
+	return u->getName()=="Wolf"||u->getName()=="Jaguar";
+}
+
+bool Game::isFlying(Unit* u){
+	return u->getName()=="Hawk"||u->getName()=="Bat"||u->getName()=="Dragon";
+}
+
+bool Game::isSwimming(Unit* u){
+	return u->getName()=="Turtle"||u->getName()=="Crocodile";
+}
+
+bool Game::isBee(Unit* u){
+	return u->getName()=="Bee";
+}
+
+bool Game::isQueenBee(Unit* u){
+	return u->getName()=="QueenBee";
 }

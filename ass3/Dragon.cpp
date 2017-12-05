@@ -1,7 +1,8 @@
 #include "Dragon.h"
 inline constexpr int min(int a, int b){return (a<b?a:b);}
 inline constexpr int max(int a, int b){return (a>b?a:b);}
-Dragon::Dragon(Game* game, int player, int position): Unit(game,player,position){
+
+Dragon::Dragon(Game* game, int player, int position): Wolf(game,player,position){
 	hp = MAX_HP;
 	atk_damage = SINGLE_ATK_DAMAGE;
 	name = "Dragon";
@@ -28,28 +29,7 @@ void Dragon::attack()
 		areaAttack();
 	}
 	else{
-		singleAttack();
-	}
-}
-
-void Dragon::singleAttack(){
-	atk_damage = SINGLE_ATK_DAMAGE;
-	if(!enemies[pos]->isDead())
-		enemies[pos]->defend(this, atk_damage);
-	else {
-		for(int i = 1; i < 5; i++)
-		{
-			if(pos-i >= 0 && !enemies[pos-i]->isDead())
-			{
-				enemies[pos-i]->defend(this, atk_damage);
-				break;
-			}
-			else if(pos+i < 5 && !enemies[pos+i]->isDead())
-			{
-				enemies[pos+i]->defend(this, atk_damage);
-				break;
-			}
-		}
+		Wolf::attack();
 	}
 }
 
@@ -58,6 +38,14 @@ void Dragon::areaAttack(){
 	for(int i=max(0,pos-1);i<min(5,pos+2);i++){
 		if(!enemies[i]->isDead()){
 			enemies[i]->defend(this, atk_damage);
+		}
+	}
+}
+
+void Dragon::specialMove(){
+	for(int i=0 ; i<5; i++){
+		if(!enemies[i]->isDead()){
+			enemies[i]->takeDamage(2);
 		}
 	}
 }

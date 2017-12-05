@@ -1,4 +1,5 @@
 #include "Wolf.h"
+#include <iostream>
 
 Wolf::Wolf(Game* game, int player, int position): Unit(game,player,position){
 	hp = MAX_HP;
@@ -16,7 +17,7 @@ void Wolf::attack()
 	positionAttack();
 }
 
-void Wolf::positionAttack(bool defenable = true){
+void Wolf::positionAttack(bool defenable){
 	if(!enemies[pos]->isDead()){
 		positionAttackAction(enemies[pos],defenable);
 	}
@@ -25,19 +26,20 @@ void Wolf::positionAttack(bool defenable = true){
 		{
 			if(pos-i >= 0 && !enemies[pos-i]->isDead())
 			{
-				positionAttackAction(enemies[pos-1],defenable);
+				positionAttackAction(enemies[pos-i],defenable);
 				break;
 			}
 			else if(pos+i < 5 && !enemies[pos+i]->isDead())
 			{
-				positionAttackAction(enemies[pos+1],defenable);
+				positionAttackAction(enemies[pos+i],defenable);
 				break;
 			}
 		}
 	}
 }
 
-void Wolf::positionAttackAction(Unit* enemy, denfenable = true){
+void Wolf::positionAttackAction(Unit* enemy, bool defenable){
+	// std::cout<<name<<" attack "<<enemy->getName()<<std::endl;
 	if(defenable){
 		enemy->defend(this, atk_damage);
 	}

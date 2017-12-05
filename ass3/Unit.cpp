@@ -2,6 +2,8 @@
  *  You SHOULD NOT modify this file
  */
 #include "Unit.h"
+#include <iostream>
+using namespace std;
 
 Unit::Unit(Game* game, int player, int position) {
 	allies = game->units[player];
@@ -56,6 +58,7 @@ int Unit::getAtkDamage() const
 void Unit::specialMove(){
 	for(int i=0 ; i<5; i++){
 		if(!enemies[i]->isDead()){
+			cout<<name<<" special move"<<enemies[i]<<endl;
 			enemies[i]->takeDamage(1);
 		}
 	}

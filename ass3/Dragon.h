@@ -1,15 +1,16 @@
 #ifndef DRAGON_H_
 #define DRAGON_H_
 
-#include "Unit.h"
+#include "Wolf.h"
 
-class Dragon: public Unit {
+class Dragon: public Wolf {
 public:
 	Dragon(Game* game, int player, int position);
 	virtual ~Dragon();
 
 	virtual void attack();
 	virtual void defend(Unit* opponent, int damage);
+	virtual void specialMove();
 private:
 	static const int MAX_HP = 40;
 	static const int AREA_ATK_DAMAGE = 4;

@@ -1,5 +1,7 @@
 #include "QueenBee.h"
 
+inline constexpr int min(int a, int b){return (a<b?a:b);}
+
 QueenBee::QueenBee(Game* game, int player, int position): Unit(game,player,position){
 	hp = MAX_HP;
 	atk_damage = DEFAULT_ATK_DAMAGE;
@@ -35,6 +37,6 @@ void QueenBee::specialMove(){
 
 void QueenBee::heal(Bee* target, int amount=2){
 	if(!isDead()){
-		target->hp = min(target->hp+amount,MAX_HP);
+		target->heal(amount);
 	}
 }
