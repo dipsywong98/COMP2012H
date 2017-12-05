@@ -22,11 +22,22 @@ public:
 	 * You may add data members and functions to this class to help you implement the Special Moves part.
 	 */
 	void specialMove(Player p);
-	bool isMammal(Unit* unit);
-	bool isFlying(Unit* unit);
-	bool isSwimming(Unit* unit);
-	bool isBee(Unit* unit);
-	bool isQueenBee(Unit* unit);
+	bool isLivingMammal(Unit* unit);
+	bool isLivingFlying(Unit* unit);
+	bool isLivingSwimming(Unit* unit);
+	bool isLivingBee(Unit* unit);
+	bool isLivingQueenBee(Unit* unit);
+	bool isLivingLegendary(Unit* unit);
+
+
+	void biteAndScratch(Unit* unit, Unit** allies, Unit** enemies);
+	void harass(Unit* unit, Unit** allies, Unit** enemies);
+	void summonTsunami(Unit* unit, Unit** allies, Unit** enemies);
+	void marchAndConquer(Unit* unit, Unit** allies, Unit** enemies);
+	void storm(Unit* unit, Unit** allies, Unit** enemies);
+
+	void generalKill(Unit** enemies, int amount=1);
+	void generalHeal(Unit* allies, bool(&isType)(Unit*), int amount);
 };
 
 #endif /* GAME_H_ */

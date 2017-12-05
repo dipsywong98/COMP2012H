@@ -22,11 +22,6 @@ void Bat::attack()
 	heal(1);
 }
 
-void Bat::specialMove(){
-	Wolf::specialMove();
-	heal(1);
-}
-
 void Bat::heal(int amount=1){
 	if(!isDead()){
 		hp = min(hp+amount,MAX_HP);

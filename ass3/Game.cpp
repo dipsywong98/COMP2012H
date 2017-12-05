@@ -156,88 +156,116 @@ void Game::start()
 
 void Game::specialMove(Player p){
 	Unit** allies = units[p];
-//	Unit** enemies = units[!p];
+	Unit** enemies = units[!p];
 
 	//counting
 
-	int mammal_count=0, flying_count=0, swimming_count=0, bee_count=0, queen_bee_count=0;
+	int mammal_count=0, flying_count=0, swimming_count=0, bee_count=0, queen_bee_count=0, legendary_count=0;
   for(int i=0; i<5 ; i++){
 		if(allies[i]->isDead())continue;
-    if(isMammal(allies[i])){
+    if(isLivingMammal(allies[i])){
       mammal_count++;
     }
-    else if(isFlying(allies[i])){
+    if(isLivingFlying(allies[i])){
       flying_count++;
     }
-		else if(isSwimming(allies[i])){
+		if(isLivingSwimming(allies[i])){
 			swimming_count++;
 		}
-		else if(isBee(allies[i])){
+		if(isLivingBee(allies[i])){
 			bee_count++;
 		}
-		else if(isQueenBee(allies[i])){
+		if(isLivingQueenBee(allies[i])){
 			queen_bee_count++;
+		}
+		if(isLivingLegendary(allies[i])){
+			legendary_count++;
 		}
   }
 
-	// special move
+	for(int i=0;i<5;i++){
+		if(mammal_count>=3){
+			cout<<"YOOOO"<<endl;
+			biteAndScratch(allies[i],allies,enemies);
+		}
+		if(flying_count>=3){
+			harass(allies[i],allies,enemies);
+		}
+		if(swimming_count>=3){
+			summonTsunami(allies[i],allies,enemies);
+		}
+		
+	}
+	
+}
 
-	if(mammal_count>=3){
-		for(int i=0; i<5; i++){
-			if(allies[i]->isDead())continue;
-			if(isMammal(allies[i])){
-				allies[i]->specialMove();
-			}
+bool Game::isLivingMammal(Unit* u){
+	return (!u->isDead())&&(u->getName()=="Wolf"||u->getName()=="Jaguar");
+}
+
+bool Game::isLivingFlying(Unit* u){
+	return (!u->isDead())&&(u->getName()=="Hawk"||u->getName()=="Bat"||u->getName()=="Dragon");
+}
+
+bool Game::isLivingSwimming(Unit* u){
+	return (!u->isDead())&&(u->getName()=="Turtle"||u->getName()=="Crocodile");
+}
+
+bool Game::isLivingBee(Unit* u){
+	return (!u->isDead())&&(u->getName()=="Bee");
+}
+
+bool Game::isLivingQueenBee(Unit* u){
+	return (!u->isDead())&&(u->getName()=="QueenBee");
+}
+
+bool Game::isLivingLegendary(Unit* u){
+	return (!u->isDead())&&(u->getName()=="Phoenix"||u->getName()=="Dragon"||u->getName()=="Manticore");
+}
+
+void Game::generalKill(Unit** enemies, int amount){
+	for(int i=0; i<5; i++){
+		if(!enemies[i]->isDead()){
+			enemies[i]->takeDamage(amount);
 		}
 	}
+}
 
-	if(flying_count>=3){
-		for(int i=0; i<5; i++){
-			if(allies[i]->isDead())continue;
-			if(isFlying(allies[i])){
-				allies[i]->specialMove();
-			}
-		}
+void Game::biteAndScratch(Unit* unit, Unit** allies, Unit** enemies){
+	if(!isLivingMammal(unit))return;
+	generalKill(enemies,1);
+}
+
+void Game::harass(Unit* unit, Unit** allies, Unit** enemies){
+	if(!isLivingFlying(unit))return;
+	if(unit->getName()=="Dragon"){
+		generalKill(enemies,2);
 	}
-
-	if(swimming_count>=3){
-		for(int i=0; i<5; i++){
-			if(allies[i]->isDead())continue;
-			if(isSwimming(allies[i])){
-				allies[i]->specialMove();
-			}
-		}
-	}
-
-	if((queen_bee_count==1&&bee_count==4)||(bee_count==5)){
-		for(int i=0; i<5; i++){
-			if(allies[i]->isDead())continue;
-			if(isBee(allies[i])){
-				allies[i]->specialMove();
-			}
-			else if(isQueenBee(allies[i])){
-				allies[i]->specialMove();
-			}
+	else{
+		generalKill(enemies,1);
+		if(unit->getName()=="Bat"){
+			((Bat*)unit)->heal(1);
 		}
 	}
 }
 
-bool Game::isMammal(Unit* u){
-	return u->getName()=="Wolf"||u->getName()=="Jaguar";
+void Game::summonTsunami(Unit* unit, Unit** allies, Unit** enemies){
+	if(!isLivingSwimming(unit))return;
+	if(unit->getName()=="Crocodile"){
+		generalKill(enemies,2);
+		unit->takeDamage(2);
+	}
+	else{
+		generalKill(enemies,1);
+	}
 }
 
-bool Game::isFlying(Unit* u){
-	return u->getName()=="Hawk"||u->getName()=="Bat"||u->getName()=="Dragon";
-}
-
-bool Game::isSwimming(Unit* u){
-	return u->getName()=="Turtle"||u->getName()=="Crocodile";
-}
-
-bool Game::isBee(Unit* u){
-	return u->getName()=="Bee";
-}
-
-bool Game::isQueenBee(Unit* u){
-	return u->getName()=="QueenBee";
+void Game::marchAndConquer(Unit* unit, Unit** allies, Unit** enemies){
+	if(!isLivingBee(unit)&&!isLivingQueenBee(unit))return;
+	if(unit->getName()=="Bee"){
+		generalKill(enemies,3);
+	}
+	else{
+		
+	}
 }
