@@ -38,12 +38,9 @@ void Dragon::attack()
 
 void Dragon::areaAttack(){
 	atk_damage = AREA_ATK_DAMAGE;
-	// cout<<"Dragon Area attack";
 	for(int i=max(0,pos-1);i<min(5,pos+2);i++){
 		if(!enemies[i]->isDead()){
-			// cout<<i<<" "<<enemies[i]->getCurrentHP();
 			enemies[i]->defend(this, atk_damage);
-			// cout<<"->"<<enemies[i]->getCurrentHP()<<",";
 		}
 	}
 	// cout<<endl;

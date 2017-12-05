@@ -105,13 +105,16 @@ bool Game::isEnd()
 
 	if(deadCount1 == 5 && deadCount2 == 5)
 	{
-		cout << "Draws!" << endl;
+		fout << "Draws!" << endl;
+		stageMessage()<<"Draws"<<endl;
 	}else if (deadCount1 == 5)
 	{
-		cout << "Player " << P2+1 << " Wins!" << endl;
+		fout << "Player " << P2+1 << " Wins!" << endl;
+		stageMessage()<<"Player " << P2+1 << " Wins!"<<endl;
 	} else if (deadCount2 == 5)
 	{
-		cout << "Player " << P1+1 << " Wins!" << endl;
+		fout << "Player " << P1+1 << " Wins!" << endl;
+		stageMessage()<<"Player " << P1+1 << " Wins!"<<endl;
 	} else {
 		return false;
 	}
@@ -127,16 +130,36 @@ void Game::start()
 	ofstream fout("log.txt");
 	while(!isEnd())
 	{
+		printAll();
+		clearStage();
+		stageMessage()<<"Player "<<currentPlayer+1<<" is attacking!"<<endl;
+		waitNextFrame();
+		int original_hp[5];
+
+		
 		for(int i = 0; i < 5; i++)
 		{
-			if(!units[currentPlayer][i]->isDead())
+			if(!units[currentPlayer][i]->isDead()){
+				for(int j=0; j<5; j++){
+					original_hp[j]=-units[!currentPlayer][j]->getCurrentHP();
+				}
+				clearStage();
+				printAttack(units[currentPlayer][i]);
 				units[currentPlayer][i]->attack();
+				for(int j=0; j<5; j++){
+					int delta = original_hp[j]+units[!currentPlayer][j]->getCurrentHP();
+					if(delta){
+						printDefend(units[!currentPlayer][j],delta);
+					}
+				}
+				waitNextFrame();
+				printAll();
+				waitNextFrame();
+			}
+
 		}
-		active_player = currentPlayer;
-
-		printAll();
-
-		 specialMove(currentPlayer);
+		
+		specialMove(currentPlayer);
 
 		//Output turn info
 		fout << "Turn " << turnCount++ << " Player " << currentPlayer+1 << " attacks:" << endl;
@@ -302,6 +325,11 @@ void Game::weatherTheStorm(Unit* unit, Unit** allies, Unit** enemies){
 	generalKill(enemies,3);
 }
 
+/**
+ *Console animations 
+ * 
+ */
+
 void Game::console_init(){
 	for(int i=0;i<2;i++){
 		for(int j=0; j<5; j++){
@@ -322,11 +350,12 @@ void Game::printUnit(Unit* unit){
 	xyout(x+3,y+2)<<unit->getName()<<endl;
 	xyout(x+3,y+3)<<"atk:"<<unit->getAtkDamage()<<endl;
 	if(unit->isDead()){
-		xyout(x+3,y+4)<<"DEAD";
+		xyout(x+3,y+4)<<"DEAD"<<endl;
 	}
 	else{
-		xyout(x+3,y+4)<<"hp"<<unit->getCurrentHP();
+		xyout(x+3,y+4)<<"hp"<<unit->getCurrentHP()<<endl;
 	}
+	// log()<<unit->getName()<<" "<<unit->getCurrentHP();
 }
 
 void Game::printAll(){
@@ -335,4 +364,40 @@ void Game::printAll(){
 			printUnit(units[i][j]);
 		}
 	}
+}
+
+void Game::clearStage(){
+	xyout(0,7)<<"                                                                      ";
+	xyout(0,8)<<"                                                                      ";
+	xyout(0,9)<<"                                                                      ";
+	xyout(0,17)<<"                                                                      ";
+}
+
+void Game::printAttack(Unit* unit){
+	int x = position[unit].first;
+	int y = position[unit].second;
+	stageMessage()<<unit->getName()<<" is attacking";
+	if(y<8){
+		xyout(x,7)<<"  v         v  "<<endl;
+	}
+	else{
+		xyout(x,9)<<"  ^         ^  "<<endl;
+	}
+}
+
+void Game::printDefend(Unit* unit, int delta){
+	int x = position[unit].first;
+	int y = position[unit].second;
+	if(y<8){
+		xyout(x,7)<<"  ^         ^  "<<endl;
+		if(delta)xyout(x+6,7)<<delta;
+	}
+	else{
+		xyout(x,9)<<"  v         v  "<<endl;
+		if(delta)xyout(x+6,9)<<delta;
+	}
+}
+
+void Game::waitNextFrame(){
+	for(int i=0; i<10000; i++)for(int j=0; j<30000; j++);
 }

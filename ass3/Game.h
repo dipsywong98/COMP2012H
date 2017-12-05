@@ -45,16 +45,19 @@ public:
 	 */
 	void gotoxy(int x, int y);
 	ostream& xyout(int x, int y);
-	int active_player;
+	ostream& stageMessage(){clearStage();return xyout(3,17);}
+	ostream& log(){return xyout(3,index++);}
 	std::map<Unit*,std::pair<int,int>> position;
 	void console_init();
 	void printUnit(Unit* u);
 	void printAll();
-	void printUnit();
-	void clearAll();
+	void clearAll(){}
 	void clearStage();
-	void printAttack();
-	void printDefend();
+	void printAttack(Unit* u);
+	void printDefend(Unit* u, int delta);
+	void waitNextFrame();
+
+	int index = 18;
 };
 
 #endif /* GAME_H_ */
