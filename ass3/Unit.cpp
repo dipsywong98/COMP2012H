@@ -54,3 +54,31 @@ int Unit::getAtkDamage() const
 {
         return atk_damage;
 }
+
+void Unit::poison(int amount){
+	poison_level+=3;
+}
+
+int Unit::getPoison(){
+	return poison_level;
+}
+
+void Unit::paralysis(){
+	is_paralysis=true;
+}
+
+bool Unit::isParalysis(){
+	return is_paralysis;
+}
+
+void Unit::resetParalysis(){
+	is_paralysis = false;
+}
+
+void Unit::resetPoison(){
+	poison_level=0;
+}
+
+void Unit::poisonKill(){
+	takeDamage(poison_level--);
+}

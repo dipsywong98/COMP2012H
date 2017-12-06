@@ -134,6 +134,7 @@ bool Game::isEnd()
 
 void Game::start()
 {
+	cout << string(50, '\n');
 	Player currentPlayer = P1;
 	int turnCount = 1;
 	console_init();
@@ -151,10 +152,23 @@ void Game::start()
 			printUnit(units[currentPlayer][i]);
 			if(allDead(units[!currentPlayer]))break;
 			if(!units[currentPlayer][i]->isDead()){
+				clearStage();
+				if(units[currentPlayer][i]->getPoison()>0){
+					stageMessage()<<units[currentPlayer][i]->getName()<<" is being poisoned"<<endl;
+					printNumber(units[currentPlayer][i],-units[currentPlayer][i]->getPoison());
+					units[currentPlayer][i]->poisonKill();
+					waitNextFrame();
+					printUnit(units[currentPlayer][i]);
+				}
+				if(units[currentPlayer][i]->isDead())continue;
 				if(units[currentPlayer][i]->getName()=="QueenBee")continue;
+				if(units[currentPlayer][i]->isParalysis()){
+					units[currentPlayer][i]->resetParalysis();
+					continue;
+				}
 				int ohp = -units[currentPlayer][i]->getCurrentHP();
 				clearStage();
-				stageMessage()<<units[currentPlayer][i]->getName()<<" is attacking";
+				stageMessage()<<units[currentPlayer][i]->getName()<<" is attacking"<<endl;
 				printAttack(units[currentPlayer][i]);
 				waitNextFrame();
 				units[currentPlayer][i]->attack();
@@ -407,12 +421,15 @@ void Game::printUnit(Unit* unit){
 	xyout(x,y+4)<<"|            |"<<endl;
 	xyout(x,y+5)<<"--------------"<<endl;
 	xyout(x+3,y+2)<<unit->getName()<<endl;
-	xyout(x+3,y+3)<<"atk:"<<unit->getAtkDamage()<<endl;
+	xyout(x+3,y+3)<<"atk:"<<unit->getAtkDamage();
+	if(unit->isParalysis())cout<<" skip";
 	if(unit->isDead()){
 		xyout(x+3,y+4)<<"DEAD"<<endl;
 	}
 	else{
-		xyout(x+3,y+4)<<"hp"<<unit->getCurrentHP()<<endl;
+		xyout(x+3,y+4)<<"hp"<<unit->getCurrentHP();
+		if(unit->getPoison()>0)cout<<" ("<<unit->getPoison()<<")";
+		cout<<endl;
 	}
 	// log()<<unit->getName()<<" "<<unit->getCurrentHP();
 }
@@ -436,10 +453,10 @@ void Game::printAttack(Unit* unit){
 	int x = position[unit].first;
 	int y = position[unit].second;
 	if(y<8){
-		xyout(x,7)<<"  v         v  "<<endl;
+		xyout(x,7)<<" v          v "<<endl;
 	}
 	else{
-		xyout(x,9)<<"  ^         ^  "<<endl;
+		xyout(x,9)<<" ^          ^ "<<endl;
 	}
 }
 
@@ -447,11 +464,11 @@ void Game::printDefend(Unit* unit, int delta){
 	int x = position[unit].first;
 	int y = position[unit].second;
 	if(y<8){
-		xyout(x,7)<<"  ^         ^  "<<endl;
+		xyout(x,7)<<" ^          ^ "<<endl;
 		
 	}
 	else{
-		xyout(x,9)<<"  v         v  "<<endl;
+		xyout(x,9)<<" v           v "<<endl;
 	}
 	if(unit->getName()=="Phoenix"){
 		if(delta>0){
