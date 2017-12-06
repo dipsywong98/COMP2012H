@@ -139,6 +139,7 @@ void Game::start()
 		for(int i = 0; i < 5; i++)
 		{
 			if(!units[currentPlayer][i]->isDead()){
+				if(units[currentPlayer][i]->getName()=="QueenBee")continue;
 				for(int j=0; j<5; j++){
 					original_hp[j]=-units[!currentPlayer][j]->getCurrentHP();
 				}
@@ -231,50 +232,24 @@ void Game::specialMove(Player p){
 
 	
 		if(mammal_count>=3){
-			specialMoveGeneral(isLivingMammal,biteAndScratch, allies,enemies);
-			// stageMessage()<<"Bite And Scratch"<<endl;
-			// for(int i=0;i<5;i++)if(isLivingMammal(allies[i]))printAttack(allies[i]);
-			// waitNextFrame();
-			// for(int i=0;i<5;i++)biteAndScratch(allies[i],allies,enemies);
-			// waitNextFrame();
-			// printAll();
-			// waitNextFrame();
+			stageMessage()<<"Bite And Scratch"<<endl;
+			specialMoveGeneral(&Game::isLivingMammal,&Game::biteAndScratch, allies,enemies);
 		}
 		if(flying_count>=3){
 			stageMessage()<<"harass"<<endl;
-			for(int i=0;i<5;i++)if(isLivingFlying(allies[i]))printAttack(allies[i]);
-			waitNextFrame();
-			for(int i=0;i<5;i++)harass(allies[i],allies,enemies);
-			waitNextFrame();
-			printAll();
-			waitNextFrame();
+			specialMoveGeneral(&Game::isLivingFlying,&Game::harass, allies,enemies);
 		}
 		if(swimming_count>=3){
 			stageMessage()<<"Summon Tsunami"<<endl;
-			for(int i=0;i<5;i++)if(isLivingSwimming(allies[i]))printAttack(allies[i]);
-			waitNextFrame();
-			for(int i=0;i<5;i++)summonTsunami(allies[i],allies,enemies);
-			waitNextFrame();
-			printAll();
-			waitNextFrame();
+			specialMoveGeneral(&Game::isLivingSwimming,&Game::summonTsunami, allies,enemies);
 		}
 		if(bee_count==5||(bee_count==4&&queen_bee_count==1)){
-			for(int i=0;i<5;i++)if(isLivingBee(allies[i])||isLivingQueenBee(allies[i]))printAttack(allies[i]);
-			waitNextFrame();
 			stageMessage()<<"March And Conquer"<<endl;
-			for(int i=0;i<5;i++)marchAndConquer(allies[i],allies,enemies);
-			waitNextFrame();
-			printAll();
-			waitNextFrame();
+			specialMoveGeneral(&Game::isLivingAnyBee,&Game::marchAndConquer, allies,enemies);
 		}
 		if(legendary_count>=3){
 			stageMessage()<<"Weather The Storm"<<endl;
-			for(int i=0;i<5;i++)if(isLivingLegendary(allies[i]))printAttack(allies[i]);
-			waitNextFrame();
-			for(int i=0;i<5;i++)weatherTheStorm(allies[i],allies,enemies);
-			waitNextFrame();
-			printAll();
-			waitNextFrame();
+			specialMoveGeneral(&Game::isLivingLegendary,&Game::weatherTheStorm, allies,enemies);
 		}
 	
 }
@@ -299,6 +274,10 @@ bool Game::isLivingQueenBee(Unit* u){
 	return (!u->isDead())&&(u->getName()=="QueenBee");
 }
 
+bool Game::isLivingAnyBee(Unit* u){
+	return isLivingBee(u)||isLivingQueenBee(u);
+}
+
 bool Game::isLivingLegendary(Unit* u){
 	return (!u->isDead())&&(u->getName()=="Phoenix"||u->getName()=="Dragon"||u->getName()=="Manticore");
 }
@@ -306,10 +285,22 @@ bool Game::isLivingLegendary(Unit* u){
 void Game::generalKill(Unit** enemies, int amount){
 	for(int i=0; i<5; i++){
 		if(!enemies[i]->isDead()){
-			printDefend(enemies[i],-amount);
 			enemies[i]->takeDamage(amount);
 		}
 	}
+}
+
+void Game::specialMoveGeneral(bool(Game::*isType)(Unit*),void(Game::*action)(Unit*,Unit**,Unit**),Unit** allies, Unit** enemies){
+	int dead_count=0,original_hp_enemies[5];
+	for(int i=0;i<5;i++)if(enemies[i]->isDead())dead_count++;else original_hp_enemies[i]=-enemies[i]->getCurrentHP();
+	if(dead_count==5)return;
+	for(int i=0;i<5;i++)if((this->*isType)(allies[i]))printAttack(allies[i]);
+	waitNextFrame();
+	for(int i=0;i<5;i++)(this->*action)(allies[i],allies,enemies);
+	for(int i=0;i<5;i++)printDefend(enemies[i],original_hp_enemies[i]+enemies[i]->getCurrentHP());
+	waitNextFrame();
+	printAll();
+	waitNextFrame();
 }
 
 void Game::biteAndScratch(Unit* unit, Unit** allies, Unit** enemies){
@@ -406,10 +397,10 @@ void Game::printAll(){
 }
 
 void Game::clearStage(){
-	xyout(0,7)<<"                                                                      ";
-	xyout(0,8)<<"                                                                      ";
-	xyout(0,9)<<"                                                                      ";
-	xyout(0,17)<<"                                                                      ";
+	xyout(0,7)<<"                                                                      "<<endl;
+	xyout(0,8)<<"                                                                      "<<endl;
+	xyout(0,9)<<"                                                                      "<<endl;
+	xyout(0,17)<<"                                                                      "<<endl;
 }
 
 void Game::printAttack(Unit* unit){
