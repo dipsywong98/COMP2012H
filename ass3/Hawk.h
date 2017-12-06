@@ -13,6 +13,7 @@ public:
 private:
 	static const int MAX_HP = 25;
 	static const int DEFAULT_ATK_DAMAGE = 5;
+	static const int DAMAGE_TAKE_PERCENT = 70;
 };
 
 #endif /* HAWK_H_ */

@@ -1,6 +1,6 @@
 #include "Phoenix.h"
 
-Phoenix::Phoenix(Game* game, int player, int position): Wolf(game,player,position){
+Phoenix::Phoenix(Game* game, int player, int position): Hawk(game,player,position){
 	hp = MAX_HP;
 	atk_damage = DEFAULT_ATK_DAMAGE;
 	name = "Phoenix";
@@ -21,18 +21,17 @@ void Phoenix::attack()
       index=i;
     }
   }
-  Wolf::positionAttackAction(enemies[index]);
+  Hawk::positionAttackAction(enemies[index],false);
 }
 
 void Phoenix::defend(Unit* opponent, int damage){
-  opponent->takeDamage(1);
-  if(rand()%100>=30){
-    takeDamage(damage);
+  if(rand()%100>=MISS_PERCENT){
+    Hawk::defend(opponent,damage);
   }
 }
 
 void Phoenix::die(){
-  if(dead_before)Wolf::die();
+  if(dead_before)Hawk::die();
   else{
     hp=MAX_HP;
     dead_before=true;

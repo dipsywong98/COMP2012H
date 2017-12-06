@@ -14,6 +14,7 @@ private:
 	static const int MAX_HP = 40;
 	static const int AREA_ATK_DAMAGE = 4;
 	static const int SINGLE_ATK_DAMAGE = 6;
+	static const int DAMAGE_TAKE_PERCENT = 60;
 
 	void areaAttack();
 	void singleAttack();

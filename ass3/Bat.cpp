@@ -13,7 +13,7 @@ Bat::~Bat() {
 }
 
 void Bat::defend(Unit* opponent, int damage){
-	takeDamage(damage*8/10);
+	takeDamage(damage*DAMAGE_TAKE_PERCENT/100);
 }
 
 void Bat::attack()

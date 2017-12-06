@@ -14,6 +14,7 @@ public:
 private:
 	static const int MAX_HP = 20;
 	static const int DEFAULT_ATK_DAMAGE = 4;
+	static const int DAMAGE_TAKE_PERCENT = 80;
 };
 
 #endif /* BAT_H_ */

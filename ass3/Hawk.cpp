@@ -16,7 +16,7 @@ void Hawk::attack(){
 }
 
 void Hawk::defend(Unit* opponent, int damage){
-	takeDamage(damage*7/10);
+	takeDamage(damage*DAMAGE_TAKE_PERCENT/100);
 	if(!isDead()){
 		opponent->takeDamage(1);
 	}

@@ -2,9 +2,9 @@
 #define PHOENIX_H_
 
 #include <random>
-#include "Wolf.h"
+#include "Hawk.h"
 
-class Phoenix: public Wolf {
+class Phoenix: public Hawk {
 public:
 	Phoenix(Game* game, int player, int position);
 	virtual ~Phoenix();
@@ -15,7 +15,8 @@ public:
 private:
   bool dead_before = false;
 	static const int MAX_HP = 30;
-	static const int DEFAULT_ATK_DAMAGE = 8;
+	static const int DEFAULT_ATK_DAMAGE = 6;
+	static const int MISS_PERCENT = 30;
 };
 
 #endif /* PHOENIX_H_ */

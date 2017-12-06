@@ -15,7 +15,7 @@ Dragon::~Dragon() {
 
 void Dragon::defend(Unit* opponent, int damage){
 	// cout<<"hit by "<<opponent->getName()<<" "<<damage<<" "<<(int)(damage*6/10)<<" "<<hp;
-	takeDamage(damage*6/10);
+	takeDamage(damage*DAMAGE_TAKE_PERCENT/100);
 	// cout<<" "<<hp<<endl;
 }
 

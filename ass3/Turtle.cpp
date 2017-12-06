@@ -12,5 +12,5 @@ Turtle::~Turtle() {
 }
 
 void Turtle::defend(Unit* opponent, int damage){
-	takeDamage(damage*0.5);
+	takeDamage(damage*DAMAGE_TAKE_PERCENT/100);
 }

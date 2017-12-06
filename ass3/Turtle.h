@@ -12,6 +12,7 @@ public:
 private:
 	static const int MAX_HP = 35;
 	static const int DEFAULT_ATK_DAMAGE = 2;
+	static const int DAMAGE_TAKE_PERCENT = 50;
 };
 
 #endif /* TURTLE_H_ */
