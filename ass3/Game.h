@@ -13,7 +13,7 @@ private:
 	ofstream fout;
 public:
 	enum Player {P1 = 0, P2 = 1 };
-	enum UnitIds {WOLF, JAGUAR, HAWK, BAT, TURTLE, CROCODILE, BEE, QUEEN_BEE, DRAGON, PHOENIX };
+	enum UnitIds {WOLF, JAGUAR, HAWK, BAT, TURTLE, CROCODILE, BEE, QUEEN_BEE, DRAGON, PHOENIX, MANTICORE};
 	Unit* units[2][5];
 
 	Game(std::string file);
@@ -35,6 +35,7 @@ public:
 	bool isLivingQueenBee(Unit* unit);
 	bool isLivingAnyBee(Unit* unit);
 	bool isLivingLegendary(Unit* unit);
+	bool isLivingCat(Unit* unit);
 
 
 	void generalKill(Unit** enemies, int amount=1);
@@ -45,7 +46,7 @@ public:
 	void summonTsunami(Unit* unit, Unit** allies, Unit** enemies);
 	void marchAndConquer(Unit* unit, Unit** allies, Unit** enemies);
 	void weatherTheStorm(Unit* unit, Unit** allies, Unit** enemies);
-
+	void assault(Unit* unit, Unit** allies, Unit** enemies);
 
 	/**
 	 * Console Animation Helper

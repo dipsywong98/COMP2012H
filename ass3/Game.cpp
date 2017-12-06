@@ -13,6 +13,7 @@
 #include "QueenBee.h"
 #include "Dragon.h"
 #include "Phoenix.h"
+#include "Manticore.h"
 
 using namespace std;
 
@@ -89,8 +90,11 @@ void Game::load(std::string file)
 		case PHOENIX:
 		units[c/5][c%5] = new Phoenix(this, c/5, c%5);
 			break;
+		case MANTICORE:
+		units[c/5][c%5] = new Manticore(this, c/5, c%5);
+			break;
 		}
-
+		
 		c++;
 	}
 
@@ -212,7 +216,7 @@ void Game::specialMove(Player p){
 
 	//counting
 
-	int mammal_count=0, flying_count=0, swimming_count=0, bee_count=0, queen_bee_count=0, legendary_count=0;
+	int mammal_count=0, flying_count=0, swimming_count=0, bee_count=0, queen_bee_count=0, legendary_count=0, cat_count=0;
   for(int i=0; i<5 ; i++){
 		if(allies[i]->isDead())continue;
     if(isLivingMammal(allies[i])){
@@ -233,30 +237,36 @@ void Game::specialMove(Player p){
 		if(isLivingLegendary(allies[i])){
 			legendary_count++;
 		}
+		if(isLivingCat(allies[i])){
+			cat_count++;
+		}
   }
 
 	
-		if(mammal_count>=3){
-			stageMessage()<<"Bite And Scratch"<<endl;
-			specialMoveGeneral(&Game::isLivingMammal,&Game::biteAndScratch, allies,enemies);
-		}
-		if(flying_count>=3){
-			stageMessage()<<"harass"<<endl;
-			specialMoveGeneral(&Game::isLivingFlying,&Game::harass, allies,enemies);
-		}
-		if(swimming_count>=3){
-			stageMessage()<<"Summon Tsunami"<<endl;
-			specialMoveGeneral(&Game::isLivingSwimming,&Game::summonTsunami, allies,enemies);
-		}
-		if(bee_count==5||(bee_count==4&&queen_bee_count==1)){
-			stageMessage()<<"March And Conquer"<<endl;
-			specialMoveGeneral(&Game::isLivingAnyBee,&Game::marchAndConquer, allies,enemies);
-		}
-		if(legendary_count>=3){
-			stageMessage()<<"Weather The Storm"<<endl;
-			specialMoveGeneral(&Game::isLivingLegendary,&Game::weatherTheStorm, allies,enemies);
-		}
-	
+	if(mammal_count>=3){
+		stageMessage()<<"Bite And Scratch"<<endl;
+		specialMoveGeneral(&Game::isLivingMammal,&Game::biteAndScratch, allies,enemies);
+	}
+	if(flying_count>=3){
+		stageMessage()<<"Harass"<<endl;
+		specialMoveGeneral(&Game::isLivingFlying,&Game::harass, allies,enemies);
+	}
+	if(swimming_count>=3){
+		stageMessage()<<"Summon Tsunami"<<endl;
+		specialMoveGeneral(&Game::isLivingSwimming,&Game::summonTsunami, allies,enemies);
+	}
+	if(bee_count==5||(bee_count==4&&queen_bee_count==1)){
+		stageMessage()<<"March And Conquer"<<endl;
+		specialMoveGeneral(&Game::isLivingAnyBee,&Game::marchAndConquer, allies,enemies);
+	}
+	if(legendary_count>=3){
+		stageMessage()<<"Weather The Storm"<<endl;
+		specialMoveGeneral(&Game::isLivingLegendary,&Game::weatherTheStorm, allies,enemies);
+	}
+	if(cat_count>=2){
+		stageMessage()<<"Assault"<<endl;
+		specialMoveGeneral(&Game::isLivingCat,&Game::assault, allies,enemies);
+	}
 }
 
 bool Game::isLivingMammal(Unit* u){
@@ -285,6 +295,10 @@ bool Game::isLivingAnyBee(Unit* u){
 
 bool Game::isLivingLegendary(Unit* u){
 	return (!u->isDead())&&(u->getName()=="Phoenix"||u->getName()=="Dragon"||u->getName()=="Manticore");
+}
+
+bool Game::isLivingCat(Unit* u){
+	return (!u->isDead())&&(u->getName()=="Jaguar"||u->getName()=="Manticore");
 }
 
 void Game::generalKill(Unit** enemies, int amount){
@@ -361,6 +375,13 @@ void Game::weatherTheStorm(Unit* unit, Unit** allies, Unit** enemies){
 	if(!isLivingLegendary(unit))return;
 	printAttack(unit);
 	generalKill(enemies,3);
+}
+
+void Game::assault(Unit* unit, Unit** allies, Unit** enemies){
+	if(!isLivingCat(unit))return;
+	printAttack(unit);
+	if(unit->getName()=="Manticore")generalKill(enemies,2);
+	else generalKill(enemies,1);
 }
 
 /**
@@ -452,12 +473,12 @@ void Game::printNumber(Unit* unit, int number){
 	if(y<8){
 		if(number<0)xyout(x+6,7)<<number<<endl;
 		else if(number>0)xyout(x+6,7)<<"+"<<number<<endl;
-		else xyout(x+6,7)<<"no harm"<<endl;
+		else xyout(x+3,7)<<"no harm"<<endl;
 	}
 	else{
 		if(number<0)xyout(x+6,9)<<number<<endl;
 		else if(number>0)xyout(x+6,9)<<"+"<<number<<endl;
-		else xyout(x+6,9)<<"no harm"<<endl;
+		else xyout(x+3,9)<<"no harm"<<endl;
 	}
 }
 
