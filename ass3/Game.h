@@ -13,7 +13,7 @@ private:
 	ofstream fout;
 public:
 	enum Player {P1 = 0, P2 = 1 };
-	enum UnitIds {WOLF, JAGUAR, HAWK, BAT, TURTLE, CROCODILE, BEE, QUEEN_BEE, DRAGON };
+	enum UnitIds {WOLF, JAGUAR, HAWK, BAT, TURTLE, CROCODILE, BEE, QUEEN_BEE, DRAGON, PHOENIX };
 	Unit* units[2][5];
 
 	Game(std::string file);
@@ -23,6 +23,7 @@ public:
 	bool isEnd();
 	void start();
 
+	bool allDead(Unit** team);
 	/**
 	 * You may add data members and functions to this class to help you implement the Special Moves part.
 	 */
@@ -62,6 +63,7 @@ public:
 	void printAttack(Unit* u);
 	void printDefend(Unit* u, int delta);
 	void printNumber(Unit* u, int number);
+	void printText(Unit* u, string text);
 	void waitNextFrame();
 
 	int index = 18;

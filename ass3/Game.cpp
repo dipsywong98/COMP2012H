@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <time.h>
 
 #include "Game.h"
 #include "Wolf.h"
@@ -11,6 +12,7 @@
 #include "Bee.h"
 #include "QueenBee.h"
 #include "Dragon.h"
+#include "Phoenix.h"
 
 using namespace std;
 
@@ -35,6 +37,7 @@ ostream& Game::xyout(int x, int y){
 }
 
 Game::Game(std::string file):fout("log.txt") {
+	srand(time(NULL));
 	load(file);
 }
 
@@ -82,6 +85,9 @@ void Game::load(std::string file)
 			break;
 		case DRAGON:
 		units[c/5][c%5] = new Dragon(this, c/5, c%5);
+			break;
+		case PHOENIX:
+		units[c/5][c%5] = new Phoenix(this, c/5, c%5);
 			break;
 		}
 
@@ -138,6 +144,8 @@ void Game::start()
 		
 		for(int i = 0; i < 5; i++)
 		{
+			printUnit(units[currentPlayer][i]);
+			if(allDead(units[!currentPlayer]))break;
 			if(!units[currentPlayer][i]->isDead()){
 				if(units[currentPlayer][i]->getName()=="QueenBee")continue;
 				int ohp = -units[currentPlayer][i]->getCurrentHP();
@@ -190,6 +198,12 @@ void Game::start()
 			currentPlayer = P1;
 
 	}
+}
+
+bool Game::allDead(Unit** team){
+	int dead_sum=0;
+	for(int i=0; i<5; i++)dead_sum+=team[i]->isDead();
+	return dead_sum==5;
 }
 
 void Game::specialMove(Player p){
@@ -277,19 +291,21 @@ void Game::generalKill(Unit** enemies, int amount){
 	for(int i=0; i<5; i++){
 		if(!enemies[i]->isDead()){
 			enemies[i]->takeDamage(amount);
-			printDefend(enemies[i],-amount);
+			// printDefend(enemies[i],-amount);
 		}
 	}
 }
 
 void Game::specialMoveGeneral(bool(Game::*isType)(Unit*),void(Game::*action)(Unit*,Unit**,Unit**),Unit** allies, Unit** enemies){
-	int dead_count=0,original_hp_enemies[5];
-	for(int i=0;i<5;i++)if(enemies[i]->isDead())dead_count++;else original_hp_enemies[i]=-enemies[i]->getCurrentHP();
-	if(dead_count==5)return;
+	if(allDead(enemies))return;
+	int original_hp_enemies[5];
+	for(int i=0;i<5;i++){
+		original_hp_enemies[i]=-enemies[i]->getCurrentHP();
+	}
 	for(int i=0;i<5;i++)if((this->*isType)(allies[i]))printAttack(allies[i]);
 	waitNextFrame();
 	for(int i=0;i<5;i++)(this->*action)(allies[i],allies,enemies);
-	// for(int i=0;i<5;i++)printDefend(enemies[i],original_hp_enemies[i]+enemies[i]->getCurrentHP());
+	for(int i=0;i<5;i++)printDefend(enemies[i],original_hp_enemies[i]+enemies[i]->getCurrentHP());
 	waitNextFrame();
 	printAll();
 	waitNextFrame();
@@ -416,7 +432,18 @@ void Game::printDefend(Unit* unit, int delta){
 	else{
 		xyout(x,9)<<"  v         v  "<<endl;
 	}
-	printNumber(unit, delta);
+	if(unit->getName()=="Phoenix"){
+		if(delta>0){
+			printText(unit," reborn ");
+		}else if(delta==0){
+			printText(unit," missed ");
+		}else {
+			printNumber(unit, delta);
+		}
+	}
+	else { 
+		printNumber(unit, delta);
+	}
 }
 
 void Game::printNumber(Unit* unit, int number){
@@ -425,15 +452,26 @@ void Game::printNumber(Unit* unit, int number){
 	if(y<8){
 		if(number<0)xyout(x+6,7)<<number<<endl;
 		else if(number>0)xyout(x+6,7)<<"+"<<number<<endl;
-		else xyout(x+6,7)<<"nope"<<endl;
+		else xyout(x+6,7)<<"no harm"<<endl;
 	}
 	else{
 		if(number<0)xyout(x+6,9)<<number<<endl;
 		else if(number>0)xyout(x+6,9)<<"+"<<number<<endl;
-		else xyout(x+6,9)<<"nope"<<endl;
+		else xyout(x+6,9)<<"no harm"<<endl;
+	}
+}
+
+void Game::printText(Unit* unit, string text){
+	int x = position[unit].first;
+	int y = position[unit].second;
+	if(y<8){
+		xyout(x+3,7)<<text<<endl;
+	}
+	else{
+		xyout(x+3,9)<<text<<endl;
 	}
 }
 
 void Game::waitNextFrame(){
-	for(int i=0; i<10000; i++)for(int j=0; j<30000; j++);
+	for(int i=0; i<10000; i++)for(int j=0; j<15000; j++);
 }

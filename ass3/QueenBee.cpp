@@ -14,13 +14,12 @@ QueenBee::~QueenBee() {
 
 void QueenBee::defend(Unit* opponent, int damage){
 	takeDamage(damage);
-	if(!isDead()){
-		for(int i=0; i<5; i++){
-			if(allies[i]->getName()=="Bee"&&!allies[i]->isDead()){
-				opponent->takeDamage(2);
-			}
+	for(int i=0; i<5; i++){
+		if(allies[i]->getName()=="Bee"&&!allies[i]->isDead()){
+			opponent->takeDamage(2);
 		}
 	}
+	
 }
 
 void QueenBee::attack()

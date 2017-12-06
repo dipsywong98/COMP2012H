@@ -18,8 +18,8 @@ public:
 	virtual void attack() = 0;
 	virtual void defend(Unit* opponent, int damage);
 
-	void takeDamage(int damage);
-	void die();
+	virtual void takeDamage(int damage);
+	virtual void die();
 	bool isDead() const;
 	std::string getName() const;
 	int getCurrentHP() const;
