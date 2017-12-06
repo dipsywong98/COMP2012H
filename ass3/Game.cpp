@@ -231,7 +231,7 @@ void Game::specialMove(Player p){
 
 	//counting
 
-	int mammal_count=0, flying_count=0, swimming_count=0, bee_count=0, queen_bee_count=0, legendary_count=0, cat_count=0;
+	int mammal_count=0, flying_count=0, swimming_count=0, bee_count=0, queen_bee_count=0, legendary_count=0, cat_count=0, manticore_count=0;
   for(int i=0; i<5 ; i++){
 		if(allies[i]->isDead())continue;
     if(isLivingMammal(allies[i])){
@@ -254,6 +254,9 @@ void Game::specialMove(Player p){
 		}
 		if(isLivingCat(allies[i])){
 			cat_count++;
+		}
+		if(allies[i]->getName()=="Manticore"){
+			manticore_count++;
 		}
   }
 
@@ -278,7 +281,7 @@ void Game::specialMove(Player p){
 		stageMessage()<<"Weather The Storm"<<endl;
 		specialMoveGeneral(&Game::isLivingLegendary,&Game::weatherTheStorm, allies,enemies);
 	}
-	if(cat_count>=2){
+	if(manticore_count&&cat_count>=2){
 		stageMessage()<<"Assault"<<endl;
 		specialMoveGeneral(&Game::isLivingCat,&Game::assault, allies,enemies);
 	}
@@ -531,5 +534,10 @@ void Game::printText(Unit* unit, string text){
 }
 
 void Game::waitNextFrame(){
+	if(m_fastforward)return;
 	for(int i=0; i<10000; i++)for(int j=0; j<15000; j++);
+}
+
+void Game::fastforward(){
+	m_fastforward = true;
 }

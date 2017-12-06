@@ -10,6 +10,7 @@ class Unit;
 
 class Game {
 private:
+	bool m_fastforward = false;
 	ofstream fout;
 public:
 	enum Player {P1 = 0, P2 = 1 };
@@ -66,6 +67,8 @@ public:
 	void printNumber(Unit* u, int number);
 	void printText(Unit* u, string text);
 	void waitNextFrame();
+
+	void fastforward();
 
 	int index = 18;
 };
