@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-Unit::Unit(Game* game, int player, int position) {
+Unit::Unit(Game* game, int player, int position):game(game) {
 	allies = game->units[player];
 	enemies = game->units[!player];
 	pos = position;

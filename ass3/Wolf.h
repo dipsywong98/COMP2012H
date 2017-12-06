@@ -13,7 +13,6 @@ public:
 protected:
 	virtual void positionAttack(bool defenable = true);
 	virtual void positionAttackAction(Unit* enemy, bool defenable = true);
-	Game* game;
 private:
 	static const int MAX_HP = 30;
 	static const int DEFAULT_ATK_DAMAGE = 5;

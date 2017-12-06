@@ -44,6 +44,7 @@ protected:
 
 	int poison_level=0;
 	bool is_paralysis=false;
+	Game* game;
 };
 
 #endif /* UNIT_H_ */

@@ -429,7 +429,7 @@ void Game::assault(Unit* unit, Unit** allies, Unit** enemies){
 void Game::console_init(){
 	for(int i=0;i<2;i++){
 		for(int j=0; j<5; j++){
-			position[units[i][j]] = pair<int,int>(14*j,9*i+1);
+			position[units[i][j]] = pair<int,int>(14*j+1,9*i+1);
 		}
 	}
 }
@@ -491,7 +491,7 @@ void Game::printDefend(Unit* unit, int delta){
 		
 	}
 	else{
-		xyout(x,9)<<" v           v "<<endl;
+		xyout(x,9)<<" v          v "<<endl;
 	}
 	if(unit->getName()=="Phoenix"){
 		if(delta>0){

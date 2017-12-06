@@ -1,7 +1,7 @@
 #include "Wolf.h"
 #include <iostream>
 
-Wolf::Wolf(Game* game, int player, int position): Unit(game,player,position),game(game){
+Wolf::Wolf(Game* game, int player, int position): Unit(game,player,position){
 	hp = MAX_HP;
 	atk_damage = DEFAULT_ATK_DAMAGE;
 	name = "Wolf";
