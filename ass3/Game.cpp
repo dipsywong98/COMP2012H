@@ -146,6 +146,7 @@ void Game::start()
 				clearStage();
 				stageMessage()<<units[currentPlayer][i]->getName()<<" is attacking";
 				printAttack(units[currentPlayer][i]);
+				waitNextFrame();
 				units[currentPlayer][i]->attack();
 				for(int j=0; j<5; j++){
 					int delta = original_hp[j]+units[!currentPlayer][j]->getCurrentHP();
@@ -230,14 +231,19 @@ void Game::specialMove(Player p){
 
 	
 		if(mammal_count>=3){
-			stageMessage()<<"Bite And Scratch"<<endl;
-			for(int i=0;i<5;i++)biteAndScratch(allies[i],allies,enemies);
-			waitNextFrame();
-			printAll();
-			waitNextFrame();
+			specialMoveGeneral(isLivingMammal,biteAndScratch, allies,enemies);
+			// stageMessage()<<"Bite And Scratch"<<endl;
+			// for(int i=0;i<5;i++)if(isLivingMammal(allies[i]))printAttack(allies[i]);
+			// waitNextFrame();
+			// for(int i=0;i<5;i++)biteAndScratch(allies[i],allies,enemies);
+			// waitNextFrame();
+			// printAll();
+			// waitNextFrame();
 		}
 		if(flying_count>=3){
 			stageMessage()<<"harass"<<endl;
+			for(int i=0;i<5;i++)if(isLivingFlying(allies[i]))printAttack(allies[i]);
+			waitNextFrame();
 			for(int i=0;i<5;i++)harass(allies[i],allies,enemies);
 			waitNextFrame();
 			printAll();
@@ -245,12 +251,16 @@ void Game::specialMove(Player p){
 		}
 		if(swimming_count>=3){
 			stageMessage()<<"Summon Tsunami"<<endl;
+			for(int i=0;i<5;i++)if(isLivingSwimming(allies[i]))printAttack(allies[i]);
+			waitNextFrame();
 			for(int i=0;i<5;i++)summonTsunami(allies[i],allies,enemies);
 			waitNextFrame();
 			printAll();
 			waitNextFrame();
 		}
 		if(bee_count==5||(bee_count==4&&queen_bee_count==1)){
+			for(int i=0;i<5;i++)if(isLivingBee(allies[i])||isLivingQueenBee(allies[i]))printAttack(allies[i]);
+			waitNextFrame();
 			stageMessage()<<"March And Conquer"<<endl;
 			for(int i=0;i<5;i++)marchAndConquer(allies[i],allies,enemies);
 			waitNextFrame();
@@ -259,6 +269,8 @@ void Game::specialMove(Player p){
 		}
 		if(legendary_count>=3){
 			stageMessage()<<"Weather The Storm"<<endl;
+			for(int i=0;i<5;i++)if(isLivingLegendary(allies[i]))printAttack(allies[i]);
+			waitNextFrame();
 			for(int i=0;i<5;i++)weatherTheStorm(allies[i],allies,enemies);
 			waitNextFrame();
 			printAll();
@@ -302,13 +314,11 @@ void Game::generalKill(Unit** enemies, int amount){
 
 void Game::biteAndScratch(Unit* unit, Unit** allies, Unit** enemies){
 	if(!isLivingMammal(unit))return;
-	printAttack(unit);
 	generalKill(enemies,1);
 }
 
 void Game::harass(Unit* unit, Unit** allies, Unit** enemies){
 	if(!isLivingFlying(unit))return;
-	printAttack(unit);
 	if(unit->getName()=="Dragon"){
 		generalKill(enemies,2);
 	}
@@ -323,7 +333,6 @@ void Game::harass(Unit* unit, Unit** allies, Unit** enemies){
 
 void Game::summonTsunami(Unit* unit, Unit** allies, Unit** enemies){
 	if(!isLivingSwimming(unit))return;
-	printAttack(unit);
 	if(unit->getName()=="Crocodile"){
 		generalKill(enemies,2);
 		unit->takeDamage(2);
@@ -337,7 +346,6 @@ void Game::summonTsunami(Unit* unit, Unit** allies, Unit** enemies){
 void Game::marchAndConquer(Unit* unit, Unit** allies, Unit** enemies){
 	if(!isLivingBee(unit)&&!isLivingQueenBee(unit))return;
 	if(unit->getName()=="Bee"){
-		printAttack(unit);
 		generalKill(enemies,3);
 	}
 	else{

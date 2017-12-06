@@ -35,6 +35,16 @@ public:
 	bool isLivingLegendary(Unit* unit);
 
 
+	void specialMoveGeneral(bool(Game::*isType)(Unit*),void(Game::*action)(Unit*,Unit**,Unit**),Unit** allies, Unit** enemies){
+		stageMessage()<<"General"<<endl;
+		for(int i=0;i<5;i++)if((this->*isType)(allies[i]))printAttack(allies[i]);
+		waitNextFrame();
+		for(int i=0;i<5;i++)(this->*action)(allies[i],allies,enemies);
+		waitNextFrame();
+		printAll();
+		waitNextFrame();
+	}
+
 	void biteAndScratch(Unit* unit, Unit** allies, Unit** enemies);
 	void harass(Unit* unit, Unit** allies, Unit** enemies);
 	void summonTsunami(Unit* unit, Unit** allies, Unit** enemies);
