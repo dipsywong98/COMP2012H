@@ -140,21 +140,12 @@ void Game::start()
 		{
 			if(!units[currentPlayer][i]->isDead()){
 				if(units[currentPlayer][i]->getName()=="QueenBee")continue;
-				for(int j=0; j<5; j++){
-					original_hp[j]=-units[!currentPlayer][j]->getCurrentHP();
-				}
 				int ohp = -units[currentPlayer][i]->getCurrentHP();
 				clearStage();
 				stageMessage()<<units[currentPlayer][i]->getName()<<" is attacking";
 				printAttack(units[currentPlayer][i]);
 				waitNextFrame();
 				units[currentPlayer][i]->attack();
-				for(int j=0; j<5; j++){
-					int delta = original_hp[j]+units[!currentPlayer][j]->getCurrentHP();
-					if(delta){
-						printDefend(units[!currentPlayer][j],delta);
-					}
-				}
 				ohp+=units[currentPlayer][i]->getCurrentHP();
 				if(ohp)printNumber(units[currentPlayer][i],ohp);
 				waitNextFrame();
@@ -286,6 +277,7 @@ void Game::generalKill(Unit** enemies, int amount){
 	for(int i=0; i<5; i++){
 		if(!enemies[i]->isDead()){
 			enemies[i]->takeDamage(amount);
+			printDefend(enemies[i],-amount);
 		}
 	}
 }
@@ -297,7 +289,7 @@ void Game::specialMoveGeneral(bool(Game::*isType)(Unit*),void(Game::*action)(Uni
 	for(int i=0;i<5;i++)if((this->*isType)(allies[i]))printAttack(allies[i]);
 	waitNextFrame();
 	for(int i=0;i<5;i++)(this->*action)(allies[i],allies,enemies);
-	for(int i=0;i<5;i++)printDefend(enemies[i],original_hp_enemies[i]+enemies[i]->getCurrentHP());
+	// for(int i=0;i<5;i++)printDefend(enemies[i],original_hp_enemies[i]+enemies[i]->getCurrentHP());
 	waitNextFrame();
 	printAll();
 	waitNextFrame();
@@ -432,11 +424,13 @@ void Game::printNumber(Unit* unit, int number){
 	int y = position[unit].second;
 	if(y<8){
 		if(number<0)xyout(x+6,7)<<number<<endl;
-		if(number>0)xyout(x+6,7)<<"+"<<number<<endl;
+		else if(number>0)xyout(x+6,7)<<"+"<<number<<endl;
+		else xyout(x+6,7)<<"nope"<<endl;
 	}
 	else{
 		if(number<0)xyout(x+6,9)<<number<<endl;
-		if(number>0)xyout(x+6,9)<<"+"<<number<<endl;
+		else if(number>0)xyout(x+6,9)<<"+"<<number<<endl;
+		else xyout(x+6,9)<<"nope"<<endl;
 	}
 }
 

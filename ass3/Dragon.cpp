@@ -16,6 +16,7 @@ Dragon::~Dragon() {
 void Dragon::defend(Unit* opponent, int damage){
 	// cout<<"hit by "<<opponent->getName()<<" "<<damage<<" "<<(int)(damage*6/10)<<" "<<hp;
 	takeDamage(damage*6/10);
+	Wolf::printDefend(damage*6/10);
 	// cout<<" "<<hp<<endl;
 }
 

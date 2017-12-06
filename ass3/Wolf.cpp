@@ -1,7 +1,7 @@
 #include "Wolf.h"
 #include <iostream>
 
-Wolf::Wolf(Game* game, int player, int position): Unit(game,player,position){
+Wolf::Wolf(Game* game, int player, int position): Unit(game,player,position),game(game){
 	hp = MAX_HP;
 	atk_damage = DEFAULT_ATK_DAMAGE;
 	name = "Wolf";
@@ -15,6 +15,15 @@ Wolf::~Wolf() {
 void Wolf::attack()
 {
 	positionAttack();
+}
+
+void Wolf::defend(Unit* opponent, int damage){
+	Unit::defend(opponent, damage);
+	printDefend(damage);
+}
+
+void Wolf::printDefend(int damage){
+	game->printDefend(this, -damage);
 }
 
 void Wolf::positionAttack(bool defenable){
