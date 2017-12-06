@@ -13,10 +13,11 @@ Phoenix::~Phoenix() {
 
 void Phoenix::attack()
 {
-  int max_hp=0, index=0;
+  int min_hp=99999, index=0;
   for(int i=0; i<5; i++){
-    if(enemies[i]->getCurrentHP()>max_hp){
-      max_hp = enemies[i]->getCurrentHP();
+    if(enemies[i]->isDead())continue;
+    if(enemies[i]->getCurrentHP()<min_hp){
+      min_hp = enemies[i]->getCurrentHP();
       index=i;
     }
   }

@@ -164,6 +164,7 @@ void Game::start()
 				if(units[currentPlayer][i]->getName()=="QueenBee")continue;
 				if(units[currentPlayer][i]->isParalysis()){
 					units[currentPlayer][i]->resetParalysis();
+					printUnit(units[currentPlayer][i]);
 					continue;
 				}
 				int ohp = -units[currentPlayer][i]->getCurrentHP();
@@ -327,13 +328,32 @@ void Game::generalKill(Unit** enemies, int amount){
 void Game::specialMoveGeneral(bool(Game::*isType)(Unit*),void(Game::*action)(Unit*,Unit**,Unit**),Unit** allies, Unit** enemies){
 	if(allDead(enemies))return;
 	int original_hp_enemies[5];
+	bool original_dead_enemies[5];
 	for(int i=0;i<5;i++){
 		original_hp_enemies[i]=-enemies[i]->getCurrentHP();
+		original_dead_enemies[i]=enemies[i]->isDead();
 	}
-	for(int i=0;i<5;i++)if((this->*isType)(allies[i]))printAttack(allies[i]);
+	for(int i=0;i<5;i++){
+		if((this->*isType)(allies[i])){
+			if(allies[i]->isParalysis()){
+				printText(allies[i],"cant move");
+			}
+			else{
+				printAttack(allies[i]);
+			}
+		}
+	}
 	waitNextFrame();
-	for(int i=0;i<5;i++)(this->*action)(allies[i],allies,enemies);
-	for(int i=0;i<5;i++)printDefend(enemies[i],original_hp_enemies[i]+enemies[i]->getCurrentHP());
+	for(int i=0;i<5;i++){
+		if(!allies[i]->isParalysis()){
+			(this->*action)(allies[i],allies,enemies);
+		}
+	}
+	for(int i=0;i<5;i++){
+		if(!(enemies[i]->isDead()&&original_dead_enemies[i])){
+			printDefend(enemies[i],original_hp_enemies[i]+enemies[i]->getCurrentHP());
+		}
+	}
 	waitNextFrame();
 	printAll();
 	waitNextFrame();
@@ -420,9 +440,9 @@ void Game::printUnit(Unit* unit){
 	xyout(x,y+3)<<"|            |"<<endl;
 	xyout(x,y+4)<<"|            |"<<endl;
 	xyout(x,y+5)<<"--------------"<<endl;
+	if(unit->isParalysis())xyout(x+3,y+1)<<"paralysis"<<endl;
 	xyout(x+3,y+2)<<unit->getName()<<endl;
-	xyout(x+3,y+3)<<"atk:"<<unit->getAtkDamage();
-	if(unit->isParalysis())cout<<" skip";
+	xyout(x+3,y+3)<<"atk:"<<unit->getAtkDamage()<<endl;
 	if(unit->isDead()){
 		xyout(x+3,y+4)<<"DEAD"<<endl;
 	}
