@@ -10,7 +10,6 @@ public:
 
 	virtual void attack();
 	virtual void defend(Unit* opponent, int damage);
-	virtual void printDefend(int damage);
 protected:
 	virtual void positionAttack(bool defenable = true);
 	virtual void positionAttackAction(Unit* enemy, bool defenable = true);

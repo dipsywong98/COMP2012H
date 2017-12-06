@@ -19,11 +19,6 @@ void Wolf::attack()
 
 void Wolf::defend(Unit* opponent, int damage){
 	Unit::defend(opponent, damage);
-	printDefend(damage);
-}
-
-void Wolf::printDefend(int damage){
-	game->printDefend(this, -damage);
 }
 
 void Wolf::positionAttack(bool defenable){
@@ -48,12 +43,12 @@ void Wolf::positionAttack(bool defenable){
 }
 
 void Wolf::positionAttackAction(Unit* enemy, bool defenable){
-	//  std::cout<<name<<" attack "<<enemy->getName()<<" "<<enemy->getCurrentHP();
+	int oldhp = -enemy->getCurrentHP();
 	if(defenable){
 		enemy->defend(this, atk_damage);
 	}
 	else{
 		enemy->takeDamage(atk_damage);
 	}
-	// std::cout<<enemy->getCurrentHP()<<std::endl;
+	game->printDefend(enemy,oldhp+enemy->getCurrentHP());
 }

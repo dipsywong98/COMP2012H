@@ -14,7 +14,6 @@ Bat::~Bat() {
 
 void Bat::defend(Unit* opponent, int damage){
 	takeDamage(damage*8/10);
-	Bee::printDefend(damage);
 }
 
 void Bat::attack()

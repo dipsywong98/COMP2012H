@@ -13,5 +13,4 @@ Turtle::~Turtle() {
 
 void Turtle::defend(Unit* opponent, int damage){
 	takeDamage(damage*0.5);
-	Wolf::printDefend(damage);
 }

@@ -13,7 +13,6 @@ Crocodile::~Crocodile() {
 
 void Crocodile::defend(Unit* opponent, int damage){
 	takeDamage(damage);
-	Wolf::printDefend(damage);
 	if(!isDead()) opponent->takeDamage(2);
 }
 
