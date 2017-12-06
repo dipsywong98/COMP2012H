@@ -1,10 +1,10 @@
 #ifndef QUEENBEE_H_
 #define QUEENBEE_H_
 
-#include "Unit.h"
+#include "Wolf.h"
 #include "Bee.h"
 
-class QueenBee: public Unit {
+class QueenBee: public Wolf {
 public:
 	QueenBee(Game* game, int player, int position);
 	virtual ~QueenBee();
